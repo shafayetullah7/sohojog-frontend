@@ -1,6 +1,6 @@
 import type { Config } from "tailwindcss";
 
-const config = {
+const config: Config = {
   darkMode: ["class"],
   content: [
     "./pages/**/*.{ts,tsx}",
@@ -71,7 +71,6 @@ const config = {
           900: "#793f08",
           1000: "#4b2704",
         },
-
         secondary: {
           50: "#F2F8F9",
           100: "#D9EAFB",
@@ -109,8 +108,19 @@ const config = {
         "blush-lavender-800": "linear-gradient(to right, #d62621, #582f77)",
         "blush-lavender-900": "linear-gradient(to right, #a91b1b, #3f2359)",
         "blush-lavender-1000": "linear-gradient(to right, #7c1011, #29123d)",
+        // opposite
+        "lavender-blush-50": "linear-gradient(to right, #eeeaf2, #fee9e8)",
+        "lavender-blush-100": "linear-gradient(to right, #e1dde8, #fddddd)",
+        "lavender-blush-200": "linear-gradient(to right, #d3cfdc, #fcc1c1)",
+        "lavender-blush-300": "linear-gradient(to right, #c3b2cc, #faa3a3)",
+        "lavender-blush-400": "linear-gradient(to right, #b488bc, #f88b8b)",
+        "lavender-blush-500": "linear-gradient(to right, #a167aa, #f76969)",
+        "lavender-blush-600": "linear-gradient(to right, #8a4fa9, #f54e47)",
+        "lavender-blush-700": "linear-gradient(to right, #713794, #f1332c)",
+        "lavender-blush-800": "linear-gradient(to right, #582f77, #d62621)",
+        "lavender-blush-900": "linear-gradient(to right, #3f2359, #a91b1b)",
+        "lavender-blush-1000": "linear-gradient(to right, #29123d, #7c1011)",
       },
-
       keyframes: {
         "accordion-down": {
           from: { height: "0" },
@@ -127,16 +137,24 @@ const config = {
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [
+    require("tailwindcss-animate"),
+    function ({ addUtilities, e, theme, variants }:any) {
+      const gradients = theme('backgroundImage') as Record<string, string>;
+      const newUtilities = Object.keys(gradients).reduce((acc, key) => {
+        acc[`.text-${e(key)}`] = {
+          backgroundImage: gradients[key],
+          backgroundClip: 'text',
+          WebkitBackgroundClip: 'text',
+          WebkitTextFillColor: 'transparent',
+          color: 'transparent',
+        };
+        return acc;
+      }, {} as Record<string, any>);
+
+      addUtilities(newUtilities, variants('textColor'));
+    },
+  ],
 } satisfies Config;
 
 export default config;
-
-// colors
-
-// #ec9a1d
-// #2e9296
-// #ec5a47
-// #6e428b
-
-// https://lottie.host/e459247f-cb90-4a58-901a-cd3afb3d3214/ktwK6Ir5Mb.json
