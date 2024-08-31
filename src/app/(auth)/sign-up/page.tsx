@@ -20,8 +20,7 @@ import { useRouter } from "next/navigation";
 
 
 const formSchema = z.object({
-    firstname: z.string({ required_error: "Firstname is required.", invalid_type_error: "Firstname must be string" }).min(2, "Firstname is too short.").max(255, "Firstname is too long."),
-    lastname: z.string({ required_error: "Lastname is required.", invalid_type_error: "Lastname must be string" }).min(2, "Lastname is too short.").max(255, "Lastname is too long."),
+    name: z.string({ required_error: "Name is required.", invalid_type_error: "Name must be string" }).min(2, "Name is too short.").max(255, "Name is too long."),
     email: z.string({ required_error: "Email is required.", invalid_type_error: "Email must be string." }).email("Invalid email format.").max(255, "Email is too long."),
     password: z.string({ required_error: "Password is required.", invalid_type_error: "Password must be string." }).min(8, "Password must at least 8 character long.").max(40, "Password is too long."),
     rePassword: z.string({ required_error: "Password is required.", invalid_type_error: "Password must be string." }).min(8, "Password must at least 8 character long.").max(40, "Password is too long.")
@@ -39,8 +38,7 @@ const SignUp = () => {
     const form = useForm<TsignUpform>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            firstname: "",
-            lastname: "",
+            name: "",
             email: "",
             password: "",
             rePassword: ""
@@ -105,8 +103,7 @@ const SignUp = () => {
                 <Form {...form}>
                     <form onSubmit={form.handleSubmit(signUpFormHandler)} className="space-y-8">
                         <div className="space-y-3">
-                            <AuthTextInput<TsignUpform> control={form.control} type='text' name='firstname' placeholder='Enter your first name' Icon={UserCircleIcon} />
-                            <AuthTextInput<TsignUpform> control={form.control} type='text' name='lastname' placeholder='Enter your last name' Icon={UserCircleIcon} />
+                            <AuthTextInput<TsignUpform> control={form.control} type='text' name='name' placeholder='Enter your last name' Icon={UserCircleIcon} />
                             <AuthTextInput<TsignUpform> control={form.control} type='email' name='email' placeholder='Enter your email' Icon={EnvelopeIcon} />
                             <PasswordInput<TsignUpform> control={form.control} name='password' placeholder='Create your password' message='Password must be at least 8 characters' Icon={LockClosedIcon} />
                             <PasswordInput<TsignUpform> control={form.control} name='rePassword' placeholder='Re-type your password' Icon={LockClosedIcon} />
@@ -115,7 +112,8 @@ const SignUp = () => {
                             )}
                         </div>
 
-                        <button type="submit" className={`w-full mt-9 py-3 block ${isLoading ? 'bg-secondary-400' : 'bg-secondary-500'} rounded-xl text-white font-medium`} disabled={isLoading}>LOG IN</button>
+                        {/* <button type="submit" className={`w-full mt-9 py-3 block ${isLoading ? 'bg-secondary-400' : 'bg-secondary-500'} rounded-xl text-white font-medium`} disabled={isLoading}>LOG IN</button> */}
+                        <button type="submit" className={`w-full mt-9 py-3 block bg-blush-lavender-500 rounded-xl text-white font-medium`} disabled={isLoading}>LOG IN</button>
 
                     </form>
                 </Form>
