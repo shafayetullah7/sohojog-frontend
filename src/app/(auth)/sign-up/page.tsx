@@ -114,8 +114,8 @@ const SignUp = () => {
 
                         {/* <button type="submit" className={`w-full mt-9 py-3 block ${isLoading ? 'bg-secondary-400' : 'bg-secondary-500'} rounded-xl text-white font-medium`} disabled={isLoading}>LOG IN</button> */}
                         {/* <button type="submit" className={`w-full mt-9 py-3 block bg-blush-lavender-500 rounded-xl text-white font-medium`} disabled={isLoading}>LOG IN</button> */}
-                        <button type="submit" className={`w-full mt-9 py-3 block bg-blush-lavender-500 bg-tran rounded-xl text-white font-medium`} disabled={isLoading}>LOG IN</button>
-
+                        {/* <button type="submit" className={`w-full mt-9 py-3 block bg-blush-lavender-500 bg-tran rounded-xl text-white font-medium`} disabled={isLoading}>LOG IN</button> */}
+                        <button type="submit" className={`w-full mt-9 py-3 block bg-lavender-blush-500-tr-bl rounded-xl text-white font-medium`} disabled={isLoading}>SIGN UP</button>
 
                     </form>
                 </Form>

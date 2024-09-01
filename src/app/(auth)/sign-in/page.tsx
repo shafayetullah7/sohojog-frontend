@@ -77,14 +77,18 @@ const SignIn = () => {
                             <p className="text-red-500">Forgot Password?</p>
                         </div>
 
-                        <button type="submit" className="w-full mt-9 py-3 block bg-secondary-500 rounded-xl text-white font-medium">LOG IN</button>
+                        {/* <button type="submit" className="w-full mt-9 py-3 block bg-secondary-500 rounded-xl text-white font-medium">LOG IN</button> */}
+                        <button type="submit" className="w-full mt-9 py-3 block bg-lavender-blush-500-tr-bl rounded-xl text-white font-medium">LOG IN</button>
+
 
                     </form>
 
                 </Form>
             </div>
 
-            <p className="text-center mt-10 text-gray-400" >If you don’t have an account?  <Link replace href={'/sign-up'} className="text-blue-400 font-medium">sign up</Link></p>
+            {/* <p className="text-center mt-10 text-gray-400" >If you don’t have an account?  <Link replace href={'/sign-up'} className="text-blue-400 font-medium">sign up</Link></p> */}
+            <p className="text-center mt-10 text-gray-400" >If you don’t have an account?  <Link replace href={'/sign-up'} className="text-lavender-blush-500 font-bold">sign up</Link></p>
+
         </div>
     );
 };

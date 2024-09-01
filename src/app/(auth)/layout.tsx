@@ -16,7 +16,9 @@ export default function AuthLayout({
                         width={90}
                         height={90}
                     />
-                    <h1 className="text-3xl font-black"><span className="text-primary-500">Soho</span><span className="text-secondary-500">jog</span></h1>
+                    {/* <h1 className="text-3xl font-black"><span className="text-primary-500">Soho</span><span className="text-secondary-500">jog</span></h1> */}
+                    <h1 className="text-3xl font-black text-lavender-blush-500">Sohojog</h1>
+
                 </div>
                 <div className="mt-8 ">
                     {children}
