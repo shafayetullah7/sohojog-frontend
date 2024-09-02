@@ -1,4 +1,4 @@
-import { axiosBaseQuery } from "@/app/lib/helpers/axios/axiosBaseQuery";
+import { axiosBaseQuery } from "@/lib/helpers/axios/axiosBaseQuery";
 import { createApi } from "@reduxjs/toolkit/query/react";
 import { TauthResponse } from "../../data-types/authDataType";
 import { baseApi } from "../baseApi";

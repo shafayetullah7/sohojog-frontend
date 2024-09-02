@@ -1,6 +1,6 @@
 "use client"
 
-import { useSignUpMutation } from "@/app/lib/redux/api/api-features/authApi";
+import { useSignUpMutation } from "@/lib/redux/api/api-features/authApi";
 import AuthTextInput from "@/components/authModule/AuthTextInput";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -12,7 +12,7 @@ import { z } from "zod";
 import { EnvelopeIcon, UserCircleIcon, LockClosedIcon, EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
 import PasswordInput from "@/components/authModule/PasswordInput";
 import { useToast } from "@/components/ui/use-toast";
-import { TerrorResponse } from "@/app/lib/redux/data-types/responseDataType";
+import { TerrorResponse } from "@/lib/redux/data-types/responseDataType";
 import { title } from "process";
 import { useRouter } from "next/navigation";
 

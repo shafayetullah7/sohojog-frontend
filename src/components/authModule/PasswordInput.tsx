@@ -1,4 +1,4 @@
-import { TheroIcon } from "@/app/lib/types/heroIcon";
+import { TheroIcon } from "@/lib/types/heroIcon";
 import { Control, FieldValues, Path } from "react-hook-form";
 import AuthTextInput from "./AuthTextInput";
 import { FormControl, FormDescription, FormField, FormItem, FormMessage } from "../ui/form";

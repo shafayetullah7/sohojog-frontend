@@ -7,7 +7,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import AuthTextInput from "@/components/authModule/AuthTextInput";
 import Link from "next/link";
-import { useLoginMutation } from "@/app/lib/redux/api/api-features/authApi";
+import { useLoginMutation } from "@/lib/redux/api/api-features/authApi";
 import { useEffect } from "react";
 import { EnvelopeIcon, LockClosedIcon } from '@heroicons/react/24/outline';
 import PasswordInput from "@/components/authModule/PasswordInput";

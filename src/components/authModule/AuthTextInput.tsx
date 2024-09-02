@@ -3,7 +3,7 @@
 import { Control, FieldValues, Path } from "react-hook-form";
 import { FormControl, FormDescription, FormField, FormItem, FormMessage } from "../ui/form";
 import { Input } from "../ui/input";
-import { TheroIcon } from "@/app/lib/types/heroIcon";
+import { TheroIcon } from "@/lib/types/heroIcon";
 
 type FormInputProps<T extends FieldValues> = {
     control: Control<T>;

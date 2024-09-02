@@ -1,9 +1,9 @@
 
 const UserNav = () => {
     return (
-        <div className="w-full flex justify-between bg-gray-100 px-5 py-4">
-            <h1>SOHOJOG</h1>
-            <input type="text" name="search" className="px-5 py-2 rounded-lg" placeholder="type here" />
+        <div className="w-full flex justify-between items-center px-6 py-5">
+            <h1 className="text-lavender-blush-500 font-black text-3xl">SOHOJOG</h1>
+            <input type="text" name="search" className="px-5 py-3 rounded-lg w-[400px]" placeholder="type here" />
             <div>
                 <p>user</p>
             </div>
