@@ -2,10 +2,8 @@
 
 import { useSignUpMutation } from "@/lib/redux/api/api-features/authApi";
 import AuthTextInput from "@/components/authModule/AuthTextInput";
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Form, FormMessage } from "@/components/ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { AxiosError } from "axios";
-import Image from "next/image";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -13,7 +11,6 @@ import { EnvelopeIcon, UserCircleIcon, LockClosedIcon, EyeIcon, EyeSlashIcon } f
 import PasswordInput from "@/components/authModule/PasswordInput";
 import { useToast } from "@/components/ui/use-toast";
 import { TerrorResponse } from "@/lib/redux/data-types/responseDataType";
-import { title } from "process";
 import { useRouter } from "next/navigation";
 
 // Import the specific icon you want to use
@@ -78,22 +75,24 @@ const SignUp = () => {
             let errors: { title: string, description: string }[] = []
             let error = { title: 'Sign Up Failed', description: axiosError?.data?.message || 'Something went wrong' }
 
-            if (axiosError) {
-                if (axiosError.data?.errors?.length) {
-                    console.log('hereeeeeeeee')
-                    errors = axiosError.data.errors.map(err => ({ title: err.name, description: err.message }));
-                } else { errors.push(error) }
-                console.log(errors);
-                errors.forEach(err => {
-                    toast({
-                        title: err.title,
-                        description: err.description,
-                        variant: "destructive",
-                    });
-                })
-            } else {
-                toast({ ...error, variant: "destructive", })
-            }
+            toast({ ...error, variant: "destructive", })
+
+            // if (axiosError) {
+            //     if (axiosError.data?.errors?.length) {
+            //         console.log('hereeeeeeeee')
+            //         errors = axiosError.data.errors.map(err => ({ title: err.name, description: err.message }));
+            //     } else { errors.push(error) }
+            //     console.log(errors);
+            //     errors.forEach(err => {
+            //         toast({
+            //             title: err.title,
+            //             description: err.description,
+            //             variant: "destructive",
+            //         });
+            //     })
+            // } else {
+            //     toast({ ...error, variant: "destructive", })
+            // }
         }
     };
     return (

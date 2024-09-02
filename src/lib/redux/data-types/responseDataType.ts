@@ -54,6 +54,8 @@ export type TerrorResponse = {
   data: null;
   errors: TerrorDetail[];
   warnings?: Twarning[];
+  access: Taccess;
+
 };
 
 export type Tresponse<T> = {

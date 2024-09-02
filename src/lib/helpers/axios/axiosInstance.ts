@@ -1,3 +1,7 @@
+import {
+  Tresponse,
+  TresponseFormat,
+} from "@/lib/redux/data-types/responseDataType";
 import axios, { AxiosError } from "axios";
 
 const axiosInstance = axios.create();
@@ -21,8 +25,18 @@ axiosInstance.interceptors.response.use(
   // @ts-ignore
   function (response) {
     console.log("level 2 ok");
-    console.log("axios response 1", response);
+    console.log("axios response 1", response.data);
     console.log("axios response 1 type", typeof response);
+
+    const data: TresponseFormat<any> = response.data;
+
+    if (data?.access?.token) {
+      console.log("token", data.access.token);
+      localStorage.setItem("sohojog-token", data.access.token);
+    }
+    if (data?.access?.otpToken) {
+      localStorage.setItem("sohojog-otptoken", data.access.otpToken);
+    }
 
     return response;
     // return response;

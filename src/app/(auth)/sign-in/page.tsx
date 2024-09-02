@@ -11,6 +11,8 @@ import { useLoginMutation } from "@/lib/redux/api/api-features/authApi";
 import { useEffect } from "react";
 import { EnvelopeIcon, LockClosedIcon } from '@heroicons/react/24/outline';
 import PasswordInput from "@/components/authModule/PasswordInput";
+import { TerrorResponse } from "@/lib/redux/data-types/responseDataType";
+import { toast } from "@/components/ui/use-toast";
 // import Loader1 from "@/components/loaders/Loader1";
 
 
@@ -42,10 +44,29 @@ const SignIn = () => {
             console.log(data);
             const res = await login(data).unwrap();
             console.log('res 123', res);
-        } catch (error) {
-            console.log('Error occured', error);
-            console.log((error as { message: string }).message);
-            console.log(JSON.stringify(error))
+            if (res.success) {
+                console.log('here 0')
+                toast({
+                    title: "Success",
+                    description: res.message || "You have signed up successfully.",
+                    className: 'bg-green-500 text-white'
+                });
+                // router.replace('/sign-in')
+                // form.reset()
+            }
+        } catch (err) {
+            console.log('Error occured', err);
+            // console.log((err as { message: string }).message);
+            // console.log(JSON.stringify(err));
+
+            console.log('eeror', err);
+            const axiosError = err as { data: TerrorResponse, status: number };
+
+            // let errors: { title: string, description: string }[] = []
+            let error = { title: 'Login Failed', description: axiosError?.data?.message || 'Something went wrong' }
+            // alert(error.description);
+
+            toast({ ...error, variant: "destructive", })
         }
     }
     return (
