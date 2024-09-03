@@ -1,4 +1,4 @@
-class LocalStorageService {
+export class LocalStorageService {
   private static instance: LocalStorageService;
 
   private constructor() {}
