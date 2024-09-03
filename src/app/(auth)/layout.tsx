@@ -1,4 +1,5 @@
 import Image from "next/image"
+import Link from "next/link"
 
 export default function AuthLayout({
     children, // will be a page or nested layout
@@ -32,10 +33,10 @@ export default function AuthLayout({
                 </div>
 
                 <div className="flex justify-center items-center">
-                    <div className="flex items-center w-fit gap-2 border border-gray-300 px-4 py-2 rounded-lg text-gray-600 font-medium cursor-pointer">
+                    <Link href={'http://localhost:4000/api/v1/auth/google/login'} className="flex items-center w-fit gap-2 border border-gray-300 px-4 py-2 rounded-lg text-gray-600 font-medium cursor-pointer">
                         <Image src={'/images/icon-google.svg'} width={20} height={20} alt="Google icon" />
                         <p>Google</p>
-                    </div>
+                    </Link>
                 </div>
 
             </div>

@@ -8,11 +8,13 @@ import { z } from "zod";
 import AuthTextInput from "@/components/authModule/AuthTextInput";
 import Link from "next/link";
 import { useLoginMutation } from "@/lib/redux/api/api-features/authApi";
-import { useEffect } from "react";
 import { EnvelopeIcon, LockClosedIcon } from '@heroicons/react/24/outline';
 import PasswordInput from "@/components/authModule/PasswordInput";
 import { TerrorResponse } from "@/lib/redux/data-types/responseDataType";
 import { toast } from "@/components/ui/use-toast";
+import { useRouter } from "next/navigation";
+// import { redirect } from 'next/navigation'
+
 // import Loader1 from "@/components/loaders/Loader1";
 
 
@@ -25,11 +27,10 @@ type Tform = z.infer<typeof formSchema>;
 
 const SignIn = () => {
 
+    const router = useRouter()
     const [login, { isError, isLoading, isSuccess, data }] = useLoginMutation()
 
-    useEffect(() => {
-        console.log('haha', data)
-    }, [data])
+
 
     const form = useForm<Tform>({
         resolver: zodResolver(formSchema),
@@ -53,6 +54,9 @@ const SignIn = () => {
                 });
                 // router.replace('/sign-in')
                 // form.reset()
+                router.replace('/dashboard')
+                // redirect('/dashboard','replace')
+
             }
         } catch (err) {
             console.log('Error occured', err);
@@ -99,7 +103,7 @@ const SignIn = () => {
                         </div>
 
                         {/* <button type="submit" className="w-full mt-9 py-3 block bg-secondary-500 rounded-xl text-white font-medium">LOG IN</button> */}
-                        <button type="submit" className="w-full mt-9 py-3 block bg-lavender-blush-500-tr-bl rounded-xl text-white font-medium">LOG IN</button>
+                        <button type="submit" disabled={isLoading} className={`w-full mt-9 py-3 block ${isLoading ? 'bg-lavender-blush-300-tr-bl' : 'bg-lavender-blush-500-tr-bl'} rounded-xl text-white font-medium`}>LOG IN</button>
 
 
                     </form>

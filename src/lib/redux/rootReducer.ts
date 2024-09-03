@@ -1,7 +1,7 @@
 import { baseApi } from "./api/baseApi";
-import authReducer from "./features/auth/authSlice";
+import userReducer from "./features/user/userSlice";
 
 export const reducer = {
-  //   auth: authReducer,
+  user: userReducer,
   [baseApi.reducerPath]: baseApi.reducer,
 };
