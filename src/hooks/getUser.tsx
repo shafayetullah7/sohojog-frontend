@@ -24,6 +24,6 @@ export const useGetUser = () => {
         }
     }, [data, isSuccess, isLoading, isFetching, dispatch])
 
-    return { data: user || data?.data.user, isLoading, isError };
+    return { data: user || data?.data.user, isLoading, error, isError };
 
 };

@@ -13,13 +13,14 @@ const GooglePage = () => {
         if (token && typeof token === 'string') {
             LocalStorageService.getInstance().token = token;
             redirect('/dashboard');
+        } else {
+            redirect('/dashboard')
         }
     }, [token])
 
     return (
         <div>
-            <p>on google</p>
-            <p>{token ? token : 'no token'}</p>
+            <p>Loading...</p>
         </div>
     );
 };

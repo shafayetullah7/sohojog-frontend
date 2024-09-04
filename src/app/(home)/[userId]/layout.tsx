@@ -2,8 +2,8 @@
 import UserNav from "@/components/nav/UserNav";
 import Sidebar from "@/components/sidebar/Sidebar";
 import { useGetUser } from "@/hooks/getUser";
-import { useGetMeQuery } from "@/lib/redux/api/api-features/userAccountApi";
-import { redirect, useRouter } from "next/navigation";
+// import { useGetMeQuery } from "@/lib/redux/api/api-features/userAccountApi";
+import { useRouter } from "next/navigation";
 // import { useRouter } from "next/router";
 import { ReactNode, useState } from "react";
 

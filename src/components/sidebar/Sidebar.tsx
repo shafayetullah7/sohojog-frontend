@@ -8,6 +8,7 @@ import {
     TooltipProvider,
     TooltipTrigger,
 } from "@/components/ui/tooltip"
+import { useParams } from "next/navigation";
 
 
 type NavItem = {
@@ -51,6 +52,11 @@ const navItems: NavItem[] = [
     },
 ];
 const Sidebar = () => {
+    const params = useParams();
+    const userId = params.userId;
+
+    console.log(userId)
+
     const [retracted, setRetracted] = useState<boolean>(false);
     const togggleLeftBarRetraction = () => {
         setRetracted((retracted) => !retracted)
@@ -91,7 +97,7 @@ const Sidebar = () => {
                             {retracted ? <TooltipProvider delayDuration={300}>
                                 <Tooltip>
                                     <TooltipTrigger>
-                                        <Link href={item.route} className={`flex flex-nowrap items-center space-x-4 p-5 mx-2 rounded-2xl text-gray-800 font-medium overflow-hidden hover:bg-lavender-blush-400 hover:text-white`}>
+                                        <Link href={`${userId}/${item.route}`} className={`flex flex-nowrap items-center space-x-4 p-5 mx-2 rounded-2xl text-gray-800 font-medium overflow-hidden hover:bg-lavender-blush-400 hover:text-white`}>
                                             <div><item.icon className="size-6" aria-hidden="true" /></div>
                                             {!retracted && <p className="text-nowrap">{item.title}</p>}
                                         </Link>

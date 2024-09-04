@@ -44,7 +44,8 @@ const SignIn = () => {
         try {
             console.log(data);
             const res = await login(data).unwrap();
-            console.log('res 123', res);
+            const { data: { user } } = res;
+            console.log('res 123', res.data, user.id);
             if (res.success) {
                 console.log('here 0')
                 toast({
@@ -54,7 +55,7 @@ const SignIn = () => {
                 });
                 // router.replace('/sign-in')
                 // form.reset()
-                router.replace('/dashboard')
+                router.replace(`${user.id}/dashboard`)
                 // redirect('/dashboard','replace')
 
             }
