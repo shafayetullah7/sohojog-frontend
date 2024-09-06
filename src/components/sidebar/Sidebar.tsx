@@ -1,7 +1,7 @@
 "use client"
 import { BookTextIcon, ChevronRight, Globe2Icon, GridIcon, HomeIcon, MessageSquareIcon, UserIcon } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
     Tooltip,
     TooltipContent,
@@ -55,7 +55,12 @@ const Sidebar = () => {
     const params = useParams();
     const userId = params.userId;
 
-    console.log(userId)
+
+    // useEffect(() => {
+    //     console.log('params', params, userId);
+    // }, [params, userId])
+
+    // console.log(userId)
 
     const [retracted, setRetracted] = useState<boolean>(false);
     const togggleLeftBarRetraction = () => {
@@ -97,7 +102,7 @@ const Sidebar = () => {
                             {retracted ? <TooltipProvider delayDuration={300}>
                                 <Tooltip>
                                     <TooltipTrigger>
-                                        <Link href={`${userId}/${item.route}`} className={`flex flex-nowrap items-center space-x-4 p-5 mx-2 rounded-2xl text-gray-800 font-medium overflow-hidden hover:bg-lavender-blush-400 hover:text-white`}>
+                                        <Link href={`/sh/${userId}/${item.route}`} className={`flex flex-nowrap items-center space-x-4 p-5 mx-2 rounded-2xl text-gray-800 font-medium overflow-hidden hover:bg-lavender-blush-400 hover:text-white`}>
                                             <div><item.icon className="size-6" aria-hidden="true" /></div>
                                             {!retracted && <p className="text-nowrap">{item.title}</p>}
                                         </Link>
@@ -106,7 +111,7 @@ const Sidebar = () => {
                                         <p className="text-slate-500">{item.title}</p>
                                     </TooltipContent>
                                 </Tooltip>
-                            </TooltipProvider> : <Link href={item.route} className={`flex flex-nowrap items-center space-x-4 p-5 mx-2 rounded-2xl text-gray-800 font-medium overflow-hidden hover:bg-lavender-blush-400 hover:text-white`}>
+                            </TooltipProvider> : <Link href={`/sh/${userId}/${item.route}`} className={`flex flex-nowrap items-center space-x-4 p-5 mx-2 rounded-2xl text-gray-800 font-medium overflow-hidden hover:bg-lavender-blush-400 hover:text-white`}>
                                 <div><item.icon className="size-6" aria-hidden="true" /></div>
                                 {!retracted && <p className="text-nowrap">{item.title}</p>}
                             </Link>}

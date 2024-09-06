@@ -1,29 +1,57 @@
+import { errorAlert } from "@/components/alerts/errorAlert";
+import { LocalStorageService } from "@/lib/helpers/access/Access";
 import { useGetMeQuery } from "@/lib/redux/api/api-features/userAccountApi";
 import { setUser } from "@/lib/redux/features/user/userSlice";
 import { RootState } from "@/lib/redux/store";
+import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux"
+import { useDispatch, useSelector } from "react-redux";
 
 export const useGetUser = () => {
     const dispatch = useDispatch();
-    const user = useSelector((state: RootState) => state.user);
+    const { user } = useSelector((state: RootState) => state.user);
+    // const router = useRouter();
 
-    // const { data: userData, isLoading, isError } = useGetUserQuery(undefined, {
-    //     skip: !!user, // Skip the query if the user data is already in the store
-    //   });
+    // console.log('path', window.location.href)
 
-    const response = useGetMeQuery()
-    const { data, isSuccess, isLoading, isError, isFetching, error } = response
+    // console.log('user', !!user);
+
+    const { data, isSuccess, isLoading, isError, error, isFetching, isUninitialized, status } = useGetMeQuery(undefined, {
+        skip: !!user, // Skip query if user data is already present
+    });
 
     useEffect(() => {
-        console.log('data', data);
-        if (!isLoading || isFetching) {
-            if (isSuccess && data) {
-                dispatch(setUser(data.data.user))
+        if (!isLoading || !isFetching) {
+            if (isSuccess) { // Handle success scenario only
+                dispatch(setUser(data.data.user)); // Dispatch user data only on success
+            } else if (isError) { // Handle error scenario
+                console.log("Error fetching user data:", error, 'token', LocalStorageService.getInstance().token)
+                // LocalStorageService.getInstance().token;
+                console.log('caught the theif')
+                errorAlert({ title: 'Failed', description: "Please login again" })
+                // router.push('/sign-in');
             }
         }
-    }, [data, isSuccess, isLoading, isFetching, dispatch])
+    }, [data, isSuccess, isError, isLoading, isFetching, error, dispatch]); // Only include necessary dependencies
 
-    return { data: user || data?.data.user, isLoading, error, isError };
+    const combinedData = user || data?.data.user;
+    const combinedLoading = isLoading || isFetching;
 
+    // console.log("on get user hook", {
+    //     data: combinedData,
+    //     isSuccess,
+    //     isLoading: combinedLoading,
+    //     error,
+    //     isError,
+    //     isFetching,
+    //     isUninitialized,
+    //     status,
+    // });
+
+    return {
+        data: combinedData,
+        isLoading: combinedLoading,
+        error,
+        isSuccess, // Keep isSuccess for potential usage
+    };
 };

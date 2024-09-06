@@ -1,7 +1,7 @@
 import { useGetUser } from "@/hooks/getUser";
 
 const UserNav = () => {
-    const { isLoading, isError, data } = useGetUser()
+    const { isLoading, error, data: user } = useGetUser()
     return (
         <div className="w-full flex justify-between items-center px-6 py-5">
             <h1 className="text-lavender-blush-500 font-black text-3xl">SOHOJOG</h1>
@@ -10,8 +10,8 @@ const UserNav = () => {
                 <p>
                     {isLoading
                         ? 'loading...'
-                        : data?.user?.name
-                            ? data.user.name
+                        : user?.name
+                            ? user.name
                             : 'not found'}
                 </p>
             </div>

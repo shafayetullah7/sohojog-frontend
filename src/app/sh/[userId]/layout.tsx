@@ -15,11 +15,11 @@ type Props = {
 const UserLayout = ({ children }: Props) => {
 
     // const { isLoading, isError, error, data, isSuccess, isFetching } = useGetMeQuery()
-    const { isError, isLoading, data
+    const { error, isSuccess, isLoading, data
     } = useGetUser()
     const router = useRouter()
 
-    console.log(data)
+    // console.log(data)
 
     if (isLoading) {
         return <div>
@@ -27,6 +27,7 @@ const UserLayout = ({ children }: Props) => {
         </div>
     } else {
         if (!data) {
+            // console.log('caught the theif')
             router.replace('/sign-in')
             // redirect('/sign-in')
         } else {

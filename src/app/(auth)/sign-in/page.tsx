@@ -11,8 +11,14 @@ import { useLoginMutation } from "@/lib/redux/api/api-features/authApi";
 import { EnvelopeIcon, LockClosedIcon } from '@heroicons/react/24/outline';
 import PasswordInput from "@/components/authModule/PasswordInput";
 import { TerrorResponse } from "@/lib/redux/data-types/responseDataType";
-import { toast } from "@/components/ui/use-toast";
+// import { toast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
+import { errorAlert } from "@/components/alerts/errorAlert";
+import { successAlert } from "@/components/alerts/successAlert";
+import { useEffect } from "react";
+import { LocalStorageService } from "@/lib/helpers/access/Access";
+import { useDispatch } from "react-redux";
+import { setUser } from "@/lib/redux/features/user/userSlice";
 // import { redirect } from 'next/navigation'
 
 // import Loader1 from "@/components/loaders/Loader1";
@@ -28,6 +34,7 @@ type Tform = z.infer<typeof formSchema>;
 const SignIn = () => {
 
     const router = useRouter()
+    const dispatch = useDispatch()
     const [login, { isError, isLoading, isSuccess, data }] = useLoginMutation()
 
 
@@ -40,6 +47,17 @@ const SignIn = () => {
         }
     });
 
+    const LocalStorage = LocalStorageService.getInstance()
+
+
+    useEffect(() => {
+        if (isSuccess && LocalStorage.token) {
+            console.log(LocalStorage.token)
+            console.log('redirecting success')
+            router.replace(`/sh`)
+        }
+    }, [isSuccess, LocalStorage, router])
+
     const loginFormHandler = async (data: Tform) => {
         try {
             console.log(data);
@@ -48,14 +66,19 @@ const SignIn = () => {
             console.log('res 123', res.data, user.id);
             if (res.success) {
                 console.log('here 0')
-                toast({
+                // toast({
+                //     title: "Success",
+                //     description: res.message || "You have signed up successfully.",
+                //     className: 'bg-green-500 text-white'
+                // });
+                dispatch(setUser(user));
+                successAlert({
                     title: "Success",
                     description: res.message || "You have signed up successfully.",
-                    className: 'bg-green-500 text-white'
-                });
+                })
                 // router.replace('/sign-in')
                 // form.reset()
-                router.replace(`${user.id}/dashboard`)
+                // router.replace(`/sh`)
                 // redirect('/dashboard','replace')
 
             }
@@ -71,7 +94,8 @@ const SignIn = () => {
             let error = { title: 'Login Failed', description: axiosError?.data?.message || 'Something went wrong' }
             // alert(error.description);
 
-            toast({ ...error, variant: "destructive", })
+            // toast({ ...error, variant: "destructive", })
+            errorAlert({ ...error });
         }
     }
     return (

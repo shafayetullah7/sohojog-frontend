@@ -13,27 +13,27 @@ export class LocalStorageService {
 
   // Getters and setters for token
   get token(): string | null {
-    return localStorage.getItem("token");
+    return localStorage.getItem("sohojogtoken");
   }
 
   set token(value: string | null) {
     if (value) {
-      localStorage.setItem("token", value);
+      localStorage.setItem("sohojogtoken", value);
     } else {
-      localStorage.removeItem("token");
+      localStorage.removeItem("sohojogtoken");
     }
   }
 
   // Getters and setters for otpToken
   get otpToken(): string | null {
-    return localStorage.getItem("otpToken");
+    return localStorage.getItem("sohojogotpToken");
   }
 
   set otpToken(value: string | null) {
     if (value) {
-      localStorage.setItem("otpToken", value);
+      localStorage.setItem("sohojogotpToken", value);
     } else {
-      localStorage.removeItem("otpToken");
+      localStorage.removeItem("sohojogotpToken");
     }
   }
 }

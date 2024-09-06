@@ -22,6 +22,8 @@ axiosInstance.interceptors.request.use(
     const token = localStorageService.token;
     const otpToken = localStorageService.otpToken;
 
+    console.log("axios interceptor token", window.location.href, token);
+
     if (token && config.headers) {
       config.headers["Authorization"] = `Bearer ${token}`;
     } else if (otpToken && config.headers) {
@@ -39,18 +41,18 @@ axiosInstance.interceptors.request.use(
 axiosInstance.interceptors.response.use(
   // @ts-ignore
   function (response) {
-    console.log("level 2 ok");
-    console.log("axios response 1", response.data);
-    console.log("axios response 1 type", typeof response);
+    // console.log("level 2 ok");
+    // console.log("axios response 1", response.data);
+    // console.log("axios response 1 type", typeof response);
 
     const data: TresponseFormat<any> = response.data;
 
     if (data?.access?.token) {
       // console.log("token", data.access.token);
-      // localStorage.setItem("sohojog-token", data.access.token);
+      // localStorage.setItem("sohojogtoken", data.access.token);
       localStorageService.token = data.access.token;
     } else if (data?.access?.otpToken) {
-      // localStorage.setItem("sohojog-otptoken", data.access.otpToken);
+      // localStorage.setItem("sohojogotptoken", data.access.otpToken);
       localStorageService.token = data.access.otpToken;
     }
 
@@ -67,6 +69,7 @@ axiosInstance.interceptors.response.use(
       console.error("Error message:", error.message);
     }
     if (error.status === 401 || error.response?.data.access.sessionExpired) {
+      console.log('here sign in');
       Router.push("/sign-in");
     }
     return Promise.reject(error);
