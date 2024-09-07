@@ -3,7 +3,7 @@ import { createApi } from "@reduxjs/toolkit/query/react";
 // import { TauthResponse } from "../../data-types/authDataType";
 import { baseApi } from "../baseApi";
 import { Tresponse, TresponseFormat } from "../../data-types/responseDataType";
-import { TsignUpData, TsignUpform } from "@/app/(auth)/sign-up/page";
+import { TsignUpData, TsignUpform } from "@/app/(auth)/(access)/sign-up/page";
 import { Tuser, TuserResponse } from "../../data-types/userDataTypes";
 
 export const authApi = baseApi.injectEndpoints({

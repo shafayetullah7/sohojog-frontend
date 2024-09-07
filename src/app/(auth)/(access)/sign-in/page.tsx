@@ -15,8 +15,8 @@ import { TerrorResponse } from "@/lib/redux/data-types/responseDataType";
 import { useRouter } from "next/navigation";
 import { errorAlert } from "@/components/alerts/errorAlert";
 import { successAlert } from "@/components/alerts/successAlert";
-import { useEffect } from "react";
-import { LocalStorageService } from "@/lib/helpers/access/Access";
+// import { useEffect } from "react";
+// import { LocalStorageService } from "@/lib/helpers/access/Access";
 import { useDispatch } from "react-redux";
 import { setUser } from "@/lib/redux/features/user/userSlice";
 // import { redirect } from 'next/navigation'
@@ -47,16 +47,16 @@ const SignIn = () => {
         }
     });
 
-    const LocalStorage = LocalStorageService.getInstance()
+    // const LocalStorage = LocalStorageService.getInstance()
 
 
-    useEffect(() => {
-        if (isSuccess && LocalStorage.token) {
-            console.log(LocalStorage.token)
-            console.log('redirecting success')
-            router.replace(`/sh`)
-        }
-    }, [isSuccess, LocalStorage, router])
+    // useEffect(() => {
+    //     if (isSuccess && LocalStorage.token) {
+    //         console.log(LocalStorage.token)
+    //         console.log('redirecting success')
+    //         router.replace(`/sh`)
+    //     }
+    // }, [isSuccess, LocalStorage, router])
 
     const loginFormHandler = async (data: Tform) => {
         try {
@@ -74,11 +74,11 @@ const SignIn = () => {
                 dispatch(setUser(user));
                 successAlert({
                     title: "Success",
-                    description: res.message || "You have signed up successfully.",
+                    description: res.message || "You have logged in successfully.",
                 })
                 // router.replace('/sign-in')
                 // form.reset()
-                // router.replace(`/sh`)
+                router.replace(`/sh`)
                 // redirect('/dashboard','replace')
 
             }
@@ -100,7 +100,7 @@ const SignIn = () => {
     }
     return (
         <div>
-            <p className="font-bold text-xl">Sign in</p>
+            <p className="font-bold text-xl text-slate-900">Sign in</p>
             {/* <Loader1 size={30}></Loader1> */}
             <div className="mt-5">
                 <Form {...form}>
@@ -124,11 +124,11 @@ const SignIn = () => {
                                     Remember Me
                                 </label>
                             </div>
-                            <p className="text-red-500">Forgot Password?</p>
+                            <Link href={'/forgot-pass'} className="text-red-500 hover:underline">Forgot Password?</Link>
                         </div>
 
                         {/* <button type="submit" className="w-full mt-9 py-3 block bg-secondary-500 rounded-xl text-white font-medium">LOG IN</button> */}
-                        <button type="submit" disabled={isLoading} className={`w-full mt-9 py-3 block ${isLoading ? 'bg-lavender-blush-300-tr-bl' : 'bg-lavender-blush-500-tr-bl'} rounded-xl text-white font-medium`}>LOG IN</button>
+                        <button type="submit" disabled={isLoading || isSuccess} className={`w-full mt-9 py-3 block ${isLoading || isSuccess ? 'bg-lavender-blush-300-tr-bl' : 'bg-lavender-blush-500-tr-bl'} rounded-xl text-white font-medium`}>LOG IN</button>
 
 
                     </form>

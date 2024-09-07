@@ -12,6 +12,10 @@ import PasswordInput from "@/components/authModule/PasswordInput";
 import { useToast } from "@/components/ui/use-toast";
 import { TerrorResponse } from "@/lib/redux/data-types/responseDataType";
 import { useRouter } from "next/navigation";
+import { successAlert } from "@/components/alerts/successAlert";
+import { useDispatch } from "react-redux";
+import { setUser } from "@/lib/redux/features/user/userSlice";
+import { errorAlert } from "@/components/alerts/errorAlert";
 
 // Import the specific icon you want to use
 
@@ -28,9 +32,9 @@ export type TsignUpData = Omit<TsignUpform, 'rePassword'>;
 
 const SignUp = () => {
 
-    const [signUp, { isError, isLoading, data }] = useSignUpMutation();
-    const { toast } = useToast();
+    const [signUp, { isError, isLoading,isSuccess, data }] = useSignUpMutation();
     const router = useRouter();
+    const dispatch = useDispatch()
 
     const form = useForm<TsignUpform>({
         resolver: zodResolver(formSchema),
@@ -47,16 +51,23 @@ const SignUp = () => {
             const { rePassword, ...signUpData } = data;
             const res = await signUp(signUpData).unwrap();
 
+            const { data: { user } } = res;
+
             console.log('res', res);
 
             if (res.success) {
-                console.log('here 0')
-                toast({
+                // console.log('here 0')
+                dispatch(setUser(user))
+                successAlert({
                     title: "Success",
                     description: res.message || "You have signed up successfully.",
-                    className: 'bg-green-500 text-white'
-                });
-                router.replace('/sign-in')
+                })
+                // toast({
+                //     title: "Success",
+                //     description: res.message || "You have signed up successfully.",
+                //     className: 'bg-green-500 text-white'
+                // });
+                router.replace('/sh')
             }
             // else {
             //     console.log('here 2');
@@ -75,7 +86,8 @@ const SignUp = () => {
             let errors: { title: string, description: string }[] = []
             let error = { title: 'Sign Up Failed', description: axiosError?.data?.message || 'Something went wrong' }
 
-            toast({ ...error, variant: "destructive", })
+            // toast({ ...error, variant: "destructive", })
+            errorAlert({ ...error })
 
             // if (axiosError) {
             //     if (axiosError.data?.errors?.length) {
@@ -97,7 +109,7 @@ const SignUp = () => {
     };
     return (
         <div>
-            <p className="font-bold text-xl text-gray-800">Sign up</p>
+            <p className="font-bold text-xl text-slate-900">Sign up</p>
             <div className="mt-5">
                 <Form {...form}>
                     <form onSubmit={form.handleSubmit(signUpFormHandler)} className="space-y-8">
@@ -114,7 +126,8 @@ const SignUp = () => {
                         {/* <button type="submit" className={`w-full mt-9 py-3 block ${isLoading ? 'bg-secondary-400' : 'bg-secondary-500'} rounded-xl text-white font-medium`} disabled={isLoading}>LOG IN</button> */}
                         {/* <button type="submit" className={`w-full mt-9 py-3 block bg-blush-lavender-500 rounded-xl text-white font-medium`} disabled={isLoading}>LOG IN</button> */}
                         {/* <button type="submit" className={`w-full mt-9 py-3 block bg-blush-lavender-500 bg-tran rounded-xl text-white font-medium`} disabled={isLoading}>LOG IN</button> */}
-                        <button type="submit" className={`w-full mt-9 py-3 block bg-lavender-blush-500-tr-bl rounded-xl text-white font-medium`} disabled={isLoading}>SIGN UP</button>
+                        <button type="submit" className={`w-full mt-9 py-3 block ${isLoading||isSuccess ? 'bg-lavender-blush-300-tr-bl' : 'bg-lavender-blush-500-tr-bl'} rounded-xl text-white font-medium`} disabled={isLoading||isSuccess}>SIGN UP</button>
+                        {/* <button type="submit" disabled={isLoading} className={`w-full mt-9 py-3 block ${isLoading ? 'bg-lavender-blush-300-tr-bl' : 'bg-lavender-blush-500-tr-bl'} rounded-xl text-white font-medium`}>LOG IN</button> */}
 
                     </form>
                 </Form>

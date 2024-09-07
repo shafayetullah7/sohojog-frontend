@@ -19,18 +19,34 @@ const HomeLayout = ({ children }: Props) => {
         // if(data || )
         if (LocalStorage.token) {
             if (isLoading) {
-                if (data?.id) {
-                    // console.log('sh redirect 5')
-                    router.replace(`/sh/${data.id}`)
+                if (data) {
+                    if (!data.verified) {
+                        router.replace('/verify-user');
+                    }
+                    else if (data.id) {
+                        // console.log('sh redirect 5')
+                        router.replace(`/sh/${data.id}`)
+                    }
                 }
             } else {
                 if (data?.id) {
                     // console.log('sh redirect 4')
-                    router.replace(`/sh/${data.id}`)
+                    if (!data?.verified) {
+                        // console.log('sh redirect 4')
+                        router.replace(`/verify-user`);
+                    } else {
+                        router.replace(`/sh/${data.id}`);
+                    }
+
                 } else {
                     if (isSuccess && data) {
-                        // console.log('sh redirect 3')
-                        router.replace(`/sh/${data.id}`);
+                        if (!data.verified) {
+                            router.replace('/verify-user')
+                        } else {
+                            // console.log('sh redirect 3')
+                            router.replace(`/sh/${data.id}`);
+                        }
+
                     } else {
                         // console.log('sh redirect 2')
                         router.replace('/sign-in');
