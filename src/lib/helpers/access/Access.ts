@@ -11,29 +11,44 @@ export class LocalStorageService {
     return LocalStorageService.instance;
   }
 
+  // Check if window is defined (ensures this is running on the client side)
+  private isBrowser(): boolean {
+    return typeof window !== "undefined";
+  }
+
   // Getters and setters for token
   get token(): string | null {
-    return localStorage.getItem("sohojogtoken");
+    if (this.isBrowser()) {
+      return localStorage.getItem("sohojogtoken");
+    }
+    return null; // Return null if not in the browser
   }
 
   set token(value: string | null) {
-    if (value) {
-      localStorage.setItem("sohojogtoken", value);
-    } else {
-      localStorage.removeItem("sohojogtoken");
+    if (this.isBrowser()) {
+      if (value) {
+        localStorage.setItem("sohojogtoken", value);
+      } else {
+        localStorage.removeItem("sohojogtoken");
+      }
     }
   }
 
   // Getters and setters for otpToken
   get otpToken(): string | null {
-    return localStorage.getItem("sohojogotpToken");
+    if (this.isBrowser()) {
+      return localStorage.getItem("sohojogotpToken");
+    }
+    return null; // Return null if not in the browser
   }
 
   set otpToken(value: string | null) {
-    if (value) {
-      localStorage.setItem("sohojogotpToken", value);
-    } else {
-      localStorage.removeItem("sohojogotpToken");
+    if (this.isBrowser()) {
+      if (value) {
+        localStorage.setItem("sohojogotpToken", value);
+      } else {
+        localStorage.removeItem("sohojogotpToken");
+      }
     }
   }
 }

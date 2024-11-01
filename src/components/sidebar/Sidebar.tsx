@@ -1,5 +1,5 @@
 "use client"
-import { BookTextIcon, ChevronRight, Globe2Icon, GridIcon, HomeIcon, MessageSquareIcon, UserIcon } from "lucide-react";
+import { BookTextIcon, BriefcaseIcon, ChevronRight, Globe2Icon, GridIcon, HomeIcon, MessageSquareIcon, UserIcon } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import {
@@ -8,7 +8,7 @@ import {
     TooltipProvider,
     TooltipTrigger,
 } from "@/components/ui/tooltip"
-import { useParams } from "next/navigation";
+import { useParams, usePathname } from "next/navigation";
 
 
 type NavItem = {
@@ -29,6 +29,11 @@ const navItems: NavItem[] = [
         title: 'Dashboard',
         route: '/dashboard',
         icon: GridIcon,
+    },
+    {
+        title: 'Projects',
+        route: '/projects',
+        icon: BriefcaseIcon,
     },
     {
         title: 'Profile',
@@ -53,12 +58,20 @@ const navItems: NavItem[] = [
 ];
 const Sidebar = () => {
     const params = useParams();
+    const pathname = usePathname();
     const userId = params.userId;
 
+    // console.log("********", pathname)
 
-    // useEffect(() => {
-    //     console.log('params', params, userId);
-    // }, [params, userId])
+    const isActive = (path: string) => {
+        const sections = pathname.split('/');
+        const target = sections[3];
+
+        const matcher = `/${target ? target : ''}`
+
+        return path === matcher;
+    }
+
 
     // console.log(userId)
 
@@ -70,7 +83,7 @@ const Sidebar = () => {
 
     return (
         <div className={`py-4 px-4  ${retracted ? 'w-28' : 'w-1/5'} transition-all duration-300 overflow-hidden`}>
-            <div className={`flex flex-nowrap items-center justify-end space-x-4 mx-6 rounded-2xl text-gray-800`}>
+            <div className={`flex flex-nowrap items-center justify-start space-x-4 mx-6 rounded-2xl text-gray-800`}>
                 {/* <div className="cursor-pointer" onClick={togggleLeftBarRetraction}><MenuIcon className="size-8" aria-hidden="true"></MenuIcon></div> */}
                 <div className={`cursor-pointer ${retracted ? 'rotate-0' : 'rotate-180'} transition-all duration-500`} onClick={togggleLeftBarRetraction}>
                     <ChevronRight className="size-8" aria-hidden="true"></ChevronRight>
@@ -80,29 +93,10 @@ const Sidebar = () => {
                 <ul className="space-y-1">
                     {navItems.map((item) => (
                         <li key={item.route}>
-                            {/* <Link href={item.route} className={`flex flex-nowrap items-center space-x-4 p-5 mx-2 my-1 rounded-2xl text-gray-800 font-medium overflow-hidden hover:bg-lavender-blush-400 hover:text-white`}>
-                                <div><item.icon className="size-6" aria-hidden="true" /></div>
-                                {!retracted && <p className="text-nowrap">{item.title}</p>}
-                            </Link> */}
-                            {
-                                // <TooltipProvider>
-                                //     <Tooltip>
-                                //         <TooltipTrigger className="w-full">
-                                //             <Link href={item.route} className={`flex flex-nowrap items-center space-x-4 p-5 mx-2 rounded-2xl text-gray-800 font-medium overflow-hidden hover:bg-lavender-blush-400 hover:text-white`}>
-                                //                 <div><item.icon className="size-6" aria-hidden="true" /></div>
-                                //                 {!retracted && <p className="text-nowrap">{item.title}</p>}
-                                //             </Link>
-                                //         </TooltipTrigger>
-                                //         {retracted && <TooltipContent>
-                                //             <p>Add to library</p>
-                                //         </TooltipContent>}
-                                //     </Tooltip>
-                                // </TooltipProvider>
-                            }
                             {retracted ? <TooltipProvider delayDuration={300}>
                                 <Tooltip>
                                     <TooltipTrigger>
-                                        <Link href={`/sh/${userId}/${item.route}`} className={`flex flex-nowrap items-center space-x-4 p-5 mx-2 rounded-2xl text-gray-800 font-medium overflow-hidden hover:bg-lavender-blush-400 hover:text-white`}>
+                                        <Link href={`/sh/${userId}/${item.route}/`} className={`${isActive(item.route) ? 'bg-lavender-blush-400 text-white' : ''} flex flex-nowrap items-center space-x-4 p-5 mx-2 rounded-xl text-gray-800 font-medium overflow-hidden`}>
                                             <div><item.icon className="size-6" aria-hidden="true" /></div>
                                             {!retracted && <p className="text-nowrap">{item.title}</p>}
                                         </Link>
@@ -111,7 +105,7 @@ const Sidebar = () => {
                                         <p className="text-slate-500">{item.title}</p>
                                     </TooltipContent>
                                 </Tooltip>
-                            </TooltipProvider> : <Link href={`/sh/${userId}/${item.route}`} className={`flex flex-nowrap items-center space-x-4 p-5 mx-2 rounded-2xl text-gray-800 font-medium overflow-hidden hover:bg-lavender-blush-400 hover:text-white`}>
+                            </TooltipProvider> : <Link href={`/sh/${userId}/${item.route}/`} className={`${isActive(item.route) ? 'bg-lavender-blush-400 text-white' : ''} flex flex-nowrap items-center space-x-4 p-5 mx-2 rounded-xl text-gray-800 font-medium overflow-hidden`}>
                                 <div><item.icon className="size-6" aria-hidden="true" /></div>
                                 {!retracted && <p className="text-nowrap">{item.title}</p>}
                             </Link>}
