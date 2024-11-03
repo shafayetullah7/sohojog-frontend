@@ -1,15 +1,45 @@
+'use client'
 import { PlusIcon } from 'lucide-react';
-import React from 'react';
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from "@/components/ui/dialog"
+import CreateProject from './createProject/CreateProject';
+import { useState } from 'react';
+
 
 const ProjectsHead = () => {
+    const [openModal, setOpenModal] = useState<boolean>(false);
+
+    const updateOpenModal = (value: boolean) => {
+        setOpenModal(value)
+    }
+
     return (
-        <div className='bg-white w-full p-5'>
+        <div className='bg-white w-full p-5 rounded-lg'>
             <div className='flex justify-between items-center'>
                 <h1 className='text-4xl font-bold'>Projects</h1>
-                <button className="flex items-center space-x-2 p-2 bg-blue-500 text-white rounded">
-                    <PlusIcon className="w-4 h-4" />
-                    <span>Create New Project</span>
-                </button>
+
+                <Dialog open={openModal}>
+                    <DialogTrigger>
+                        <button className="flex items-center space-x-2 p-2 border-2 border-gray-500 rounded-lg font-semibold" onClick={() => updateOpenModal(true)}>
+                            <PlusIcon className="size-4" strokeWidth={3} />
+                            <span>Create New Project</span>
+                        </button>
+                    </DialogTrigger>
+                    <DialogContent className="w-auto max-w-[min(calc(100vw-2rem),600px)]">
+                        <DialogHeader>
+                            <DialogTitle><h2 className="text-2xl font-bold mb-6">Create new project</h2></DialogTitle>
+                        </DialogHeader>
+                        <div>
+                            <CreateProject updateOpenModal={updateOpenModal}></CreateProject>
+                        </div>
+                    </DialogContent>
+                </Dialog>
             </div>
         </div>
     );
