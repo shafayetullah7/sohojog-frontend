@@ -1,7 +1,7 @@
 import { TresponseFormat } from "@/lib/redux/data-types/responseDataType";
 import { baseApi } from "../../../baseApi";
 import { CreateProjectResponseData } from "./manager.project.t";
-import { CreateProjectRequestData } from "@/app/sh/[userId]/projects/components/createProject/CreateProject";
+import { CreateProjectRequestData } from "@/app/sh/[userId]/projects/components/createProject/create.project.schema";
 
 const managerProjectApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
