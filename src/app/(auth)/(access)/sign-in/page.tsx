@@ -7,10 +7,10 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import AuthTextInput from "@/components/authModule/AuthTextInput";
 import Link from "next/link";
-import { useLoginMutation } from "@/lib/redux/api/api-features/authApi";
+import { useLoginMutation } from "@/_lib/redux/api/api-features/common/auth-api/authApi";
 import { EnvelopeIcon, LockClosedIcon } from '@heroicons/react/24/outline';
 import PasswordInput from "@/components/authModule/PasswordInput";
-import { TerrorResponse } from "@/lib/redux/data-types/responseDataType";
+import { TerrorResponse } from "@/_lib/redux/data-types/responseDataType";
 // import { toast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
 import { errorAlert } from "@/components/alerts/errorAlert";
@@ -18,7 +18,7 @@ import { successAlert } from "@/components/alerts/successAlert";
 // import { useEffect } from "react";
 // import { LocalStorageService } from "@/lib/helpers/access/Access";
 import { useDispatch } from "react-redux";
-import { setUser } from "@/lib/redux/features/user/userSlice";
+import { setUser } from "@/_lib/redux/features/user/userSlice";
 // import { redirect } from 'next/navigation'
 
 // import Loader1 from "@/components/loaders/Loader1";

@@ -2,7 +2,7 @@ import {
   TerrorResponse,
   Tresponse,
   TresponseFormat,
-} from "@/lib/redux/data-types/responseDataType";
+} from "@/_lib/redux/data-types/responseDataType";
 import axios, { AxiosError } from "axios";
 import Router from "next/router";
 import { LocalStorageService } from "../access/Access";

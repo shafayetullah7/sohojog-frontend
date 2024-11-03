@@ -1,4 +1,4 @@
-import { axiosBaseQuery } from "@/lib/helpers/axios/axiosBaseQuery";
+import { axiosBaseQuery } from "@/_lib/helpers/axios/axiosBaseQuery";
 import { createApi } from "@reduxjs/toolkit/query/react";
 
 const baseUrl = `http://localhost:4000/api/v1/`;

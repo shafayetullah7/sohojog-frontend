@@ -2,11 +2,11 @@
 
 import { errorAlert } from "@/components/alerts/errorAlert";
 import { useGetUser } from "@/hooks/getUser";
-import { LocalStorageService } from "@/lib/helpers/access/Access";
-import { useSendOtpMutation } from "@/lib/redux/api/api-features/authApi";
+import { LocalStorageService } from "@/_lib/helpers/access/Access";
+import { useSendOtpMutation } from "@/_lib/redux/api/api-features/common/auth-api/authApi";
 import { usePathname, useRouter } from "next/navigation";
 import { ReactNode, useEffect, useState, useCallback } from "react";
-import { TerrorResponse } from "@/lib/redux/data-types/responseDataType";
+import { TerrorResponse } from "@/_lib/redux/data-types/responseDataType";
 
 type Props = {
     children: ReactNode;

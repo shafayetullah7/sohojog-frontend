@@ -1,6 +1,6 @@
 'use client'
 import { errorAlert } from '@/components/alerts/errorAlert';
-import { LocalStorageService } from '@/lib/helpers/access/Access';
+import { LocalStorageService } from '@/_lib/helpers/access/Access';
 import { redirect, useSearchParams } from 'next/navigation';
 // import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';

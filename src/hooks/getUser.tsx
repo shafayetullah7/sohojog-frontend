@@ -1,8 +1,8 @@
 import { errorAlert } from "@/components/alerts/errorAlert";
-import { LocalStorageService } from "@/lib/helpers/access/Access";
-import { useGetMeQuery } from "@/lib/redux/api/api-features/userAccountApi";
-import { setUser } from "@/lib/redux/features/user/userSlice";
-import { RootState } from "@/lib/redux/store";
+import { LocalStorageService } from "@/_lib/helpers/access/Access";
+import { useGetMeQuery } from "@/_lib/redux/api/api-features/common/user-api/userAccountApi";
+import { setUser } from "@/_lib/redux/features/user/userSlice";
+import { RootState } from "@/_lib/redux/store";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";

@@ -1,13 +1,15 @@
-import { axiosBaseQuery } from "@/lib/helpers/axios/axiosBaseQuery";
+import { axiosBaseQuery } from "@/_lib/helpers/axios/axiosBaseQuery";
 import { createApi } from "@reduxjs/toolkit/query/react";
 // import { TauthResponse } from "../../data-types/authDataType";
-import { baseApi } from "../baseApi";
-import { Tresponse, TresponseFormat } from "../../data-types/responseDataType";
+import { baseApi } from "../../../baseApi";
+import {
+  Tresponse,
+  TresponseFormat,
+} from "../../../../data-types/responseDataType";
 import { TsignUpData, TsignUpform } from "@/app/(auth)/(access)/sign-up/page";
-import { Tuser, TuserResponse } from "../../data-types/userDataTypes";
+import { Tuser, TuserResponse } from "../../../../data-types/userDataTypes";
 import { TverifyUserData } from "@/app/(auth)/verify-user/page";
 import { TSendOtpData } from "@/app/sh/layout";
-// import { TSendOtpData } from "@/app/sh/layout";
 
 export const authApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({

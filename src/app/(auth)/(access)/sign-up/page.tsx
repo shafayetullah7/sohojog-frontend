@@ -1,6 +1,6 @@
 "use client"
 
-import { useSignUpMutation } from "@/lib/redux/api/api-features/authApi";
+import { useSignUpMutation } from "@/_lib/redux/api/api-features/common/auth-api/authApi";
 import AuthTextInput from "@/components/authModule/AuthTextInput";
 import { Form, FormMessage } from "@/components/ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -10,11 +10,11 @@ import { z } from "zod";
 import { EnvelopeIcon, UserCircleIcon, LockClosedIcon, EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
 import PasswordInput from "@/components/authModule/PasswordInput";
 import { useToast } from "@/components/ui/use-toast";
-import { TerrorResponse } from "@/lib/redux/data-types/responseDataType";
+import { TerrorResponse } from "@/_lib/redux/data-types/responseDataType";
 import { useRouter } from "next/navigation";
 import { successAlert } from "@/components/alerts/successAlert";
 import { useDispatch } from "react-redux";
-import { setUser } from "@/lib/redux/features/user/userSlice";
+import { setUser } from "@/_lib/redux/features/user/userSlice";
 import { errorAlert } from "@/components/alerts/errorAlert";
 
 // Import the specific icon you want to use
@@ -32,7 +32,7 @@ export type TsignUpData = Omit<TsignUpform, 'rePassword'>;
 
 const SignUp = () => {
 
-    const [signUp, { isError, isLoading,isSuccess, data }] = useSignUpMutation();
+    const [signUp, { isError, isLoading, isSuccess, data }] = useSignUpMutation();
     const router = useRouter();
     const dispatch = useDispatch()
 
@@ -126,7 +126,7 @@ const SignUp = () => {
                         {/* <button type="submit" className={`w-full mt-9 py-3 block ${isLoading ? 'bg-secondary-400' : 'bg-secondary-500'} rounded-xl text-white font-medium`} disabled={isLoading}>LOG IN</button> */}
                         {/* <button type="submit" className={`w-full mt-9 py-3 block bg-blush-lavender-500 rounded-xl text-white font-medium`} disabled={isLoading}>LOG IN</button> */}
                         {/* <button type="submit" className={`w-full mt-9 py-3 block bg-blush-lavender-500 bg-tran rounded-xl text-white font-medium`} disabled={isLoading}>LOG IN</button> */}
-                        <button type="submit" className={`w-full mt-9 py-3 block ${isLoading||isSuccess ? 'bg-lavender-blush-300-tr-bl' : 'bg-lavender-blush-500-tr-bl'} rounded-xl text-white font-medium`} disabled={isLoading||isSuccess}>SIGN UP</button>
+                        <button type="submit" className={`w-full mt-9 py-3 block ${isLoading || isSuccess ? 'bg-lavender-blush-300-tr-bl' : 'bg-lavender-blush-500-tr-bl'} rounded-xl text-white font-medium`} disabled={isLoading || isSuccess}>SIGN UP</button>
                         {/* <button type="submit" disabled={isLoading} className={`w-full mt-9 py-3 block ${isLoading ? 'bg-lavender-blush-300-tr-bl' : 'bg-lavender-blush-500-tr-bl'} rounded-xl text-white font-medium`}>LOG IN</button> */}
 
                     </form>
