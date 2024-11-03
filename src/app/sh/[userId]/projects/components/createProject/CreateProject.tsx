@@ -2,7 +2,6 @@
 
 import * as React from "react"
 import { useForm, Controller } from "react-hook-form"
-import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { format } from "date-fns"
 import { Calendar as CalendarIcon } from "lucide-react"
@@ -28,6 +27,9 @@ import {
 import { ProjectPriority, ProjectStatus, ProjectVisibility } from "@/constants/enums/project.enums"
 import { CreateProjectRequestData, CreateProjectRequestFormData, createProjectSchema } from "./create.project.schema"
 import { useCreateProjectMutation } from "@/lib/redux/api/roles/manager/manager-project-features/managerProjectApi"
+import { successAlert } from "@/components/alerts/successAlert"
+import { errorAlert } from "@/components/alerts/errorAlert"
+import { TerrorResponse } from "@/lib/redux/data-types/responseDataType"
 
 
 
@@ -56,8 +58,9 @@ const CreateProject = ({ updateOpenModal }: Props) => {
     }
 
     const addTag = (tagToAdd?: string) => {
+        if (tags.length > 5) return;
         const tag = tagToAdd || newTag
-        if (tag && tag.length <= 20 && !tags.map(tag => tag.toLowerCase()).includes(tag.toLowerCase())) {
+        if (tag && tag.length <= 35 && !tags.map(tag => tag.toLowerCase()).includes(tag.toLowerCase())) {
             setTags([...tags, tag])
             setNewTag("") // Reset the input field after adding
         }
@@ -70,11 +73,19 @@ const CreateProject = ({ updateOpenModal }: Props) => {
 
         try {
             const response = await createProject(requestData).unwrap();
-            // Handle success, e.g., show success message, redirect, etc.
-            console.log("Project created successfully!");
+            successAlert({ title: 'Success', description: "New Project Created" });
+
+            updateOpenModal(false);
+
+            // console.log("Project created successfully!");
         } catch (err) {
-            // Handle errors, e.g., show error message
-            console.error("Error creating project:", err);
+            const axiosError = err as { data: TerrorResponse, status: number };
+            const errorMessage = axiosError?.data?.message || 'Failed to create project';
+
+            const error = { title: "Failed", description: errorMessage };
+
+            errorAlert(error);
+            // console.error("Error creating project:", err);
         }
     };
 
@@ -259,15 +270,15 @@ const CreateProject = ({ updateOpenModal }: Props) => {
                             placeholder="Add a tag"
                             className="w-40"
                         />
-                        <button type="button" onClick={() => addTag()} className="flex items-center px-3 bg-gray-500 rounded-md">
+                        {tags.length <= 6 && <button type="button" onClick={() => addTag()} className="flex items-center px-3 bg-gray-500 rounded-md">
                             <Plus className="size-4 text-white" />
-                        </button>
+                        </button>}
                     </div>
                 </div>
 
                 <div className="flex flex-col md:flex-row justify-between gap-4 pt-4">
                     <Button type="button" variant="outline" className="w-full md:w-auto" onClick={() => updateOpenModal(false)}>Cancel</Button>
-                    <Button type="submit" className="w-full md:w-auto">Create Project</Button>
+                    <Button type="submit" className="w-full md:w-auto" disabled={isLoading}>Create Project</Button>
                 </div>
             </form>
         </div>
