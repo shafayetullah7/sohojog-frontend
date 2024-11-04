@@ -1,42 +1,48 @@
-// import { useGetManagerProjectQuery } from '@/_lib/redux/api/api-features/roles/manager/manager-project-api-features/managerProjectApi';
-// import React from 'react';
+'use client'
+import { useGetManagerProjectQuery } from '@/_lib/redux/api/api-features/roles/manager/manager-project-api-features/managerProjectApi';
+import { TerrorResponse } from '@/_lib/redux/data-types/responseDataType';
+import React from 'react';
+import MyProject from './myProject/MyProject';
 
-// const ManagerProjects = () => {
-//   // Use the hook to get the manager projects
-//   const { data, error, isLoading } = useGetManagerProjectQuery({});
+const ManagerProjects = () => {
+    // Use the hook to get the manager projects
+    const { data, error, isLoading, isSuccess } = useGetManagerProjectQuery({});
 
-//   // Handle loading state
-//   if (isLoading) {
-//     return <div>Loading...</div>;
-//   }
+    // Handle loading state
+    if (isLoading) {
+        return <div className="flex justify-center items-center h-64">Loading...</div>;
+    }
 
-//   // Handle error state
-//   if (error) {
-//     return <div>Error fetching projects: {error.message}</div>;
-//   }
+    // Handle error state
+    if (error) {
+        const resError = error as TerrorResponse;
+        return <div className="text-red-500 text-center mt-4">Error fetching projects: {resError.message}</div>;
+    }
 
-//   // Assuming data is structured with a property 'projects' containing the list of projects
-//   const projects = data?.data?.projects || [];
+    if (isSuccess) {
+        if (!data) {
+            return <div className="text-center mt-4">No data found</div>;
+        } else {
+            const { projects } = data.data;
 
-//   return (
-//     <div>
-//       <h1>Manager Projects</h1>
-//       {projects.length === 0 ? (
-//         <p>No projects found.</p>
-//       ) : (
-//         <ul>
-//           {projects.map((project) => (
-//             <li key={project.id}>
-//               <h2>{project.title}</h2>
-//               <p>{project.description}</p>
-//               <p>Created At: {new Date(project.createdAt).toLocaleDateString()}</p>
-//               {/* Add more project details as needed */}
-//             </li>
-//           ))}
-//         </ul>
-//       )}
-//     </div>
-//   );
-// };
+            return (
+                <div className="px-4 py-6 bg-white my-6">
+                    {/* <h1 className="text-2xl font-bold text-center mb-6">Manager Projects</h1> */}
+                    <div className="grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+                        {projects.length === 0 ? (
+                            <p className="col-span-full text-center">No projects found.</p>
+                        ) : (
+                            projects.map((project) => (
+                                <MyProject key={project.id} project={project} />
+                            ))
+                        )}
+                    </div>
+                </div>
+            );
+        }
+    }
 
-// export default ManagerProjects;
+    return null; // Return null as a fallback
+};
+
+export default ManagerProjects;

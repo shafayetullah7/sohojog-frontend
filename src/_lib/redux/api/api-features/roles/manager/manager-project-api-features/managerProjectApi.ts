@@ -1,8 +1,11 @@
-import { TresponseFormat } from "@/_lib/redux/data-types/responseDataType";
+import {
+  TerrorResponse,
+  TresponseFormat,
+} from "@/_lib/redux/data-types/responseDataType";
 import { baseApi } from "../../../../baseApi";
 import { CreateProjectResponseData } from "./dto/manager.create.project.t";
 import { CreateProjectRequestData } from "@/app/sh/[userId]/projects/components/createProject/create.project.schema";
-import { GetManagerProjectData } from "./dto/manager.get.project.dto";
+import { GetManagerProjectsData } from "./dto/manager.get.project.dto";
 
 const managerProjectApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -18,16 +21,16 @@ const managerProjectApi = baseApi.injectEndpoints({
     }),
 
     getManagerProject: builder.query<
-      TresponseFormat<GetManagerProjectData>,
+      TresponseFormat<GetManagerProjectsData>,
       {}
     >({
-      query: (data) => ({
+      query: () => ({
         url: `manager/projects`,
-        method: "get",
-        data,
+        method: "GET",
       }),
     }),
   }),
 });
 
-export const { useCreateProjectMutation, useGetManagerProjectQuery } = managerProjectApi;
+export const { useCreateProjectMutation, useGetManagerProjectQuery } =
+  managerProjectApi;
