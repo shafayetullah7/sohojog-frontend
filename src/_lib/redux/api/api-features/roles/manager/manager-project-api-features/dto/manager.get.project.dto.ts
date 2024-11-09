@@ -2,7 +2,7 @@ import {
   ProjectPriority,
   ProjectStatus,
   ProjectVisibility,
-} from "@/constants/enums/project.enums";
+} from "@/_constants/enums/project.enums";
 
 interface TaskCounts {
   total: number;

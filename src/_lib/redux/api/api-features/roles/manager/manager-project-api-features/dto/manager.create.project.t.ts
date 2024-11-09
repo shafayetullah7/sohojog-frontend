@@ -1,5 +1,5 @@
-import { Participation } from "@/constants/types/participation.t";
-import { Project } from "@/constants/types/project.t";
+import { Participation } from "@/_constants/types/participation.t";
+import { Project } from "@/_constants/types/project.t";
 
 interface ProjectParticipations extends Project {
   participations: Participation[];

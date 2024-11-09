@@ -4,7 +4,7 @@ import {
 } from "@/_lib/redux/data-types/responseDataType";
 import { baseApi } from "../../../../baseApi";
 import { CreateProjectResponseData } from "./dto/manager.create.project.t";
-import { CreateProjectRequestData } from "@/app/sh/[userId]/projects/components/createProject/create.project.schema";
+import { CreateProjectRequestData } from "@/app/sh/[userId]/my-projects/components/createProject/create.project.schema";
 import { GetManagerProjectsData } from "./dto/manager.get.project.dto";
 
 const managerProjectApi = baseApi.injectEndpoints({

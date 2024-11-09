@@ -26,7 +26,7 @@ const ManagerProjects = () => {
             const { projects } = data.data;
 
             return (
-                <div className="px-4 py-6 bg-white my-6">
+                <div className="px-6 py-6 bg-white my-6 rounded-3xl">
                     {/* <h1 className="text-2xl font-bold text-center mb-6">Manager Projects</h1> */}
                     <div className="grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
                         {projects.length === 0 ? (

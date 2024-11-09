@@ -32,7 +32,7 @@ const UserLayout = ({ children }: Props) => {
             // redirect('/sign-in')
         } else {
             return (
-                <div className="h-screen text-gray-700 flex flex-col">
+                <div className="min-h-screen text-gray-900 flex flex-col">
                     <div className=""><UserNav></UserNav></div>
                     <div className="flex h-full">
                         <Sidebar></Sidebar>

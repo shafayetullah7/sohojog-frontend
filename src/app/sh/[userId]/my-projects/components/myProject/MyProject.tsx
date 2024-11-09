@@ -7,7 +7,9 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { CalendarIcon, UsersIcon, CheckSquareIcon, ArrowRightIcon } from "lucide-react";
 import { ManagerProject } from "@/_lib/redux/api/api-features/roles/manager/manager-project-api-features/dto/manager.get.project.dto";
-import { ProjectPriority, ProjectStatus } from "@/constants/enums/project.enums";
+import { ProjectPriority, ProjectStatus } from "@/_constants/enums/project.enums";
+import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
+import Link from "next/link";
 
 
 
@@ -34,11 +36,11 @@ interface MyProjectProps {
 
 export default function MyProject({ project }: MyProjectProps) {
     return (
-        <Card className="w-full max-w-md mx-auto flex flex-col">
+        <Card className="w-full max-w-md mx-auto flex flex-col rounded-2xl">
             <CardHeader>
                 <div className="flex justify-between items-start">
                     <CardTitle className="text-xl font-bold">{project.title}</CardTitle>
-                    <Badge className={statusColors[project.status]}>
+                    <Badge className={`${statusColors[project.status]}`}>
                         {project.status}
                     </Badge>
                 </div>
@@ -70,17 +72,39 @@ export default function MyProject({ project }: MyProjectProps) {
             <CardFooter className="h-full relative flex flex-col justify-end">
                 <div className="flex justify-between items-center w-full">
                     <div className="flex items-center space-x-2">
-                        <Badge className={priorityColors[project.priority]}>
+                        {/* <Badge className={priorityColors[project.priority]}>
                             {project.priority}
-                        </Badge>
-                        <Avatar className="h-8 w-8">
-                            {project.participations?.length && <AvatarImage src={project.participations[0]?.user.profilePicture?.minUrl || undefined} />}
-                            {project.participations?.length && <AvatarFallback>{project.participations[0]?.user.name.charAt(0)}</AvatarFallback>}
-                        </Avatar>
+                        </Badge> */}
+                        {
+                            project.participations?.length && project.participations.map((data) => <div key={data.id}>
+                                <HoverCard openDelay={100}>
+                                    <HoverCardTrigger asChild>
+                                        <Avatar className="size-10 border-2 border-blushPink-400 cursor-pointer">
+                                            <AvatarImage src={data.user.profilePicture?.minUrl || undefined} />
+                                            <AvatarFallback>{data.user.name.charAt(0)}</AvatarFallback>
+                                        </Avatar>
+                                    </HoverCardTrigger>
+                                    <HoverCardContent className="" side="top" sideOffset={5}>
+                                        <div className="flex justify-between items-start">
+                                            <Avatar className="size-24 object-cover object-center">
+                                                <AvatarImage src={data.user.profilePicture?.minUrl || undefined} />
+                                                <AvatarFallback>{data.user.name.charAt(0)}</AvatarFallback>
+                                            </Avatar>
+                                            <div className="space-y-1 py-2">
+                                                <h4 className=" font-semibold">{data.user.name}</h4>
+                                            </div>
+                                        </div>
+                                    </HoverCardContent>
+                                </HoverCard>
+                            </div>
+                            )
+                        }
                     </div>
-                    <Button variant="outline" size="sm">
-                        View Project <ArrowRightIcon className="ml-2 h-4 w-4" />
-                    </Button>
+                    <Link href={`my-projects/${project.id}`}>
+                        <Button variant="outline" size="sm" className="rounded-xl px-4">
+                            View Project <ArrowRightIcon className="ml-2 h-4 w-4" />
+                        </Button>
+                    </Link>
                 </div>
             </CardFooter>
         </Card>

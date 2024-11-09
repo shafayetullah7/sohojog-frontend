@@ -32,7 +32,7 @@ const navItems: NavItem[] = [
     },
     {
         title: 'Projects',
-        route: '/projects',
+        route: '/my-projects',
         icon: BriefcaseIcon,
     },
     {

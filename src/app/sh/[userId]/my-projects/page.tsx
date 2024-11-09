@@ -1,7 +1,7 @@
 import ManagerProjects from "./components/ManagerProjects";
 import ProjectsHead from "./components/ProjectsHead";
 
-const MyProjectpage = () => {
+const MyProjectspage = () => {
     return (
         <div>
             <ProjectsHead></ProjectsHead>
@@ -10,4 +10,4 @@ const MyProjectpage = () => {
     );
 };
 
-export default MyProjectpage;
+export default MyProjectspage;

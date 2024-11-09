@@ -20,7 +20,7 @@ const ProjectsHead = () => {
     }
 
     return (
-        <div className='bg-white w-full p-5 rounded-lg'>
+        <div className='bg-white w-full py-5 px-6 rounded-3xl'>
             <div className='flex justify-between items-center'>
                 <h1 className='text-4xl font-bold'>Projects</h1>
 
