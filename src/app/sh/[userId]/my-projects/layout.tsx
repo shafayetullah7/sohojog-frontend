@@ -5,7 +5,7 @@ type Props = {
 }
 const MyProjectslayout = ({ children }: Props) => {
     return (
-        <div>
+        <div className="h-full">
             {children}
         </div>
     );

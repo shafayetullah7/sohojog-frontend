@@ -4,7 +4,7 @@ import { errorAlert } from "@/components/alerts/errorAlert";
 import { useGetUser } from "@/hooks/getUser";
 import { LocalStorageService } from "@/_lib/helpers/access/Access";
 import { useSendOtpMutation } from "@/_lib/redux/api/api-features/common/auth-api/authApi";
-import { usePathname, useRouter } from "next/navigation";
+import { useParams, usePathname, useRouter } from "next/navigation";
 import { ReactNode, useEffect, useState, useCallback } from "react";
 import { TerrorResponse } from "@/_lib/redux/data-types/responseDataType";
 
@@ -21,6 +21,7 @@ const HomeLayout = ({ children }: Props) => {
     const router = useRouter();
     const [otpSent, setOtpSent] = useState(false);
     const pathname = usePathname();
+    const params = useParams();
 
     // Function to handle OTP sending, memoized to prevent unnecessary re-creations
     const handleOtpSending = useCallback(async (email: string) => {
@@ -54,6 +55,10 @@ const HomeLayout = ({ children }: Props) => {
         if (isUserLoading) return; // Avoid unnecessary execution when loading
 
         if (user) {
+            const userId = params.userId;
+            if (userId && user.id !== userId) {
+                throw new Error("User not found.")
+            }
             if (!user.verified && !otpSent) {
                 handleOtpSending(user.email); // Call the OTP handler only if not verified
                 setOtpSent(true); // Ensure OTP is sent only once
@@ -65,7 +70,7 @@ const HomeLayout = ({ children }: Props) => {
         } else if (userError || !user) {
             router.replace('/sign-in');
         }
-    }, [user, isUserLoading, userError, LocalStorage.token, handleOtpSending, router, otpSent, pathname]);
+    }, [user, isUserLoading, userError, LocalStorage.token, handleOtpSending, router, otpSent, pathname, params]);
 
     if (isUserLoading || isOtpLoading || !user?.verified) {
         return <div>loading</div>; // Show loading indicator during OTP or user fetch

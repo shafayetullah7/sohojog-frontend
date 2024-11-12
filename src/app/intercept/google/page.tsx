@@ -1,37 +1,35 @@
-'use client'
-import { errorAlert } from '@/components/alerts/errorAlert';
-import { LocalStorageService } from '@/_lib/helpers/access/Access';
-import { redirect, useSearchParams } from 'next/navigation';
-// import { useRouter } from 'next/router';
-import React, { useEffect } from 'react';
+"use client";
+
+import { Suspense, useEffect } from "react";
+import { errorAlert } from "@/components/alerts/errorAlert";
+import { LocalStorageService } from "@/_lib/helpers/access/Access";
+import { redirect, useSearchParams } from "next/navigation";
 
 const GooglePage = () => {
-    // const router = useRouter();
-    const searchParams = useSearchParams()
-    const token = searchParams.get('token');
+    const searchParams = useSearchParams();
+    const token = searchParams.get("token");
 
-    if (token && typeof token === 'string') {
-        LocalStorageService.getInstance().token = token;
-        redirect('/sh');
-    } else {
-        errorAlert({ title: 'Failed', description: 'Unable to login.' })
-        redirect('/sign-in');
-    }
-
-    // useEffect(() => {
-    //     if (token && typeof token === 'string') {
-    //         LocalStorageService.getInstance().token = token;
-    //         redirect('/dashboard');
-    //     } else {
-    //         redirect('/dashboard')
-    //     }
-    // }, [token])
+    useEffect(() => {
+        if (token && typeof token === "string") {
+            LocalStorageService.getInstance().token = token;
+            redirect("/sh");
+        } else {
+            errorAlert({ title: "Failed", description: "Unable to login." });
+            redirect("/sign-in");
+        }
+    }, [token]);
 
     return (
-        <div>
-            <p>Loading...</p>
+        <div className="flex flex-col items-center justify-center h-screen">
+            <p className="text-lg font-semibold text-gray-700">Redirecting...</p>
         </div>
     );
 };
 
-export default GooglePage;
+const GooglePageWithSuspense = () => (
+    <Suspense fallback={<div className="flex justify-center items-center h-screen"><p>Loading...</p></div>}>
+        <GooglePage />
+    </Suspense>
+);
+
+export default GooglePageWithSuspense;

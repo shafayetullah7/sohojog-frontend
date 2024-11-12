@@ -34,10 +34,10 @@ const UserLayout = ({ children }: Props) => {
             return (
                 <div className="min-h-screen text-gray-900 flex flex-col">
                     <div className=""><UserNav></UserNav></div>
-                    <div className="flex h-full">
+                    <div className="flex flex-1">
                         <Sidebar></Sidebar>
 
-                        <div className="flex-1 bg-gray-50 p-6">
+                        <div className="flex-1  bg-slate-50 p-6">
                             <div className="w-full h-full">{children}</div>
                         </div>
                         {/* <div className="w-1/5"></div> */}

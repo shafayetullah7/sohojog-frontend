@@ -1,5 +1,7 @@
 "use client"
 import { BookTextIcon, BriefcaseIcon, ChevronRight, Globe2Icon, GridIcon, HomeIcon, MessageSquareIcon, UserIcon } from "lucide-react";
+import { MenuIcon, XIcon } from "lucide-react";
+
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import {
@@ -82,15 +84,20 @@ const Sidebar = () => {
 
 
     return (
-        <div className={`py-4 px-4  ${retracted ? 'w-28' : 'w-1/5'} transition-all duration-300 overflow-hidden`}>
+        <div className={`py-0 px-4  ${retracted ? 'w-28' : 'w-1/5'} transition-all duration-300 overflow-hidden`}>
             <div className={`flex flex-nowrap items-center justify-start space-x-4 mx-6 rounded-2xl text-gray-800`}>
                 {/* <div className="cursor-pointer" onClick={togggleLeftBarRetraction}><MenuIcon className="size-8" aria-hidden="true"></MenuIcon></div> */}
-                <div className={`cursor-pointer ${retracted ? 'rotate-0' : 'rotate-180'} transition-all duration-500`} onClick={togggleLeftBarRetraction}>
-                    <ChevronRight className="size-8" aria-hidden="true"></ChevronRight>
+                {/* <div className={`cursor-pointer ${retracted ? 'rotate-0' : 'rotate-180'} transition-all duration-1000`} onClick={togggleLeftBarRetraction}>
+                    {retracted ? <MenuIcon className="size-8" aria-hidden="true"></MenuIcon> : <XIcon className="size-8" aria-hidden="true"></XIcon>}
+                </div> */}
+                <div className={`cursor-pointer transition-all duration-500`} onClick={togggleLeftBarRetraction}>
+                    {/* <ChevronRight className="size-8" aria-hidden="true"></ChevronRight> */}
+                    {/* {retracted ? <MenuIcon className="size-8" aria-hidden="true"></MenuIcon> : <XIcon className="size-8" aria-hidden="true"></XIcon>} */}
+                    <MenuIcon className="size-8" aria-hidden="true"></MenuIcon>
                 </div>
             </div>
             <div className="mt-8">
-                <ul className="space-y-2">
+                <ul className="space-y-1">
                     {navItems.map((item) => (
                         <li key={item.route}>
                             {retracted ? <TooltipProvider delayDuration={300}>
