@@ -4,36 +4,53 @@
 /*   */
 
 @keyframes gradient-x {
-    0% {
-        background-position: 0% 50%;
-    }
-
-   
+  0% {
+    background-position: 0% 50%;
+  }
 }
 
 .animate-gradient-x {
-    background-size: 200% 200%;
-    animation: gradient-x 0.5s ease infinite;
+  background-size: 200% 200%;
+  animation: gradient-x 0.5s ease infinite;
 }
 
 @keyframes gradientShift {
-    0% { background-position: 0% 50%; }
-    100% { background-position: 100% 50%; }
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 100% 50%;
+  }
 }
 
 /* Styling for buttons with the 'gradient-button' class */
 .gradient-button {
-    background: linear-gradient(270deg, #2e9296, #77c7c5, #2e9296); /* Gradient colors */
-    background-size: 200% 200%;
-    color: #fff;
-    padding: 0.75rem 1.5rem;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-position 0.6s ease; /* Smooth transition for both hover-in and hover-out */
+  background: linear-gradient(
+    270deg,
+    #a167aa,
+    #c3b2cc,
+    #faa3a3,
+    #f76969
+  ); /* Gradient colors */
+  background-size: 200% 200%;
+  color: #fff;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  cursor: pointer;
+  transition: background-position 0.6s ease; /* Smooth transition for both hover-in and hover-out */
 }
 
 /* Shift background on hover */
 .gradient-button:hover {
-    background-position: 100% 50%; /* Moves gradient smoothly to the end */
+  background-position: 100% 50%; /* Moves gradient smoothly to the end */
+}
+
+.gradient-button:disabled {
+  background: linear-gradient(270deg, #c3b2cc, #e1dde8, #faa3a3, #fddddd);
+  background-size: 200% 200%;
+  background-position: 50% 50%;
+  color: #b0b0b0; /* Light gray text color */
+  cursor: not-allowed; /* Change cursor to indicate it's disabled */
+  opacity: 0.7; /* Slight transparency for a disabled look */
+  transition: none; /* Disable hover transition on the disabled state */
 }

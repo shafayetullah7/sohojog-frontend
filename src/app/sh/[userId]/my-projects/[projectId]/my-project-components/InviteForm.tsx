@@ -1,14 +1,23 @@
 "use client"
 
-import { useState } from "react"
-import { Search, Plus, X } from "lucide-react"
+import { useState, useEffect } from "react"
+import { Search, X, Send } from "lucide-react"
+import { useForm, Controller } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+import * as z from "zod"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import { ScrollArea } from "@/components/ui/scroll-area"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Dialog, DialogContent } from "@/components/ui/dialog"
+import { ScrollArea } from "@/components/ui/scroll-area"
+import { Skeleton } from "@/components/ui/skeleton"
+import { useSendInvitationMutation } from "@/_lib/redux/api/api-features/roles/manager/manager-invitation/manager.invitation.api"
+import { SendInvitePayload } from "@/_lib/redux/api/api-features/roles/manager/manager-invitation/dto/manager.send.invitation"
+import { successAlert } from "@/components/alerts/successAlert"
+import { TerrorResponse } from "@/_lib/redux/data-types/responseDataType"
+import { errorAlert } from "@/components/alerts/errorAlert"
 
 interface User {
   id: string
@@ -16,167 +25,204 @@ interface User {
   email: string
 }
 
-export default function InviteForm() {
-  const [searchQuery, setSearchQuery] = useState<string>("")
-  const [searchResults, setSearchResults] = useState<User[]>([])
-  const [selectedUsers, setSelectedUsers] = useState<User[]>([])
-  const [inviteEmails, setInviteEmails] = useState<string[]>([])
-  const [newEmail, setNewEmail] = useState<string>("")
-  const [inviteSubject, setInviteSubject] = useState<string>("")
-  const [inviteMessage, setInviteMessage] = useState<string>("")
+const inviteFormSchema = z.object({
+  email: z.string().email("Invalid email address").min(1, "Email is required"),
+  name: z.string().min(1, "Name is required"),
+  message: z.string().min(1, "Message is required"),
+})
 
-  const handleSearch = async () => {
-    const results = await mockSearchAPI(searchQuery)
-    setSearchResults(results.filter(user => !selectedUsers.some(selected => selected.id === user.id)))
-  }
+type InviteFormValues = z.infer<typeof inviteFormSchema>
+
+type Props = {
+  isOpen: boolean;
+  onClose: () => void,
+  projectId: string
+}
+
+export default function InviteForm({ isOpen, onClose, projectId }: Props) {
+  const [searchResults, setSearchResults] = useState<User[]>([])
+  const [isSearching, setIsSearching] = useState(false)
+
+  const [sendInvitation, { isError, isLoading, isSuccess, data: inviteResponse, reset }] = useSendInvitationMutation();
+
+  const { control, handleSubmit, setValue, watch, formState: { errors } } = useForm<InviteFormValues>({
+    resolver: zodResolver(inviteFormSchema),
+    defaultValues: {
+      email: "",
+      name: "",
+      message: "",
+    },
+  })
+
+  // const email = watch("email")
+
+  // useEffect(() => {
+  //   const searchUsers = async () => {
+  //     if (email.length > 2) {
+  //       setIsSearching(true)
+  //       const results = await mockSearchAPI(email)
+  //       setSearchResults(results)
+  //       setIsSearching(false)
+  //     } else {
+  //       setSearchResults([])
+  //     }
+  //   }
+
+  //   const debounce = setTimeout(searchUsers, 300)
+  //   return () => clearTimeout(debounce)
+  // }, [email])
+
+
 
   const handleSelectUser = (user: User) => {
-    setSelectedUsers(prev => [...prev, user])
-    setSearchResults(prev => prev.filter(u => u.id !== user.id))
+    setValue("email", user.email)
+    setValue("name", user.name)
+    setSearchResults([])
   }
 
-  const handleRemoveUser = (userId: string) => {
-    const removedUser = selectedUsers.find(user => user.id === userId)
-    setSelectedUsers(prev => prev.filter(user => user.id !== userId))
-    if (removedUser) {
-      setSearchResults(prev => [...prev, removedUser])
+
+  const onSubmit = async (data: InviteFormValues) => {
+    console.log("Sending invitation to:", data)
+    // Here you would typically call an API to send the invitation
+
+    const reqData: SendInvitePayload = {
+      email: data.email,
+      invitedUserName: data.name,
+      message: data.message,
+      sendEmail: true,
+      projectId
+    };
+
+    try {
+      const response = await sendInvitation(reqData).unwrap();
+      reset()
+
+      successAlert({ title: 'Success', description: response.message || 'Request has been sent.' });
+      // console.log("Project created successfully!");
+    } catch (err) {
+      const axiosError = err as { data: TerrorResponse, status: number };
+      const errorMessage = axiosError?.data?.message || 'Failed to send invitation';
+
+      const error = { title: "Failed", description: errorMessage };
+
+      errorAlert(error);
+      // console.error("Error creating project:", err);
     }
-  }
-
-  const handleAddEmail = () => {
-    if (newEmail && !inviteEmails.includes(newEmail)) {
-      setInviteEmails(prev => [...prev, newEmail])
-      setNewEmail("")
-    }
-  }
-
-  const handleRemoveEmail = (email: string) => {
-    setInviteEmails(prev => prev.filter(e => e !== email))
-  }
-
-  const handleSendInvitations = (type: "users" | "emails") => {
-    if (type === 'users') {
-      console.log("Sending invitations to users:", selectedUsers)
-    } else {
-      console.log("Sending email invitations to:", inviteEmails)
-    }
-    console.log("Subject:", inviteSubject)
-    console.log("Message:", inviteMessage)
   }
 
   return (
-    <Card className="w-full max-w-2xl">
-      <CardHeader>
-        <CardTitle>Invite Participants</CardTitle>
-        <CardDescription>Search for users or send email invitations.</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <Tabs defaultValue="search" className="w-full">
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="search">Search Users</TabsTrigger>
-            <TabsTrigger value="email">Email Invitations</TabsTrigger>
-          </TabsList>
-          <TabsContent value="search">
-            <div className="space-y-4 py-4">
-              <div className="flex items-center space-x-2">
-                <Input
-                  placeholder="Search users..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                />
-                <Button onClick={handleSearch}>
-                  <Search className="w-4 h-4" />
-                </Button>
-              </div>
-              {searchResults.length > 0 && (
-                <ScrollArea className="h-[100px] w-full border rounded-md p-2">
-                  {searchResults.map((user) => (
-                    <div key={user.id} className="flex justify-between items-center p-2 hover:bg-gray-100 rounded-md">
-                      <span>{user.name} ({user.email})</span>
-                      <Button size="sm" onClick={() => handleSelectUser(user)}>Select</Button>
-                    </div>
-                  ))}
-                </ScrollArea>
-              )}
-              {selectedUsers.length > 0 && (
-                <div>
-                  <Label>Selected Users</Label>
-                  <ScrollArea className="h-[100px] w-full border rounded-md p-2 mt-2">
-                    {selectedUsers.map((user) => (
-                      <div key={user.id} className="flex justify-between items-center p-2">
-                        <span>{user.name}</span>
-                        <Button size="sm" variant="destructive" onClick={() => handleRemoveUser(user.id)}>
-                          <X className="w-4 h-4" />
-                        </Button>
+    <Dialog open={isOpen} onOpenChange={() => { }}>
+      <DialogContent className="sm:max-w-[425px]" closeShow={false}>
+        <Card>
+          <CardHeader>
+            <CardTitle>Invitation Details</CardTitle>
+          </CardHeader>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <CardContent className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="email">Email</Label>
+                <div className="relative">
+                  <Controller
+                    name="email"
+                    control={control}
+                    render={({ field }) => (
+                      <div className="relative flex items-center">
+                        <Input
+                          id="email"
+                          placeholder="Enter email address"
+                          {...field}
+                        />
                       </div>
-                    ))}
-                  </ScrollArea>
+                    )}
+                  />
+                  {errors.email && (
+                    <p className="text-sm text-red-500 mt-1">{errors.email.message}</p>
+                  )}
+                  {(isSearching || searchResults.length > 0) && (
+                    <ScrollArea className="absolute z-10 w-full max-h-[200px] mt-1 rounded-md bg-white shadow-lg border border-gray-200">
+                      {isSearching ? (
+                        <div className="p-2 space-y-2">
+                          <Skeleton className="h-4 w-full" />
+                          <Skeleton className="h-4 w-full" />
+                          <Skeleton className="h-4 w-full" />
+                        </div>
+                      ) : (
+                        searchResults.map((user) => (
+                          <div
+                            key={user.id}
+                            className="p-2 hover:bg-gray-100 cursor-pointer flex items-center space-x-2 border-b border-gray-100 last:border-none"
+                            onClick={() => handleSelectUser(user)}
+                          >
+                            <Search className="text-gray-400" />
+                            <span>{user.name} ({user.email})</span>
+                          </div>
+                        ))
+                      )}
+                    </ScrollArea>
+                  )}
                 </div>
-              )}
-            </div>
-          </TabsContent>
-          <TabsContent value="email">
-            <div className="space-y-4 py-4">
-              <div className="flex items-center space-x-2">
-                <Input
-                  placeholder="Enter email address"
-                  value={newEmail}
-                  onChange={(e) => setNewEmail(e.target.value)}
-                />
-                <Button onClick={handleAddEmail} size="sm">
-                  <Plus className="w-4 h-4" />
-                </Button>
               </div>
-              {inviteEmails.length > 0 && (
-                <ScrollArea className="h-[100px] w-full border rounded-md p-2">
-                  {inviteEmails.map((email, index) => (
-                    <div key={index} className="flex justify-between items-center p-2">
-                      <span>{email}</span>
-                      <Button size="sm" variant="destructive" onClick={() => handleRemoveEmail(email)}>
-                        <X className="w-4 h-4" />
-                      </Button>
-                    </div>
-                  ))}
-                </ScrollArea>
-              )}
-            </div>
-          </TabsContent>
-        </Tabs>
-        <div className="space-y-4 py-4">
-          <div>
-            <Label htmlFor="inviteSubject">Subject</Label>
-            <Input
-              id="inviteSubject"
-              value={inviteSubject}
-              onChange={(e) => setInviteSubject(e.target.value)}
-              placeholder="Invitation subject"
-            />
-          </div>
-          <div>
-            <Label htmlFor="inviteMessage">Message</Label>
-            <Textarea
-              id="inviteMessage"
-              value={inviteMessage}
-              onChange={(e) => setInviteMessage(e.target.value)}
-              placeholder="Invitation message"
-            />
-          </div>
-        </div>
-      </CardContent>
-      <CardFooter>
-        <Button onClick={() => handleSendInvitations(selectedUsers.length > 0 ? 'users' : 'emails')} className="w-full">
-          Send Invitations
-        </Button>
-      </CardFooter>
-    </Card>
+              <div className="space-y-2">
+                <Label htmlFor="name">Name</Label>
+                <Controller
+                  name="name"
+                  control={control}
+                  render={({ field }) => (
+                    <Input
+                      id="name"
+                      placeholder="Enter name"
+                      {...field}
+                    />
+                  )}
+                />
+                {errors.name && (
+                  <p className="text-sm text-red-500 mt-1">{errors.name.message}</p>
+                )}
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="message">Message</Label>
+                <Controller
+                  name="message"
+                  control={control}
+                  render={({ field }) => (
+                    <Textarea
+                      id="message"
+                      placeholder="Enter invitation message"
+                      {...field}
+                    />
+                  )}
+                />
+                {errors.message && (
+                  <p className="text-sm text-red-500 mt-1">{errors.message.message}</p>
+                )}
+              </div>
+            </CardContent>
+            <CardFooter className="flex justify-between">
+              <Button type="button" variant="outline" onClick={onClose} className="flex items-center rounded-xl bg-gray-100 text-gray-500 hover:text-gray-700 border-2 border-gray-100 hover:border-gray-200  hover:bg-white">
+                <X className="h-4 w-4" />
+                <span>Close</span>
+              </Button>
+              <Button disabled={isLoading} type="submit" className="flex items-center space-x-2 rounded-xl gradient-button">
+                <Send className="h-4 w-4" />
+                <span>Send Invitation</span>
+              </Button>
+            </CardFooter>
+          </form>
+        </Card>
+      </DialogContent>
+    </Dialog>
   )
 }
 
 // Mock API function for searching users
 async function mockSearchAPI(query: string): Promise<User[]> {
+  // Simulate API delay
+  await new Promise(resolve => setTimeout(resolve, 500))
+
   // Replace this with the actual API call
   return [
-    { id: "1", name: "User One", email: "userone@example.com" },
-    { id: "2", name: "User Two", email: "usertwo@example.com" },
-  ].filter(user => user.name.toLowerCase().includes(query.toLowerCase()) || user.email.toLowerCase().includes(query.toLowerCase()))
+    { id: "1", name: "John Doe", email: "john@example.com" },
+    { id: "2", name: "Jane Smith", email: "jane@example.com" },
+    { id: "3", name: "Alice Johnson", email: "alice@example.com" },
+  ].filter(user => user.email.toLowerCase().includes(query.toLowerCase()))
 }

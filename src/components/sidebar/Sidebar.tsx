@@ -1,9 +1,9 @@
 "use client"
-import { BookTextIcon, BriefcaseIcon, ChevronRight, Globe2Icon, GridIcon, HomeIcon, MessageSquareIcon, UserIcon } from "lucide-react";
-import { MenuIcon, XIcon } from "lucide-react";
+import { BookTextIcon, BriefcaseIcon, Globe2Icon, GridIcon, Hand, HomeIcon, MessageSquareIcon, UserIcon } from "lucide-react";
+import { MenuIcon } from "lucide-react";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
     Tooltip,
     TooltipContent,
@@ -36,6 +36,11 @@ const navItems: NavItem[] = [
         title: 'Projects',
         route: '/my-projects',
         icon: BriefcaseIcon,
+    },
+    {
+        title: 'My Participations',
+        route: '/my-participations',
+        icon: Hand,
     },
     {
         title: 'Profile',
