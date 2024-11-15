@@ -1,5 +1,5 @@
 "use client"
-import { BookTextIcon, BriefcaseIcon, Globe2Icon, GridIcon, Hand, HomeIcon, MessageSquareIcon, UserIcon } from "lucide-react";
+import { BookTextIcon, BriefcaseIcon, Globe2Icon, GridIcon, Hand, HomeIcon, Inbox, MessageSquareIcon, UserIcon } from "lucide-react";
 import { MenuIcon } from "lucide-react";
 
 import Link from "next/link";
@@ -41,6 +41,11 @@ const navItems: NavItem[] = [
         title: 'My Participations',
         route: '/my-participations',
         icon: Hand,
+    },
+    {
+        title: 'Invitations',
+        route: '/invitations',
+        icon: Inbox,
     },
     {
         title: 'Profile',
