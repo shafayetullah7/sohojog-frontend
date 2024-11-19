@@ -9,76 +9,111 @@ import InvitationListItem from "./InvitationListItem";
 import { useEffect, useMemo, useState } from "react";
 
 type Invitation = {
-    id: string
-    projectTitle: string
-    invitedPerson: {
-        name: string
-        image: string
-    }
-    date: Date
-    status: 'Pending' | 'Accepted' | 'Declined'
-    description: string
-    eventDate?: Date
-    location?: string
-    notes?: string
+    status: 'PENDING' | 'ACCEPTED' | 'DECLINED';
+    invitedBy: string;
+    createdAt: Date;
+    id: string;
+    project: {
+        status: string;
+        id: string;
+        title: string;
+    };
+    inviter: {
+        id: string;
+        email: string;
+        name: string;
+        profilePicture: {
+            url: string;
+        } | null;
+    };
+    sentAt: Date | null;
+    seen: boolean;
+    seenAt: Date | null;
 }
 
 const invitations: Invitation[] = [
     {
         id: '1',
-        projectTitle: 'Website Redesign',
-        invitedPerson: {
-            name: 'Alice Johnson',
-            image: '/placeholder.svg?height=30&width=30',
+        status: 'PENDING',
+        invitedBy: 'user1',  // Assuming the ID of the inviter
+        createdAt: new Date('2024-03-15'),
+        project: {
+            status: 'ACTIVE',
+            id: 'project1',
+            title: 'Website Redesign',
         },
-        date: new Date('2024-03-15'),
-        status: 'Pending',
-        description: 'Join our team for an exciting website redesign project.',
-        eventDate: new Date('2024-04-01'),
-        location: 'Virtual Meeting',
-        notes: 'Please review the project brief before the meeting.',
+        inviter: {
+            id: 'user1',
+            email: 'alice@example.com',
+            name: 'Alice Johnson',
+            profilePicture: {
+                url: '/placeholder.svg?height=30&width=30',
+            },
+        },
+        sentAt: new Date('2024-03-15'),
+        seen: false,
+        seenAt: null,
     },
     {
         id: '2',
-        projectTitle: 'Mobile App Development',
-        invitedPerson: {
-            name: 'Bob Smith',
-            image: '/placeholder.svg?height=30&width=30',
+        status: 'ACCEPTED',
+        invitedBy: 'user2',
+        createdAt: new Date('2024-03-10'),
+        project: {
+            status: 'ACTIVE',
+            id: 'project2',
+            title: 'Mobile App Development',
         },
-        date: new Date('2024-03-10'),
-        status: 'Accepted',
-        description: 'We need your expertise for our new mobile app development.',
-        eventDate: new Date('2024-03-20'),
-        location: 'Office - Room 302',
+        inviter: {
+            id: 'user2',
+            email: 'bob@example.com',
+            name: 'Bob Smith',
+            profilePicture: {
+                url: '/placeholder.svg?height=30&width=30',
+            },
+        },
+        sentAt: new Date('2024-03-10'),
+        seen: true,
+        seenAt: new Date('2024-03-11'),
     },
     {
         id: '3',
-        projectTitle: 'Marketing Campaign',
-        invitedPerson: {
-            name: 'Carol Davis',
-            image: '/placeholder.svg?height=30&width=30',
+        status: 'DECLINED',
+        invitedBy: 'user3',
+        createdAt: new Date('2024-03-05'),
+        project: {
+            status: 'COMPLETED',
+            id: 'project3',
+            title: 'Marketing Campaign',
         },
-        date: new Date('2024-03-05'),
-        status: 'Declined',
-        description: 'Planning session for our upcoming marketing campaign.',
+        inviter: {
+            id: 'user3',
+            email: 'carol@example.com',
+            name: 'Carol Davis',
+            profilePicture: null,  // No profile picture
+        },
+        sentAt: new Date('2024-03-05'),
+        seen: true,
+        seenAt: new Date('2024-03-06'),
     },
     // Add more invitations as needed
-]
+];
+
 
 const InvitationsRightBar = () => {
 
     const [selectedInvitation, setSelectedInvitation] = useState<Invitation | null>(null)
-    const [filter, setFilter] = useState<'All' | 'Pending' | 'Accepted' | 'Declined'>('All')
+    const [filter, setFilter] = useState<'All' | 'PENDING' | 'ACCEPTED' | 'DECLINED'>('All')
     const [searchTerm, setSearchTerm] = useState('')
 
     const filteredInvitations = useMemo(() => {
         return invitations
             .filter((invitation) => {
                 if (filter !== 'All' && invitation.status !== filter) return false
-                if (searchTerm && !invitation.projectTitle.toLowerCase().includes(searchTerm.toLowerCase())) return false
+                if (searchTerm && !invitation.project.title.toLowerCase().includes(searchTerm.toLowerCase())) return false
                 return true
             })
-            .sort((a, b) => b.date.getTime() - a.date.getTime())
+            .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
     }, [filter, searchTerm])
 
     useEffect(() => {
@@ -88,7 +123,7 @@ const InvitationsRightBar = () => {
     }, [filteredInvitations, selectedInvitation])
 
     return (
-        <div className="w-full bg-white">
+        <div className="w-full bg-white rounded-3xl p-2">
             <div className="p-4 border-b">
                 <h2 className="text-lg font-semibold mb-2">Invitations</h2>
                 <div className="flex items-center space-x-2 mb-2">
@@ -107,9 +142,9 @@ const InvitationsRightBar = () => {
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
                             <DropdownMenuItem onClick={() => setFilter('All')}>All</DropdownMenuItem>
-                            <DropdownMenuItem onClick={() => setFilter('Pending')}>Pending</DropdownMenuItem>
-                            <DropdownMenuItem onClick={() => setFilter('Accepted')}>Accepted</DropdownMenuItem>
-                            <DropdownMenuItem onClick={() => setFilter('Declined')}>Declined</DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => setFilter('PENDING')}>Pending</DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => setFilter('ACCEPTED')}>Accepted</DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => setFilter('DECLINED')}>Declined</DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
                 </div>
