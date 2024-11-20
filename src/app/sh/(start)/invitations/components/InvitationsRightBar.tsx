@@ -150,14 +150,17 @@ const InvitationsRightBar = () => {
                 </div>
             </div>
             <ScrollArea className="h-[calc(100vh-8.5rem)]">
-                {filteredInvitations.map((invitation) => (
-                    <InvitationListItem
-                        key={invitation.id}
-                        invitation={invitation}
-                        isSelected={selectedInvitation?.id === invitation.id}
-                        onClick={() => setSelectedInvitation(invitation)}
-                    />
-                ))}
+                <ul className="space-y-3">
+                    {filteredInvitations.map((invitation) => (
+                        <li key={invitation.id}>
+                            <InvitationListItem
+                                invitation={invitation}
+                                isSelected={selectedInvitation?.id === invitation.id}
+                                onClick={() => setSelectedInvitation(invitation)}
+                            />
+                        </li>
+                    ))}
+                </ul>
             </ScrollArea>
         </div>
     );

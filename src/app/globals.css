@@ -27,30 +27,117 @@
 .gradient-button {
   background: linear-gradient(
     270deg,
-    #a167aa,
-    #c3b2cc,
-    #faa3a3,
-    #f76969
-  ); /* Gradient colors */
-  background-size: 200% 200%;
+    var(--lavender-mist-700),
+    var(--lavender-mist-400),
+    var(--blush-pink-300),
+    var(--blush-pink-600)
+  );
+  background-size: 300% 300%;
   color: #fff;
   padding: 0.75rem 1.5rem;
   border: none;
+  border-radius: 0.75rem;
+  font-weight: 600;
   cursor: pointer;
-  transition: background-position 0.6s ease; /* Smooth transition for both hover-in and hover-out */
+  transition: all 0.5s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-/* Shift background on hover */
 .gradient-button:hover {
-  background-position: 100% 50%; /* Moves gradient smoothly to the end */
+  background-position: 100% 50%;
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
+}
+
+.gradient-button:active {
+  transform: translateY(1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.gradient-button:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(161, 103, 170, 0.5);
 }
 
 .gradient-button:disabled {
-  background: linear-gradient(270deg, #c3b2cc, #e1dde8, #faa3a3, #fddddd);
-  background-size: 200% 200%;
+  background: linear-gradient(
+    270deg,
+    var(--lavender-mist-200),
+    var(--lavender-mist-100),
+    var(--blush-pink-100),
+    var(--blush-pink-200)
+  );
+  background-size: 300% 300%;
   background-position: 50% 50%;
-  color: #b0b0b0; /* Light gray text color */
-  cursor: not-allowed; /* Change cursor to indicate it's disabled */
-  opacity: 0.7; /* Slight transparency for a disabled look */
-  transition: none; /* Disable hover transition on the disabled state */
+  color: var(--lavender-mist-600);
+  cursor: not-allowed;
+  opacity: 0.7;
+  box-shadow: none;
+  transform: none;
+}
+
+
+
+:root {
+  --lavender-mist-100: #e1dde8;
+  --lavender-mist-200: #d3cfdc;
+  --lavender-mist-300: #c3b2cc;
+  --lavender-mist-400: #b488bc;
+  --lavender-mist-600: #8a4fa9;
+  --lavender-mist-700: #713794;
+  
+  --blush-pink-100: #fddddd;
+  --blush-pink-200: #fcc1c1;
+  --blush-pink-300: #faa3a3;
+  --blush-pink-600: #f54e47;
+}
+
+
+
+
+
+/* Styling for buttons with the 'cancel-button' class */
+.cancel-button {
+  background: none;
+  color: var(--text-blackish-gray);
+  padding: 0.75rem 1.5rem;
+  border: 2px solid var(--border-blackish-gray);
+  border-radius: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.cancel-button:hover {
+  color: var(--text-blackish-gray-hover);
+  border-color: var(--border-blackish-gray-hover);
+  transform: translateY(-2px);
+}
+
+.cancel-button:active {
+  transform: translateY(1px);
+}
+
+.cancel-button:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(60, 60, 60, 0.3); /* Focus ring */
+}
+
+.cancel-button:disabled {
+  color: var(--text-blackish-gray-disabled);
+  border-color: var(--border-blackish-gray-disabled);
+  cursor: not-allowed;
+  opacity: 0.7;
+  transform: none;
+  background: none;
+}
+
+/* Color variables for blackish-gray shades */
+:root {
+  --text-blackish-gray: #444444; /* Dark gray for text */
+  --border-blackish-gray: #4c4c4c; /* Slightly lighter gray for border */
+  --text-blackish-gray-hover: #222222; /* Darker gray on hover */
+  --border-blackish-gray-hover: #222222; /* Match hover border with text */
+  --text-blackish-gray-disabled: #888888; /* Muted gray for disabled state */
+  --border-blackish-gray-disabled: #888888; /* Same muted gray for disabled border */
 }
