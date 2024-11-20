@@ -5,7 +5,7 @@ import { Calendar, Bell, Eye } from 'lucide-react'
 import { format } from 'date-fns'
 import Badge from "@/components/custom-ui/Badge"
 
-type Invitation = {
+export type Invitation = {
     status: 'PENDING' | 'ACCEPTED' | 'DECLINED';
     invitedBy: string;
     createdAt: Date;
