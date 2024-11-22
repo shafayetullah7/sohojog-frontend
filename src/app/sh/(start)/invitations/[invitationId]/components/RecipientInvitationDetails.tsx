@@ -9,15 +9,41 @@ import { Separator } from "@/components/ui/separator"
 import { Users, Briefcase, ChevronDown, ChevronUp, XCircle, CheckCircle } from 'lucide-react'
 import Badge from "@/components/custom-ui/Badge"
 import { GetSingleInvitationResponse, Invitation } from "@/_lib/redux/api/api-features/roles/participant/invitation/dto/getSingleInvitation/response.dto"
+import { useUpdateInvitationStatusMutation } from "@/_lib/redux/api/api-features/roles/participant/invitation/my.invitations.api"
 
 
 type Props = {
     invitationId: string
 }
 
-export default function RecipientInvitationDetails({ invitation }: {invitation:Invitation}) {
-    const [isProjectDescriptionExpanded, setIsProjectDescriptionExpanded] = useState(false)
-    const [isInvitationMessageExpanded, setIsInvitationMessageExpanded] = useState(false)
+export default function RecipientInvitationDetails({ invitation }: { invitation: Invitation }) {
+    const [isProjectDescriptionExpanded, setIsProjectDescriptionExpanded] = useState(false);
+    const [isInvitationMessageExpanded, setIsInvitationMessageExpanded] = useState(false);
+
+    const [updateInvitationStatus, { isLoading }] = useUpdateInvitationStatusMutation();
+    const handleAcceptInvitation = async () => {
+        try {
+            await updateInvitationStatus({
+                params: { id: invitation.id },
+                body: { status: "ACCEPTED" },
+            }).unwrap();
+            console.log("Invitation accepted successfully!");
+        } catch (error) {
+            console.error("Error accepting the invitation:", error);
+        }
+    };
+
+    const handleDeclineInvitation = async () => {
+        try {
+            await updateInvitationStatus({
+                params: { id: invitation.id },
+                body: { status: "DECLINED" },
+            }).unwrap();
+            console.log("Invitation declined successfully!");
+        } catch (error) {
+            console.error("Error declining the invitation:", error);
+        }
+    };
 
     const truncateDescription = (text: string, maxLength: number) => {
         if (text.length <= maxLength) return text;
@@ -122,16 +148,24 @@ export default function RecipientInvitationDetails({ invitation }: {invitation:I
                 </div>
 
 
-                <div className="flex space-x-4">
-                    <button className="flex-1 rounded-xl gradient-button flex items-center justify-center">
+                {invitation.status === 'PENDING' && <div className="flex space-x-4">
+                    <button
+                        className="flex-1 rounded-xl gradient-button flex items-center justify-center"
+                        onClick={handleAcceptInvitation}
+                        disabled={isLoading}
+                    >
                         <CheckCircle className="w-5 h-5 mr-2" />
                         Accept Invitation
                     </button>
-                    <button className="flex-1 rounded-xl cancel-button flex items-center justify-center">
+                    <button
+                        className="flex-1 rounded-xl cancel-button flex items-center justify-center"
+                        onClick={handleDeclineInvitation}
+                        disabled={isLoading}
+                    >
                         <XCircle className="w-5 h-5 mr-2" />
                         Decline
                     </button>
-                </div>
+                </div>}
             </section>
         </div>
     )
