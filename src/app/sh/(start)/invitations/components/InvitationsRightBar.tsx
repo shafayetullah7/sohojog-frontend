@@ -4,52 +4,60 @@ import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Skeleton } from "@/components/ui/skeleton";
 import { Filter } from "lucide-react";
-import InvitationListItem, { Invitation } from "./InvitationListItem";
-import { useEffect, useMemo, useState } from "react";
-import { useGetParticipantInvitationsMutation } from "@/_lib/redux/api/api-features/roles/participant/invitation/my.invitations.api";
-
-const InvitationSkeleton = () => (
-  <div className="flex items-center space-x-4 p-4">
-    <Skeleton className="h-12 w-12 rounded-full" />
-    <div className="space-y-2 flex-1">
-      <Skeleton className="h-4 w-[250px]" />
-      <Skeleton className="h-4 w-[200px]" />
-    </div>
-  </div>
-);
+import InvitationListItem from "./InvitationListItem";
+import { useEffect, useState } from "react";
+import { useGetParticipantInvitationsQuery } from "@/_lib/redux/api/api-features/roles/participant/invitation/my.invitations.api";
+import { GetParticipantInvitationsQueryParams } from "@/_lib/redux/api/api-features/roles/participant/invitation/dto/getInvitations/get.invitation.query.dto";
+import InvitationListItemSkeleton from "./InvitationIListItemSkeletong";
+import Link from "next/link";
+import { useParams } from "next/navigation";
 
 const InvitationsRightBar = () => {
-  const [selectedInvitation, setSelectedInvitation] = useState<Invitation | null>(null);
   const [filter, setFilter] = useState<'All' | 'PENDING' | 'ACCEPTED' | 'DECLINED'>('All');
   const [searchTerm, setSearchTerm] = useState('');
-  const [getParticipantInvitations, { data: invitationsData, isLoading, isError }] =
-    useGetParticipantInvitationsMutation();
+  const [page, setPage] = useState(1);
+  const [queryParams, setQueryParams] = useState<GetParticipantInvitationsQueryParams>({
+    projectId: undefined,
+    status: undefined,
+    invitedBy: undefined,
+    date: undefined,
+    month: undefined,
+    year: undefined,
+    beforeDate: undefined,
+    afterDate: undefined,
+    page: 1,
+    limit: 10,
+    sortBy: 'createdAt',
+    sortOrder: 'asc',
+    searchTerm: undefined,
+  });
 
-//   useEffect(() => {
-//     getParticipantInvitations({
-//       filter: filter === 'All' ? undefined : filter,
-//       searchTerm: searchTerm || undefined,
-//     });
-//   }, [filter, searchTerm, getParticipantInvitations]);
+  const params = useParams();
+  const { invitationId } = params as { invitationId: string };
 
-  const invitations = invitationsData?.data || [];
 
-//   const filteredInvitations = useMemo(() => {
-//     return invitations.sort((a, b) => b.createdAt.localeCompare(a.createdAt));
-//   }, [invitations]);
 
-//   useEffect(() => {
-//     if (filteredInvitations.length > 0 && !selectedInvitation) {
-//       setSelectedInvitation(filteredInvitations[0]);
-//     }
-//   }, [filteredInvitations, selectedInvitation]);
+  // API query hook
+  const { data: invitationsData, isLoading, isError } =
+    useGetParticipantInvitationsQuery(queryParams);
+
+
+
+  // Update queryParams whenever filter or searchTerm changes
+  useEffect(() => {
+    setQueryParams((prevParams) => ({
+      ...prevParams,
+      status: filter === 'All' ? undefined : filter,
+      searchTerm: searchTerm || undefined,
+      page,
+    }));
+  }, [filter, searchTerm, page]);
 
   return (
     <div className="w-full bg-white rounded-3xl p-2">
       <div className="p-4 border-b">
-        <h2 className="text-lg font-semibold mb-2">Invitations</h2>
+        <h2 className="text-xl font-semibold mb-2">Invitations</h2>
         <div className="flex items-center space-x-2 mb-2">
           <Input
             placeholder="Search..."
@@ -73,11 +81,11 @@ const InvitationsRightBar = () => {
           </DropdownMenu>
         </div>
       </div>
-      <ScrollArea className="h-[calc(100vh-8.5rem)]">
+      <ScrollArea className="h-[calc(100vh-8.5rem)] mt-3">
         {isLoading ? (
           <div className="space-y-3">
             {[...Array(5)].map((_, index) => (
-              <InvitationSkeleton key={index} />
+              <InvitationListItemSkeleton key={index} />
             ))}
           </div>
         ) : isError ? (
@@ -86,13 +94,15 @@ const InvitationsRightBar = () => {
           </div>
         ) : (
           <ul className="space-y-3">
-            {invitations && invitations?.map((invitation) => (
+            {invitationsData && invitationsData.data.invitations?.map((invitation) => (
               <li key={invitation.id}>
-                <InvitationListItem
-                  invitation={invitation}
-                  isSelected={selectedInvitation?.id === invitation.id}
-                  onClick={() => setSelectedInvitation(invitation)}
-                />
+                <Link href={`/sh/invitations/${invitation.id}`}>
+                  <InvitationListItem
+                    invitation={invitation}
+                    // isSelected={selectedInvitation?.id === invitation.id}
+                    isSelected={invitation.id === invitationId}
+                  />
+                </Link>
               </li>
             ))}
           </ul>

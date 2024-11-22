@@ -8,13 +8,13 @@ type Props = {
 
 const StartLayout = ({ children }: Props) => {
     return (
-        <div className="min-h-screen text-gray-900 flex flex-col">
+        <div className=" text-gray-900 flex flex-col">
             <div className=""><UserNav></UserNav></div>
-            <div className="flex flex-1">
+            <div className="flex flex-1 ">
                 <Sidebar></Sidebar>
 
                 <div className="flex-1  bg-slate-50 p-6">
-                    <div className="w-full h-full">{children}</div>
+                    <div className="w-full min-h-full">{children}</div>
                 </div>
                 {/* <div className="w-1/5"></div> */}
             </div>

@@ -69,7 +69,7 @@ axiosInstance.interceptors.response.use(
       console.error("Error message:", error.message);
     }
     if (error.status === 401 || error.response?.data.access.sessionExpired) {
-      console.log('here sign in');
+      console.log("here sign in");
       Router.push("/sign-in");
     }
     return Promise.reject(error);

@@ -8,57 +8,14 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import { Separator } from "@/components/ui/separator"
 import { Users, Briefcase, ChevronDown, ChevronUp, XCircle, CheckCircle } from 'lucide-react'
 import Badge from "@/components/custom-ui/Badge"
+import { GetSingleInvitationResponse, Invitation } from "@/_lib/redux/api/api-features/roles/participant/invitation/dto/getSingleInvitation/response.dto"
 
-// The invitation data provided
-const invitation = {
-    id: "7b4fbc2b-b2fb-4a04-aabf-3c7465df8a9d",
-    email: "johndoe@example.com",
-    projectId: "b2ecf1d6-ae8f-4f3c-a0c9-b15b904f1351",
-    status: "PENDING",
-    invitedUserName: "John Doe",
-    message: "We'd love to have you join our exciting new project! " + "Exciting details ahead! ".repeat(50),
-    invitedBy: "416a60fb-0455-48b1-a0a1-397cbebebb5e",
-    sentAt: "2024-11-13T02:27:33.877Z",
-    actionedAt: null,
-    seen: false,
-    seenAt: null,
-    createdAt: "2024-11-13T01:13:27.241Z",
-    updatedAt: "2024-11-13T02:27:33.873Z",
-    inviter: {
-        email: "janesmith@example.com",
-        id: "416a60fb-0455-48b1-a0a1-397cbebebb5e",
-        profilePicture: {
-            minUrl: "https://i.pravatar.cc/150?img=1",
-            midUrl: "https://i.pravatar.cc/300?img=1"
-        },
-        name: "Jane Smith"
-    },
-    project: {
-        id: "b2ecf1d6-ae8f-4f3c-a0c9-b15b904f1351",
-        title: "Next-Gen Web Application",
-        createdAt: "2024-10-24T01:34:27.131Z",
-        description: "Developing a cutting-edge web application " + "using the latest technologies. ".repeat(50),
-        status: "IN_PROGRESS",
-        _count: {
-            participations: 5,
-            teams: 2
-        },
-        creator: {
-            name: "Jane Smith",
-            email: "janesmith@example.com",
-            profilePicture: {
-                midUrl: "https://i.pravatar.cc/300?img=1",
-                minUrl: "https://i.pravatar.cc/150?img=1"
-            }
-        }
-    }
-}
 
 type Props = {
     invitationId: string
 }
 
-export default function ProjectInvitation({ invitationId }: Props) {
+export default function RecipientInvitationDetails({ invitation }: {invitation:Invitation}) {
     const [isProjectDescriptionExpanded, setIsProjectDescriptionExpanded] = useState(false)
     const [isInvitationMessageExpanded, setIsInvitationMessageExpanded] = useState(false)
 

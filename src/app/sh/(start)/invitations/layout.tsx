@@ -8,8 +8,7 @@ interface InvitationLayoutProps {
 const InvitationLayout = ({ children }: InvitationLayoutProps) => {
     return (
         <div className="flex gap-5 items-start justify-between h-full">
-            {/* <ParticipationMainSection></ParticipationMainSection> */}
-            <div className="flex-1">
+            <div className="flex-1 min-h-full">
                 {children}
             </div>
             <div className="w-[30%]">
