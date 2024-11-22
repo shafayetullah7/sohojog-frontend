@@ -11,7 +11,6 @@ import Badge from "@/components/custom-ui/Badge"
 import { GetSingleInvitationResponse, Invitation } from "@/_lib/redux/api/api-features/roles/participant/invitation/dto/getSingleInvitation/response.dto"
 import { useUpdateInvitationStatusMutation } from "@/_lib/redux/api/api-features/roles/participant/invitation/my.invitations.api"
 
-
 type Props = {
     invitationId: string
 }
@@ -52,19 +51,19 @@ export default function RecipientInvitationDetails({ invitation }: { invitation:
 
     return (
         <div className="container mx-auto p-6 w-full">
-            <h1 className="text-2xl font-bold mb-8">{invitation.project.title}</h1>
+            <h1 className="text-3xl font-bold mb-8 text-gray-900">{invitation.project.title}</h1>
 
             <section className="mb-12">
                 <div className="flex justify-between items-start mb-4">
                     <div>
-                        <p className="text-lg font-semibold">Project Overview</p>
-                        <p className="text-sm text-muted-foreground">Created on {format(new Date(invitation.project.createdAt), 'PPP')}</p>
+                        <p className="text-lg font-semibold text-gray-800">Project Overview</p>
+                        <p className="text-sm text-gray-500">Created on {format(new Date(invitation.project.createdAt), 'PPP')}</p>
                     </div>
                     <Badge status="neutral">{invitation.project.status}</Badge>
                 </div>
 
                 <div className="mb-4">
-                    <p className="mb-2">
+                    <p className="mb-2 text-gray-700">
                         {isProjectDescriptionExpanded
                             ? invitation.project.description
                             : truncateDescription(invitation.project.description, 200)}
@@ -73,7 +72,7 @@ export default function RecipientInvitationDetails({ invitation }: { invitation:
                         <Button
                             variant="link"
                             onClick={() => setIsProjectDescriptionExpanded(!isProjectDescriptionExpanded)}
-                            className="p-0 h-auto font-semibold"
+                            className="p-0 h-auto font-semibold text-gray-600 hover:text-gray-900"
                         >
                             {isProjectDescriptionExpanded ? 'See less' : 'See more'}
                         </Button>
@@ -82,11 +81,11 @@ export default function RecipientInvitationDetails({ invitation }: { invitation:
 
                 <div className="flex justify-between items-center mb-4">
                     <div className="flex space-x-4">
-                        <div className="flex items-center space-x-1">
+                        <div className="flex items-center space-x-1 text-gray-600">
                             <Users className="w-4 h-4" />
                             <span>{invitation.project._count.participations} Participants</span>
                         </div>
-                        <div className="flex items-center space-x-1">
+                        <div className="flex items-center space-x-1 text-gray-600">
                             <Briefcase className="w-4 h-4" />
                             <span>{invitation.project._count.teams} Teams</span>
                         </div>
@@ -97,8 +96,8 @@ export default function RecipientInvitationDetails({ invitation }: { invitation:
                             <AvatarFallback>{invitation.project.creator.name[0]}</AvatarFallback>
                         </Avatar>
                         <div>
-                            <p className="text-sm font-medium">{invitation.project.creator.name}</p>
-                            <p className="text-xs text-muted-foreground">{invitation.project.creator.email}</p>
+                            <p className="text-sm font-medium text-gray-800">{invitation.project.creator.name}</p>
+                            <p className="text-xs text-gray-500">{invitation.project.creator.email}</p>
                         </div>
                     </div>
                 </div>
@@ -109,8 +108,8 @@ export default function RecipientInvitationDetails({ invitation }: { invitation:
             <section>
                 <div className="flex justify-between items-start mb-6">
                     <div>
-                        <h2 className="text-2xl font-bold mb-1">You&apos;re Invited!</h2>
-                        <p className="text-sm text-muted-foreground">Sent on {format(new Date(invitation.sentAt), 'PPP')}</p>
+                        <h2 className="text-2xl font-bold mb-1 text-gray-900">You&apos;re Invited!</h2>
+                        <p className="text-sm text-gray-500">Sent on {format(new Date(invitation.sentAt), 'PPP')}</p>
                     </div>
                     <Badge status={invitation.status === "PENDING" ? "pending" : invitation.status === "ACCEPTED" ? "success" : "rejected"}>
                         {invitation.status}
@@ -120,17 +119,17 @@ export default function RecipientInvitationDetails({ invitation }: { invitation:
                 <div className="mb-6">
                     <div className="flex justify-between items-start mb-4">
                         <div>
-                            <p className="font-medium">{invitation.invitedUserName}</p>
-                            <p className="text-sm text-muted-foreground">{invitation.email}</p>
+                            <p className="font-medium text-gray-800">{invitation.invitedUserName}</p>
+                            <p className="text-sm text-gray-500">{invitation.email}</p>
                         </div>
                         <div className="text-right">
-                            <p className="text-sm">Invited by</p>
-                            <p className="font-medium">{invitation.inviter.name}</p>
+                            <p className="text-sm text-gray-600">Invited by</p>
+                            <p className="font-medium text-gray-800">{invitation.inviter.name}</p>
                         </div>
                     </div>
 
-                    <div className="bg-muted p-4 rounded-md mb-4">
-                        <p className="mb-2">
+                    <div className="bg-gray-100 p-4 rounded-md mb-4">
+                        <p className="mb-2 text-gray-700">
                             {isInvitationMessageExpanded
                                 ? invitation.message
                                 : truncateDescription(invitation.message, 150)}
@@ -139,7 +138,7 @@ export default function RecipientInvitationDetails({ invitation }: { invitation:
                             <Button
                                 variant="link"
                                 onClick={() => setIsInvitationMessageExpanded(!isInvitationMessageExpanded)}
-                                className="p-0 h-auto font-semibold"
+                                className="p-0 h-auto font-semibold text-gray-600 hover:text-gray-900"
                             >
                                 {isInvitationMessageExpanded ? 'See less' : 'See more'}
                             </Button>
@@ -147,25 +146,26 @@ export default function RecipientInvitationDetails({ invitation }: { invitation:
                     </div>
                 </div>
 
-
-                {invitation.status === 'PENDING' && <div className="flex space-x-4">
-                    <button
-                        className="flex-1 rounded-xl gradient-button flex items-center justify-center"
-                        onClick={handleAcceptInvitation}
-                        disabled={isLoading}
-                    >
-                        <CheckCircle className="w-5 h-5 mr-2" />
-                        Accept Invitation
-                    </button>
-                    <button
-                        className="flex-1 rounded-xl cancel-button flex items-center justify-center"
-                        onClick={handleDeclineInvitation}
-                        disabled={isLoading}
-                    >
-                        <XCircle className="w-5 h-5 mr-2" />
-                        Decline
-                    </button>
-                </div>}
+                {invitation.status === 'PENDING' && (
+                    <div className="flex space-x-4">
+                        <button
+                            className="flex-1 rounded-xl gradient-button flex items-center justify-center text-white font-semibold"
+                            onClick={handleAcceptInvitation}
+                            disabled={isLoading}
+                        >
+                            <CheckCircle className="w-5 h-5 mr-2" />
+                            Accept Invitation
+                        </button>
+                        <button
+                            className="flex-1 rounded-xl cancel-button flex items-center justify-center text-gray-700 font-semibold"
+                            onClick={handleDeclineInvitation}
+                            disabled={isLoading}
+                        >
+                            <XCircle className="w-5 h-5 mr-2" />
+                            Decline
+                        </button>
+                    </div>
+                )}
             </section>
         </div>
     )
