@@ -113,7 +113,7 @@ export default function MyProjectParticipants() {
                         onClick={() => setIsDialogOpen(true)}
                         variant="outline"
                         size="sm"
-                        className="bg-white text-gray-700 backdrop-blur-sm hover:bg-white/20 transition-colors rounded-xl px-6 border-white shadow-sm"
+                        className="gradient-button"
                     >
                         <UserPlus className="w-4 h-4 mr-2" />
                         Invite Participants

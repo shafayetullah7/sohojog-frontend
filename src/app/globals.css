@@ -76,8 +76,6 @@
   transform: none;
 }
 
-
-
 :root {
   --lavender-mist-100: #e1dde8;
   --lavender-mist-200: #d3cfdc;
@@ -85,16 +83,12 @@
   --lavender-mist-400: #b488bc;
   --lavender-mist-600: #8a4fa9;
   --lavender-mist-700: #713794;
-  
+
   --blush-pink-100: #fddddd;
   --blush-pink-200: #fcc1c1;
   --blush-pink-300: #faa3a3;
   --blush-pink-600: #f54e47;
 }
-
-
-
-
 
 /* Styling for buttons with the 'cancel-button' class */
 .cancel-button {
@@ -140,4 +134,72 @@
   --border-blackish-gray-hover: #222222; /* Match hover border with text */
   --text-blackish-gray-disabled: #888888; /* Muted gray for disabled state */
   --border-blackish-gray-disabled: #888888; /* Same muted gray for disabled border */
+}
+
+.gradient-button-secondary {
+  background: linear-gradient(
+    270deg,
+    var(--iceMint-500),
+    var(--iceMint-600),
+    var(--iceMint-400),
+    var(--iceMint-700)
+  );
+  background-size: 300% 300%;
+  color: #fff;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.5s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.gradient-button-secondary:hover {
+  background-position: 100% 50%;
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
+}
+
+.gradient-button-secondary:active {
+  transform: translateY(1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.gradient-button-secondary:focus {
+  outline: none;
+  border: none;
+  box-shadow: 0 0 0 3px rgba(0, 165, 163, 0.5); /* Corresponds to iceMint-600 */
+}
+
+.gradient-button-secondary:disabled {
+  background: linear-gradient(
+    270deg,
+    var(--iceMint-200),
+    var(--iceMint-100),
+    var(--iceMint-50),
+    var(--iceMint-100)
+  );
+  background-size: 300% 300%;
+  background-position: 50% 50%;
+  color: var(--iceMint-600);
+  cursor: not-allowed;
+  opacity: 0.7;
+  box-shadow: none;
+  transform: none;
+}
+
+:root {
+  /* Updated IceMint palette */
+  --iceMint-50: #e5f9f8;
+  --iceMint-100: #ccf2f1;
+  --iceMint-200: #99e4e3;
+  --iceMint-300: #66d6d5;
+  --iceMint-400: #33c8c7;
+  --iceMint-500: #00bab8;
+  --iceMint-600: #00a5a3;
+  --iceMint-700: #008f8e;
+  --iceMint-800: #007171;
+  --iceMint-900: #005353;
+  --iceMint-1000: #003636;
 }

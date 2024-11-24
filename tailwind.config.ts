@@ -46,18 +46,19 @@ const config: Config = {
           1000: "#7c1011",
         },
         iceMint: {
-          50: "#e5f7f7",
-          100: "#d4f0f0",
-          200: "#b8e5e6",
-          300: "#99dbdb",
-          400: "#78d0d1",
-          500: "#55c5c5",
-          600: "#40d4d5",
-          700: "#25c1c1",
-          800: "#1b9898",
-          900: "#147070",
-          1000: "#0d4a4a",
+          50: "#e5f9f8", // Very light mint
+          100: "#ccf2f1", // Light mint
+          200: "#99e4e3", // Soft mint
+          300: "#66d6d5", // Medium mint
+          400: "#33c8c7", // Bright mint
+          500: "#00bab8", // Pure mint
+          600: "#00a5a3", // Deep mint
+          700: "#008f8e", // Strong teal mint
+          800: "#007171", // Dark mint
+          900: "#005353", // Deep dark teal
+          1000: "#003636", // Almost black mint
         },
+
         honeyCream: {
           50: "#fef1dc",
           100: "#fce7c5",
@@ -124,30 +125,52 @@ const config: Config = {
         "lavender-blush-1000": "linear-gradient(to right, #29123d, #7c1011)",
 
         // Blush to Lavender gradients (top right to bottom left)
-        "blush-lavender-50-tr-bl": "linear-gradient(to bottom left, #fee9e8, #eeeaf2)",
-        "blush-lavender-100-tr-bl": "linear-gradient(to bottom left, #fddddd, #e1dde8)",
-        "blush-lavender-200-tr-bl": "linear-gradient(to bottom left, #fcc1c1, #d3cfdc)",
-        "blush-lavender-300-tr-bl": "linear-gradient(to bottom left, #faa3a3, #c3b2cc)",
-        "blush-lavender-400-tr-bl": "linear-gradient(to bottom left, #f88b8b, #b488bc)",
-        "blush-lavender-500-tr-bl": "linear-gradient(to bottom left, #f76969, #a167aa)",
-        "blush-lavender-600-tr-bl": "linear-gradient(to bottom left, #f54e47, #8a4fa9)",
-        "blush-lavender-700-tr-bl": "linear-gradient(to bottom left, #f1332c, #713794)",
-        "blush-lavender-800-tr-bl": "linear-gradient(to bottom left, #d62621, #582f77)",
-        "blush-lavender-900-tr-bl": "linear-gradient(to bottom left, #a91b1b, #3f2359)",
-        "blush-lavender-1000-tr-bl": "linear-gradient(to bottom left, #7c1011, #29123d)",
+        "blush-lavender-50-tr-bl":
+          "linear-gradient(to bottom left, #fee9e8, #eeeaf2)",
+        "blush-lavender-100-tr-bl":
+          "linear-gradient(to bottom left, #fddddd, #e1dde8)",
+        "blush-lavender-200-tr-bl":
+          "linear-gradient(to bottom left, #fcc1c1, #d3cfdc)",
+        "blush-lavender-300-tr-bl":
+          "linear-gradient(to bottom left, #faa3a3, #c3b2cc)",
+        "blush-lavender-400-tr-bl":
+          "linear-gradient(to bottom left, #f88b8b, #b488bc)",
+        "blush-lavender-500-tr-bl":
+          "linear-gradient(to bottom left, #f76969, #a167aa)",
+        "blush-lavender-600-tr-bl":
+          "linear-gradient(to bottom left, #f54e47, #8a4fa9)",
+        "blush-lavender-700-tr-bl":
+          "linear-gradient(to bottom left, #f1332c, #713794)",
+        "blush-lavender-800-tr-bl":
+          "linear-gradient(to bottom left, #d62621, #582f77)",
+        "blush-lavender-900-tr-bl":
+          "linear-gradient(to bottom left, #a91b1b, #3f2359)",
+        "blush-lavender-1000-tr-bl":
+          "linear-gradient(to bottom left, #7c1011, #29123d)",
 
         // Lavender to Blush gradients (bottom left to top right)
-        "lavender-blush-50-tr-bl": "linear-gradient(to top right, #fee9e8, #eeeaf2)",
-        "lavender-blush-100-tr-bl": "linear-gradient(to top right, #fddddd, #e1dde8)",
-        "lavender-blush-200-tr-bl": "linear-gradient(to top right, #fcc1c1, #d3cfdc)",
-        "lavender-blush-300-tr-bl": "linear-gradient(to top right, #faa3a3, #c3b2cc)",
-        "lavender-blush-400-tr-bl": "linear-gradient(to top right, #f88b8b, #b488bc)",
-        "lavender-blush-500-tr-bl": "linear-gradient(to top right, #f76969, #a167aa)",
-        "lavender-blush-600-tr-bl": "linear-gradient(to top right, #f54e47, #8a4fa9)",
-        "lavender-blush-700-tr-bl": "linear-gradient(to top right, #f1332c, #713794)",
-        "lavender-blush-800-tr-bl": "linear-gradient(to top right, #d62621, #582f77)",
-        "lavender-blush-900-tr-bl": "linear-gradient(to top right, #a91b1b, #3f2359)",
-        "lavender-blush-1000-tr-bl": "linear-gradient(to top right, #7c1011, #29123d)",
+        "lavender-blush-50-tr-bl":
+          "linear-gradient(to top right, #fee9e8, #eeeaf2)",
+        "lavender-blush-100-tr-bl":
+          "linear-gradient(to top right, #fddddd, #e1dde8)",
+        "lavender-blush-200-tr-bl":
+          "linear-gradient(to top right, #fcc1c1, #d3cfdc)",
+        "lavender-blush-300-tr-bl":
+          "linear-gradient(to top right, #faa3a3, #c3b2cc)",
+        "lavender-blush-400-tr-bl":
+          "linear-gradient(to top right, #f88b8b, #b488bc)",
+        "lavender-blush-500-tr-bl":
+          "linear-gradient(to top right, #f76969, #a167aa)",
+        "lavender-blush-600-tr-bl":
+          "linear-gradient(to top right, #f54e47, #8a4fa9)",
+        "lavender-blush-700-tr-bl":
+          "linear-gradient(to top right, #f1332c, #713794)",
+        "lavender-blush-800-tr-bl":
+          "linear-gradient(to top right, #d62621, #582f77)",
+        "lavender-blush-900-tr-bl":
+          "linear-gradient(to top right, #a91b1b, #3f2359)",
+        "lavender-blush-1000-tr-bl":
+          "linear-gradient(to top right, #7c1011, #29123d)",
 
         // HoneyCream to IceMint gradients
         "honeyCream-iceMint-50": "linear-gradient(to right, #fef1dc, #e5f7f7)",
@@ -160,7 +183,8 @@ const config: Config = {
         "honeyCream-iceMint-700": "linear-gradient(to right, #d57012, #25c1c1)",
         "honeyCream-iceMint-800": "linear-gradient(to right, #a7580d, #1b9898)",
         "honeyCream-iceMint-900": "linear-gradient(to right, #793f08, #147070)",
-        "honeyCream-iceMint-1000": "linear-gradient(to right, #4b2704, #0d4a4a)",
+        "honeyCream-iceMint-1000":
+          "linear-gradient(to right, #4b2704, #0d4a4a)",
 
         // IceMint to HoneyCream gradients (reverse order)
         "iceMint-honeyCream-50": "linear-gradient(to left, #e5f7f7, #fef1dc)",
@@ -176,30 +200,52 @@ const config: Config = {
         "iceMint-honeyCream-1000": "linear-gradient(to left, #0d4a4a, #4b2704)",
 
         // Top right to bottom left gradients
-        "honeyCream-iceMint-50-tr-bl": "linear-gradient(to bottom left, #fef1dc, #e5f7f7)",
-        "honeyCream-iceMint-100-tr-bl": "linear-gradient(to bottom left, #fce7c5, #d4f0f0)",
-        "honeyCream-iceMint-200-tr-bl": "linear-gradient(to bottom left, #fbd6a5, #b8e5e6)",
-        "honeyCream-iceMint-300-tr-bl": "linear-gradient(to bottom left, #f7c285, #99dbdb)",
-        "honeyCream-iceMint-400-tr-bl": "linear-gradient(to bottom left, #f5ab61, #78d0d1)",
-        "honeyCream-iceMint-500-tr-bl": "linear-gradient(to bottom left, #f5973e, #55c5c5)",
-        "honeyCream-iceMint-600-tr-bl": "linear-gradient(to bottom left, #f38817, #40d4d5)",
-        "honeyCream-iceMint-700-tr-bl": "linear-gradient(to bottom left, #d57012, #25c1c1)",
-        "honeyCream-iceMint-800-tr-bl": "linear-gradient(to bottom left, #a7580d, #1b9898)",
-        "honeyCream-iceMint-900-tr-bl": "linear-gradient(to bottom left, #793f08, #147070)",
-        "honeyCream-iceMint-1000-tr-bl": "linear-gradient(to bottom left, #4b2704, #0d4a4a)",
+        "honeyCream-iceMint-50-tr-bl":
+          "linear-gradient(to bottom left, #fef1dc, #e5f7f7)",
+        "honeyCream-iceMint-100-tr-bl":
+          "linear-gradient(to bottom left, #fce7c5, #d4f0f0)",
+        "honeyCream-iceMint-200-tr-bl":
+          "linear-gradient(to bottom left, #fbd6a5, #b8e5e6)",
+        "honeyCream-iceMint-300-tr-bl":
+          "linear-gradient(to bottom left, #f7c285, #99dbdb)",
+        "honeyCream-iceMint-400-tr-bl":
+          "linear-gradient(to bottom left, #f5ab61, #78d0d1)",
+        "honeyCream-iceMint-500-tr-bl":
+          "linear-gradient(to bottom left, #f5973e, #55c5c5)",
+        "honeyCream-iceMint-600-tr-bl":
+          "linear-gradient(to bottom left, #f38817, #40d4d5)",
+        "honeyCream-iceMint-700-tr-bl":
+          "linear-gradient(to bottom left, #d57012, #25c1c1)",
+        "honeyCream-iceMint-800-tr-bl":
+          "linear-gradient(to bottom left, #a7580d, #1b9898)",
+        "honeyCream-iceMint-900-tr-bl":
+          "linear-gradient(to bottom left, #793f08, #147070)",
+        "honeyCream-iceMint-1000-tr-bl":
+          "linear-gradient(to bottom left, #4b2704, #0d4a4a)",
 
         // Bottom left to top right gradients (reverse order)
-        "iceMint-honeyCream-50-tr-bl": "linear-gradient(to top right, #fef1dc, #e5f7f7)",
-        "iceMint-honeyCream-100-tr-bl": "linear-gradient(to top right, #fce7c5, #d4f0f0)",
-        "iceMint-honeyCream-200-tr-bl": "linear-gradient(to top right, #fbd6a5, #b8e5e6)",
-        "iceMint-honeyCream-300-tr-bl": "linear-gradient(to top right, #f7c285, #99dbdb)",
-        "iceMint-honeyCream-400-tr-bl": "linear-gradient(to top right, #f5ab61, #78d0d1)",
-        "iceMint-honeyCream-500-tr-bl": "linear-gradient(to top right, #f5973e, #55c5c5)",
-        "iceMint-honeyCream-600-tr-bl": "linear-gradient(to top right, #f38817, #40d4d5)",
-        "iceMint-honeyCream-700-tr-bl": "linear-gradient(to top right, #d57012, #25c1c1)",
-        "iceMint-honeyCream-800-tr-bl": "linear-gradient(to top right, #a7580d, #1b9898)",
-        "iceMint-honeyCream-900-tr-bl": "linear-gradient(to top right, #793f08, #147070)",
-        "iceMint-honeyCream-1000-tr-bl": "linear-gradient(to top right, #4b2704, #0d4a4a)",
+        "iceMint-honeyCream-50-tr-bl":
+          "linear-gradient(to top right, #fef1dc, #e5f7f7)",
+        "iceMint-honeyCream-100-tr-bl":
+          "linear-gradient(to top right, #fce7c5, #d4f0f0)",
+        "iceMint-honeyCream-200-tr-bl":
+          "linear-gradient(to top right, #fbd6a5, #b8e5e6)",
+        "iceMint-honeyCream-300-tr-bl":
+          "linear-gradient(to top right, #f7c285, #99dbdb)",
+        "iceMint-honeyCream-400-tr-bl":
+          "linear-gradient(to top right, #f5ab61, #78d0d1)",
+        "iceMint-honeyCream-500-tr-bl":
+          "linear-gradient(to top right, #f5973e, #55c5c5)",
+        "iceMint-honeyCream-600-tr-bl":
+          "linear-gradient(to top right, #f38817, #40d4d5)",
+        "iceMint-honeyCream-700-tr-bl":
+          "linear-gradient(to top right, #d57012, #25c1c1)",
+        "iceMint-honeyCream-800-tr-bl":
+          "linear-gradient(to top right, #a7580d, #1b9898)",
+        "iceMint-honeyCream-900-tr-bl":
+          "linear-gradient(to top right, #793f08, #147070)",
+        "iceMint-honeyCream-1000-tr-bl":
+          "linear-gradient(to top right, #4b2704, #0d4a4a)",
       },
       keyframes: {
         "accordion-down": {
@@ -219,20 +265,20 @@ const config: Config = {
   },
   plugins: [
     require("tailwindcss-animate"),
-    function ({ addUtilities, e, theme, variants }:any) {
-      const gradients = theme('backgroundImage') as Record<string, string>;
+    function ({ addUtilities, e, theme, variants }: any) {
+      const gradients = theme("backgroundImage") as Record<string, string>;
       const newUtilities = Object.keys(gradients).reduce((acc, key) => {
         acc[`.text-${e(key)}`] = {
           backgroundImage: gradients[key],
-          backgroundClip: 'text',
-          WebkitBackgroundClip: 'text',
-          WebkitTextFillColor: 'transparent',
-          color: 'transparent',
+          backgroundClip: "text",
+          WebkitBackgroundClip: "text",
+          WebkitTextFillColor: "transparent",
+          color: "transparent",
         };
         return acc;
       }, {} as Record<string, any>);
 
-      addUtilities(newUtilities, variants('textColor'));
+      addUtilities(newUtilities, variants("textColor"));
     },
   ],
 } satisfies Config;
