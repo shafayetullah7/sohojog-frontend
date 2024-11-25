@@ -1,20 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { format } from "date-fns";
-import {
-    CalendarIcon,
-    CheckCircleIcon,
-    ClockIcon,
-    EyeIcon,
-    TagIcon,
-    UsersIcon,
-    DollarSignIcon,
-    MailIcon,
-    VideoIcon,
-    ChevronDownIcon,
-    ChevronUpIcon,
-} from "lucide-react";
+import { CalendarIcon, CheckCircleIcon, ClockIcon, EyeIcon, TagIcon, UsersIcon, DollarSignIcon, MailIcon, VideoIcon, ChevronDownIcon, ChevronUpIcon } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
@@ -41,8 +29,21 @@ type Props = {
 
 const MyProjectHeading = ({ projectId }: Props) => {
     const [isExpanded, setIsExpanded] = useState(true);
+    const contentRef = useRef<HTMLDivElement>(null);
     const { data, isLoading, isError, error, isFetching } =
         useGetManagerSingleProjectQuery({ projectId });
+
+    useEffect(() => {
+        if (contentRef.current) {
+            contentRef.current.style.maxHeight = isExpanded
+                ? `${contentRef.current.scrollHeight}px`
+                : '0px';
+        }
+    }, [isExpanded, data]);
+
+    const toggleExpand = () => {
+        setIsExpanded(!isExpanded);
+    };
 
     if (isLoading || isFetching) {
         return (
@@ -78,9 +79,26 @@ const MyProjectHeading = ({ projectId }: Props) => {
         return (
             <div className="bg-gradient-to-r from-blue-50 to-indigo-100 p-4 rounded-lg shadow-md transition-all duration-300 ease-in-out">
                 <div className="flex items-start justify-between mb-4">
-                    <div>
-                        <h1 className="text-2xl font-bold text-gray-800 mb-2">{project.title}</h1>
-                        <div className="flex flex-wrap gap-2 mb-2">
+                    <div className="flex-1">
+                        <div className="flex items-center justify-between">
+                            <h1 className="text-2xl font-bold text-gray-800">{project.title}</h1>
+                            <Button
+                                variant="ghost"
+                                size="sm"
+                                className="p-1 h-auto text-gray-500 hover:text-gray-700"
+                                onClick={toggleExpand}
+                                aria-expanded={isExpanded}
+                                aria-controls="project-details"
+                            >
+                                {isExpanded ? (
+                                    <ChevronUpIcon className="w-5 h-5" />
+                                ) : (
+                                    <ChevronDownIcon className="w-5 h-5" />
+                                )}
+                                <span className="sr-only">{isExpanded ? 'Collapse details' : 'Expand details'}</span>
+                            </Button>
+                        </div>
+                        <div className="flex flex-wrap gap-2 mt-2">
                             <Badge className={`${statusColors[project.status as keyof typeof statusColors]}`}>
                                 {project.status}
                             </Badge>
@@ -93,13 +111,18 @@ const MyProjectHeading = ({ projectId }: Props) => {
                             </Badge>
                         </div>
                     </div>
-                    <Avatar className="w-12 h-12 border-2 border-white">
+                    <Avatar className="w-12 h-12 border-2 border-white ml-4">
                         <AvatarImage src={project.creator.profilePicture?.minUrl} alt={project.creator.name} />
                         <AvatarFallback>{project.creator.name.charAt(0)}</AvatarFallback>
                     </Avatar>
                 </div>
 
-                <div className={`overflow-hidden transition-all duration-300 ease-in-out ${isExpanded ? 'max-h-[1000px]' : 'max-h-0'}`}>
+                <div
+                    id="project-details"
+                    ref={contentRef}
+                    className="overflow-hidden transition-all duration-300 ease-in-out"
+                    style={{ maxHeight: isExpanded ? `${contentRef.current?.scrollHeight}px` : '0px' }}
+                >
                     <div className="mb-4">
                         <p className="text-sm text-gray-600">
                             {project.description}
@@ -141,24 +164,6 @@ const MyProjectHeading = ({ projectId }: Props) => {
                         </div>
                     )}
                 </div>
-
-                <Button
-                    variant="link"
-                    className="p-0 h-auto text-blue-600 hover:text-blue-800 mt-2"
-                    onClick={() => setIsExpanded(!isExpanded)}
-                >
-                    {isExpanded ? (
-                        <>
-                            <ChevronUpIcon className="w-4 h-4 mr-1" />
-                            Show less
-                        </>
-                    ) : (
-                        <>
-                            <ChevronDownIcon className="w-4 h-4 mr-1" />
-                            Show more
-                        </>
-                    )}
-                </Button>
             </div>
         );
     }
