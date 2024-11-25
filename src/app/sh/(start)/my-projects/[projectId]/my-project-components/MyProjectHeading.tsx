@@ -40,7 +40,7 @@ type Props = {
 };
 
 const MyProjectHeading = ({ projectId }: Props) => {
-    const [showFullDescription, setShowFullDescription] = useState(false);
+    const [isExpanded, setIsExpanded] = useState(true);
     const { data, isLoading, isError, error, isFetching } =
         useGetManagerSingleProjectQuery({ projectId });
 
@@ -76,7 +76,7 @@ const MyProjectHeading = ({ projectId }: Props) => {
 
     if (project) {
         return (
-            <div className="bg-gradient-to-r from-blue-50 to-indigo-100 p-4 rounded-lg shadow-md">
+            <div className="bg-gradient-to-r from-blue-50 to-indigo-100 p-4 rounded-lg shadow-md transition-all duration-300 ease-in-out">
                 <div className="flex items-start justify-between mb-4">
                     <div>
                         <h1 className="text-2xl font-bold text-gray-800 mb-2">{project.title}</h1>
@@ -99,67 +99,66 @@ const MyProjectHeading = ({ projectId }: Props) => {
                     </Avatar>
                 </div>
 
-                <div className="mb-4">
-                    <p className="text-sm text-gray-600">
-                        {showFullDescription
-                            ? project.description
-                            : `${project.description.slice(0, 100)}${project.description.length > 100 ? '...' : ''}`}
-                    </p>
-                    {project.description.length > 100 && (
-                        <Button
-                            variant="link"
-                            className="p-0 h-auto text-blue-600 hover:text-blue-800"
-                            onClick={() => setShowFullDescription(!showFullDescription)}
-                        >
-                            {showFullDescription ? (
-                                <>
-                                    <ChevronUpIcon className="w-4 h-4 mr-1" />
-                                    See less
-                                </>
-                            ) : (
-                                <>
-                                    <ChevronDownIcon className="w-4 h-4 mr-1" />
-                                    See more
-                                </>
-                            )}
-                        </Button>
-                    )}
-                </div>
+                <div className={`overflow-hidden transition-all duration-300 ease-in-out ${isExpanded ? 'max-h-[1000px]' : 'max-h-0'}`}>
+                    <div className="mb-4">
+                        <p className="text-sm text-gray-600">
+                            {project.description}
+                        </p>
+                    </div>
 
-                <div className="flex flex-wrap gap-4 text-sm text-gray-600">
-                    <div className="flex items-center">
-                        <CalendarIcon className="w-4 h-4 mr-2 text-gray-400" />
-                        <span>
-                            {project.startDate && format(new Date(project.startDate), "MMM d, yyyy")} -{" "}
-                            {project.endDate && format(new Date(project.endDate), "MMM d, yyyy")}
-                        </span>
-                    </div>
-                    <div className="flex items-center">
-                        <UsersIcon className="w-4 h-4 mr-2 text-gray-400" />
-                        <span>{project.counts.participations || 0} Participants</span>
-                    </div>
-                    <div className="flex items-center">
-                        <ClockIcon className="w-4 h-4 mr-2 text-gray-400" />
-                        <span>{project.counts.tasks || 0} Tasks</span>
-                    </div>
-                    {project.wallet && (
+                    <div className="flex flex-wrap gap-4 text-sm text-gray-600">
                         <div className="flex items-center">
-                            <DollarSignIcon className="w-4 h-4 mr-2 text-gray-400" />
-                            <span>{project.wallet.estimatedBudget} {project.wallet.currency}</span>
+                            <CalendarIcon className="w-4 h-4 mr-2 text-gray-400" />
+                            <span>
+                                {project.startDate && format(new Date(project.startDate), "MMM d, yyyy")} -{" "}
+                                {project.endDate && format(new Date(project.endDate), "MMM d, yyyy")}
+                            </span>
+                        </div>
+                        <div className="flex items-center">
+                            <UsersIcon className="w-4 h-4 mr-2 text-gray-400" />
+                            <span>{project.counts.participations || 0} Participants</span>
+                        </div>
+                        <div className="flex items-center">
+                            <ClockIcon className="w-4 h-4 mr-2 text-gray-400" />
+                            <span>{project.counts.tasks || 0} Tasks</span>
+                        </div>
+                        {project.wallet && (
+                            <div className="flex items-center">
+                                <DollarSignIcon className="w-4 h-4 mr-2 text-gray-400" />
+                                <span>{project.wallet.estimatedBudget} {project.wallet.currency}</span>
+                            </div>
+                        )}
+                    </div>
+
+                    {project.tags.length > 0 && (
+                        <div className="mt-4 flex flex-wrap gap-2">
+                            {project.tags.map((tag: string, index: number) => (
+                                <Badge key={index} variant="secondary" className="flex items-center bg-white text-gray-600">
+                                    <TagIcon className="w-3 h-3 mr-1" />
+                                    {tag}
+                                </Badge>
+                            ))}
                         </div>
                     )}
                 </div>
 
-                {project.tags.length > 0 && (
-                    <div className="mt-4 flex flex-wrap gap-2">
-                        {project.tags.map((tag: string, index: number) => (
-                            <Badge key={index} variant="secondary" className="flex items-center bg-white text-gray-600">
-                                <TagIcon className="w-3 h-3 mr-1" />
-                                {tag}
-                            </Badge>
-                        ))}
-                    </div>
-                )}
+                <Button
+                    variant="link"
+                    className="p-0 h-auto text-blue-600 hover:text-blue-800 mt-2"
+                    onClick={() => setIsExpanded(!isExpanded)}
+                >
+                    {isExpanded ? (
+                        <>
+                            <ChevronUpIcon className="w-4 h-4 mr-1" />
+                            Show less
+                        </>
+                    ) : (
+                        <>
+                            <ChevronDownIcon className="w-4 h-4 mr-1" />
+                            Show more
+                        </>
+                    )}
+                </Button>
             </div>
         );
     }

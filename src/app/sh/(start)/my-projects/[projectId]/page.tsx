@@ -14,6 +14,7 @@ import { TerrorResponse } from "@/_lib/redux/data-types/responseDataType"
 import MyProjectHeading from "./my-project-components/MyProjectHeading"
 import MyProjectParticipants from "./my-project-components/MyProjectParticipants"
 import MyProjectTeams from "./my-project-components/MyProjectTeams"
+import ProjectNav from "./my-project-components/ProjectNav"
 
 
 
@@ -116,7 +117,9 @@ export default function MyProjectDetailsPage() {
     return (
         <div className="min-h-screen">
             {/* Header Section with Background Image */}
-            {<MyProjectHeading projectId={projectId}></MyProjectHeading>}
+            <MyProjectHeading projectId={projectId}></MyProjectHeading>
+
+            <ProjectNav></ProjectNav>
 
             {/* Main Content */}
             <div className="container mx-auto px-4 py-8">
