@@ -39,7 +39,7 @@ export interface Project {
   updatedAt: Date;
   creator: ProjectCreator;
   counts: ProjectCounts;
-  wallet: ProjectWallet;
+  wallet?: ProjectWallet;
 }
 
 export interface ManagerSingleProjectResponse {

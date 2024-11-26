@@ -4,10 +4,10 @@ import {
 } from "@/_lib/redux/data-types/responseDataType";
 import { baseApi } from "../../../../baseApi";
 import { CreateProjectResponseData } from "./dto/manager.create.project.t";
-import { CreateProjectRequestData } from "@/app/sh/[userId]/my-projects/components/createProject/create.project.schema";
 import { GetManagerProjectsData } from "./dto/manager.get.project.dto";
 import { ManagerSingleProjectResponse } from "./dto/manager.single.project";
 import { ManagerSingleProjectParticipantsResponse } from "./dto/manager.get.single.project.participants";
+import { CreateProjectRequestData } from "@/app/sh/(start)/my-projects/components/createProject/create.project.schema";
 
 const managerProjectApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -40,6 +40,9 @@ const managerProjectApi = baseApi.injectEndpoints({
         url: `manager/projects/${projectId}`,
         method: "GET",
       }),
+      providesTags: (result, error, { projectId }) => [
+        { type: "manager-project", id: projectId },
+      ],
     }),
 
     getManagerSingleProjectParticipans: builder.query<

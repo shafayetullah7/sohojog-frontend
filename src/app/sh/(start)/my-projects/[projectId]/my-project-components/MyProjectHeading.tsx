@@ -2,14 +2,23 @@
 
 import { useState, useRef, useEffect } from "react";
 import { format } from "date-fns";
-import { CalendarIcon, CheckCircleIcon, ClockIcon, EyeIcon, TagIcon, UsersIcon, DollarSignIcon, MailIcon, VideoIcon, ChevronDownIcon, ChevronUpIcon } from 'lucide-react';
+import { CalendarIcon, CheckCircleIcon, ClockIcon, EyeIcon, TagIcon, UsersIcon, DollarSignIcon, ChevronDownIcon, ChevronUpIcon, WalletIcon } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { Progress } from "@/components/ui/progress";
-import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useGetManagerSingleProjectQuery } from "@/_lib/redux/api/api-features/roles/manager/manager-project-api-features/managerProjectApi";
 import { TerrorResponse } from "@/_lib/redux/data-types/responseDataType";
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from "@/components/ui/dialog";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const statusColors = {
     PLANNING: "bg-blue-100 text-blue-800",
@@ -23,12 +32,22 @@ const priorityColors = {
     HIGH: "bg-red-100 text-red-800",
 };
 
+const Currency = {
+    USD: "USD",
+    EUR: "EUR",
+    GBP: "GBP",
+    JPY: "JPY",
+};
+
 type Props = {
     projectId: string;
 };
 
 const MyProjectHeading = ({ projectId }: Props) => {
     const [isExpanded, setIsExpanded] = useState(true);
+    const [isWalletDialogOpen, setIsWalletDialogOpen] = useState(false);
+    const [balance, setBalance] = useState("0");
+    const [currency, setCurrency] = useState(Currency.USD);
     const contentRef = useRef<HTMLDivElement>(null);
     const { data, isLoading, isError, error, isFetching } =
         useGetManagerSingleProjectQuery({ projectId });
@@ -43,6 +62,12 @@ const MyProjectHeading = ({ projectId }: Props) => {
 
     const toggleExpand = () => {
         setIsExpanded(!isExpanded);
+    };
+
+    const handleEnableWallet = () => {
+        // Implement your wallet enabling logic here
+        console.log("Enabling wallet with balance:", balance, "and currency:", currency);
+        setIsWalletDialogOpen(false);
     };
 
     if (isLoading || isFetching) {
@@ -98,7 +123,7 @@ const MyProjectHeading = ({ projectId }: Props) => {
                                 <span className="sr-only">{isExpanded ? 'Collapse details' : 'Expand details'}</span>
                             </Button>
                         </div>
-                        <div className="flex flex-wrap gap-2 mt-2">
+                        <div className="flex flex-wrap items-center gap-2 mt-2">
                             <Badge className={`${statusColors[project.status as keyof typeof statusColors]}`}>
                                 {project.status}
                             </Badge>
@@ -109,6 +134,62 @@ const MyProjectHeading = ({ projectId }: Props) => {
                                 <EyeIcon className="w-3 h-3 mr-1" />
                                 {project.visibility}
                             </Badge>
+                            {project.wallet ? (
+                                <Badge variant="secondary" className="flex items-center">
+                                    <DollarSignIcon className="w-3 h-3 mr-1" />
+                                    {project.wallet.estimatedBudget} {project.wallet.currency}
+                                </Badge>
+                            ) : (
+                                <Dialog open={isWalletDialogOpen} onOpenChange={setIsWalletDialogOpen}>
+                                    <DialogTrigger asChild>
+                                        <Button variant="outline" size="sm" className="flex items-center">
+                                            <WalletIcon className="w-4 h-4 mr-2" />
+                                            Enable Wallet
+                                        </Button>
+                                    </DialogTrigger>
+                                    <DialogContent>
+                                        <DialogHeader>
+                                            <DialogTitle>Enable Project Wallet</DialogTitle>
+                                            <DialogDescription>
+                                                Set up a wallet to manage the budget for this project.
+                                            </DialogDescription>
+                                        </DialogHeader>
+                                        <div className="grid gap-4 py-4">
+                                            <div className="grid grid-cols-4 items-center gap-4">
+                                                <label htmlFor="balance" className="text-right">
+                                                    Balance
+                                                </label>
+                                                <Input
+                                                    id="balance"
+                                                    type="number"
+                                                    value={balance}
+                                                    onChange={(e) => setBalance(e.target.value)}
+                                                    className="col-span-3"
+                                                    min="0"
+                                                />
+                                            </div>
+                                            <div className="grid grid-cols-4 items-center gap-4">
+                                                <label htmlFor="currency" className="text-right">
+                                                    Currency
+                                                </label>
+                                                <Select onValueChange={(value) => setCurrency(value as keyof typeof Currency)} value={currency}>
+                                                    <SelectTrigger className="col-span-3">
+                                                        <SelectValue placeholder="Select currency" />
+                                                    </SelectTrigger>
+                                                    <SelectContent>
+                                                        {Object.entries(Currency).map(([key, value]) => (
+                                                            <SelectItem key={key} value={value}>
+                                                                {value}
+                                                            </SelectItem>
+                                                        ))}
+                                                    </SelectContent>
+                                                </Select>
+                                            </div>
+                                        </div>
+                                        <Button onClick={handleEnableWallet}>Enable Wallet</Button>
+                                    </DialogContent>
+                                </Dialog>
+                            )}
                         </div>
                     </div>
                     <Avatar className="w-12 h-12 border-2 border-white ml-4">
@@ -145,12 +226,6 @@ const MyProjectHeading = ({ projectId }: Props) => {
                             <ClockIcon className="w-4 h-4 mr-2 text-gray-400" />
                             <span>{project.counts.tasks || 0} Tasks</span>
                         </div>
-                        {project.wallet && (
-                            <div className="flex items-center">
-                                <DollarSignIcon className="w-4 h-4 mr-2 text-gray-400" />
-                                <span>{project.wallet.estimatedBudget} {project.wallet.currency}</span>
-                            </div>
-                        )}
                     </div>
 
                     {project.tags.length > 0 && (
