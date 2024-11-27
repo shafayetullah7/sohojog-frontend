@@ -10,6 +10,7 @@ import { InvitationsSection } from './my-project-components/InvitationSection'
 import { MeetingsSection } from './my-project-components/MeetingsSection'
 import MyProjectParticipants from './my-project-components/MyProjectParticipants'
 import MyProjectTeams from './my-project-components/MyProjectTeams'
+import { QuickActionBar } from './my-project-components/QuickActionBar'
 
 const projectData = {
     progress: 65,
@@ -42,6 +43,8 @@ export default function ProjectDetailsLayout() {
                     </div>
                 </div>
             </div>
+            <QuickActionBar />
+
         </div>
     )
 }

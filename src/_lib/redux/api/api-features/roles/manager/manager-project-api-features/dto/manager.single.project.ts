@@ -11,6 +11,7 @@ export interface ProjectCreator {
 
 export interface ProjectWallet {
   currency: string;
+  balance: number;
   estimatedBudget: number;
   _count: {
     transactions: number;
