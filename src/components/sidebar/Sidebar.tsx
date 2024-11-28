@@ -111,7 +111,7 @@ const Sidebar = () => {
                             {retracted ? <TooltipProvider delayDuration={300}>
                                 <Tooltip>
                                     <TooltipTrigger>
-                                        <Link href={`/sh/${item.route}/`} className={`${isActive(item.route) ? 'bg-lavender-blush-600 text-white hover:bg-lavender-blush-600' : ' hover:bg-gray-50'} flex flex-nowrap items-center space-x-4 p-5 mx-2 rounded-xl text-gray-800 font-medium overflow-hidden`}>
+                                        <Link prefetch={true} href={`/sh/${item.route}`} className={`${isActive(item.route) ? 'bg-lavender-blush-600 text-white hover:bg-lavender-blush-600' : ' hover:bg-gray-50'} flex flex-nowrap items-center space-x-4 p-5 mx-2 rounded-xl text-gray-800 font-medium overflow-hidden`}>
                                             <div><item.icon className="size-6" aria-hidden="true" /></div>
                                             {!retracted && <p className="text-nowrap">{item.title}</p>}
                                         </Link>
@@ -120,7 +120,7 @@ const Sidebar = () => {
                                         <p className="text-slate-500">{item.title}</p>
                                     </TooltipContent>
                                 </Tooltip>
-                            </TooltipProvider> : <Link href={`/sh/${item.route}/`} className={`${isActive(item.route) ? 'bg-lavender-blush-600 text-white hover:bg-lavender-blush-600' : 'hover:bg-gray-50'} flex flex-nowrap items-center space-x-4 p-5 mx-2 rounded-xl text-gray-800 font-medium overflow-hidden`}>
+                            </TooltipProvider> : <Link prefetch={true} href={`/sh/${item.route}`} className={`${isActive(item.route) ? 'bg-lavender-blush-600 text-white hover:bg-lavender-blush-600' : 'hover:bg-gray-50'} flex flex-nowrap items-center space-x-4 p-5 mx-2 rounded-xl text-gray-800 font-medium overflow-hidden`}>
                                 <div><item.icon className="size-6" aria-hidden="true" /></div>
                                 {!retracted && <p className="text-nowrap">{item.title}</p>}
                             </Link>}

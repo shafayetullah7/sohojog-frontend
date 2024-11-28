@@ -9,7 +9,8 @@ import {
 import { TsignUpData, TsignUpform } from "@/app/(auth)/(access)/sign-up/page";
 import { Tuser, TuserResponse } from "../../../../data-types/userDataTypes";
 import { TverifyUserData } from "@/app/(auth)/verify-user/page";
-import { TSendOtpData } from "@/app/sh/layout";
+import { TSendOtpData } from "./dto/send.otp.dto";
+// import { TSendOtpData } from "@/app/sh/layout";
 
 export const authApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
