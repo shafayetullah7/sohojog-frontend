@@ -1,12 +1,17 @@
-export enum ParticipationStatus {
-  ACTIVE = "ACTIVE",
-  INACTIVE = "INACTIVE",
-  REMOVED = "REMOVED",
-}
+export const participationStatus = {
+  ACTIVE: "ACTIVE",
+  INACTIVE: "INACTIVE",
+  REMOVED: "REMOVED",
+} as const;
 
-export enum ParticipationRole {
-  MEMBER = "MEMBER",
-}
+export const participationRole = {
+  MEMBER: "MEMBER",
+} as const;
+
+export type ParticipationStatus =
+  (typeof participationStatus)[keyof typeof participationStatus];
+export type ParticipationRole =
+  (typeof participationRole)[keyof typeof participationRole];
 
 export type GetParticipationRequestDto = {
   id?: string; // UUID

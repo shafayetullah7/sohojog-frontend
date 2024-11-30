@@ -29,7 +29,7 @@ type Props = {
 }
 
 export default function MyProjectHeading({ projectId }: Props) {
-    const [isExpanded, setIsExpanded] = useState(true)
+    const [isExpanded, setIsExpanded] = useState(false)
     const contentRef = useRef<HTMLDivElement>(null)
     const { data, isLoading, isError, error, isFetching } =
         useGetManagerSingleProjectQuery({ projectId })

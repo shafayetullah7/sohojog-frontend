@@ -8,7 +8,7 @@ type User = {
   profilePicture: ProfilePicture | null;
 };
 
-type Participation = {
+export type Participation = {
   id: string;
   projectId: string;
   userId: string;

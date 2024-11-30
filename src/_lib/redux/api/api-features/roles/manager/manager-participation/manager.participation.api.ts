@@ -5,7 +5,7 @@ import { GetProjectParticipantsResponseDto } from "./dto/get-participations/resp
 
 const managerParticipationApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    getParticipations: builder.query<
+    getManagerParticipations: builder.query<
       TresponseFormat<GetProjectParticipantsResponseDto>, // Response type
       GetParticipationRequestDto // Query type
     >({
@@ -73,7 +73,7 @@ const managerParticipationApi = baseApi.injectEndpoints({
 });
 
 export const {
-  useGetParticipationsQuery,
+  useGetManagerParticipationsQuery,
   //   useCreateParticipationMutation,
   //   useUpdateParticipationMutation,
   //   useDeleteParticipationMutation,
