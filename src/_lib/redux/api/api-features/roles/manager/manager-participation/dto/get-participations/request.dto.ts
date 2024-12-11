@@ -20,6 +20,7 @@ export type GetParticipationRequestDto = {
   status?: ParticipationStatus; // Enum
   role?: ParticipationRole; // Enum
   invitationId?: string; // UUID
+  excludeTeam?: string;
   joinedAt?: string; // Date (ISO string)
   joinedFrom?: string; // Date (ISO string)
   joinedTo?: string; // Date (ISO string)

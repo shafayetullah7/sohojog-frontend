@@ -34,8 +34,8 @@ export const axiosBaseQuery =
           "Content-Type": contentType || "application/json",
         },
       });
-      console.log("level 1");
-      console.log("level 1 res", result);
+      // console.log("level 1");
+      // console.log("level 1 res", result);
       return { data: result.data };
     } catch (axiosError) {
       // const err = axiosError as AxiosError<TerrorResponse>;

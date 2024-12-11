@@ -4,6 +4,10 @@ import { CreateTeamResponse } from "./dto/create-team/response.dto";
 import { CreateTeamRequest } from "./dto/create-team/request.dto";
 import { GetManagerTeamsResponse } from "./dto/get-teams/response.dto";
 import { GetManagerTeamsRequestQueryDto } from "./dto/get-teams/request.dto";
+import {
+  GetManagerTeamDetailsResponseDto,
+} from "./dto/get-single-team/get-team-details/response.dto";
+import { GetManagerTeamDetailsRequestDto } from "./dto/get-single-team/get-team-details/request.dto";
 
 const teamApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -38,7 +42,24 @@ const teamApi = baseApi.injectEndpoints({
             ]
           : [{ type: "manager-team", id: "LIST" }],
     }),
+    getManagerTeamDetails: builder.query<
+      TresponseFormat<GetManagerTeamDetailsResponseDto>,
+      GetManagerTeamDetailsRequestDto
+    >({
+      query: ({ projectId, teamId }) => ({
+        url: `manager/project-properties/${projectId}/teams/${teamId}`,
+        method: "GET",
+      }),
+      providesTags: (result, error, { teamId }) =>
+        result
+          ? [{ type: "manager-team", id: teamId }]
+          : [{ type: "manager-team", id: "LIST" }],
+    }),
   }),
 });
 
-export const { useCreateTeamMutation, useGetManagerTeamsQuery } = teamApi;
+export const {
+  useCreateTeamMutation,
+  useGetManagerTeamsQuery,
+  useGetManagerTeamDetailsQuery,
+} = teamApi;

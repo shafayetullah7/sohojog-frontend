@@ -12,5 +12,8 @@ export const baseApi = createApi({
     "manager-participation",
     "participant-invitation",
     "manager-team",
+    "team-membership",
   ],
+  keepUnusedDataFor: 45,
+  refetchOnReconnect: true,
 });

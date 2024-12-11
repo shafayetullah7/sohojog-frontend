@@ -43,7 +43,6 @@ export default function VerifyUserPage() {
     });
 
     const handleSendOtp = async () => {
-        // console.log('(((((((((((((((((((((((((((((')
         if (userState.data) {
             try {
                 const res = await sendOtp({ email: userState.data.email }).unwrap()

@@ -38,42 +38,90 @@ axiosInstance.interceptors.request.use(
 );
 
 // Add a response interceptor
-axiosInstance.interceptors.response.use(
-  // @ts-ignore
-  function (response) {
-    // console.log("level 2 ok");
-    // console.log("axios response 1", response.data);
-    // console.log("axios response 1 type", typeof response);
+// axiosInstance.interceptors.response.use(
+//   // @ts-ignore
+//   function (response) {
 
+//     const data: TresponseFormat<any> = response.data;
+
+//     if (data?.access?.token) {
+//       localStorageService.token = data.access.token;
+//     } else if (data?.access?.otpToken) {
+//       // localStorage.setItem("sohojogotptoken", data.access.otpToken);
+//       localStorageService.token = data.access.otpToken;
+//     }
+
+//     return response;
+//     // return response;
+//   },
+//   (error: AxiosError<TerrorResponse>) => {
+//     console.log("level 2 error");
+//     if (error.response) {
+//       console.error("Error response:", error.response);
+//     } else if (error.request) {
+//       console.error("No response:", error.request);
+//     } else {
+//       console.error("Error message:", error.message);
+//     }
+//     if (error.status === 401 || error.response?.data.access.sessionExpired) {
+//       console.log("here sign in");
+//       Router.push("/sign-in");
+//     }
+//     return Promise.reject(error);
+//   }
+// );
+
+let isRedirecting = false;
+
+
+axiosInstance.interceptors.response.use(
+  (response) => {
     const data: TresponseFormat<any> = response.data;
 
+    // Update tokens based on response
     if (data?.access?.token) {
-      // console.log("token", data.access.token);
-      // localStorage.setItem("sohojogtoken", data.access.token);
       localStorageService.token = data.access.token;
     } else if (data?.access?.otpToken) {
-      // localStorage.setItem("sohojogotptoken", data.access.otpToken);
       localStorageService.token = data.access.otpToken;
     }
 
     return response;
-    // return response;
   },
   (error: AxiosError<TerrorResponse>) => {
-    console.log("level 2 error");
+    console.log("Axios Response Interceptor Error:", error.message);
+
     if (error.response) {
-      console.error("Error response:", error.response);
+      console.error("Error Response Data:", error.response.data);
     } else if (error.request) {
-      console.error("No response:", error.request);
+      console.error("No Response from Server:", error.request);
     } else {
-      console.error("Error message:", error.message);
+      console.error("General Error Message:", error.message);
     }
-    if (error.status === 401 || error.response?.data.access.sessionExpired) {
-      console.log("here sign in");
-      Router.push("/sign-in");
+
+    // Handle 401 or Session Expired Errors
+    if (
+      error.response?.status === 401 ||
+      error.response?.data?.access?.sessionExpired
+    ) {
+      if (!isRedirecting) {
+        isRedirecting = true;
+        Router.push("/sign-in").finally(() => {
+          isRedirecting = false;
+        });
+      }
     }
+
+    // Handle Timeout Errors
+    if (error.code === "ECONNABORTED") {
+      console.error("Request Timeout:", error.message);
+    }
+
+    // Handle Network Errors
+    if (!error.response) {
+      console.error("Network Error:", error.message);
+    }
+
     return Promise.reject(error);
   }
 );
-
 export { axiosInstance };

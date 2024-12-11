@@ -12,6 +12,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { ChevronLeft, ChevronRight, Search, Users, CheckSquare, ArrowUpDown, Filter } from 'lucide-react'
 import { useGetManagerTeamsQuery } from '@/_lib/redux/api/api-features/roles/manager/manager-team/manager.team.api'
 import { GetManagerTeamsRequestQueryDto, TeamStatus } from '@/_lib/redux/api/api-features/roles/manager/manager-team/dto/get-teams/request.dto'
+import { useRouter } from 'next/navigation'
 
 type SortBy = 'createdAt' | 'updatedAt'
 type SortOrder = 'asc' | 'desc'
@@ -23,6 +24,8 @@ export default function AllTeamsPage() {
         sortBy: "createdAt",
         sortOrder: "asc"
     })
+
+    const router = useRouter()
 
     const { data, isLoading, isError } = useGetManagerTeamsQuery({
         ...filterOptions
@@ -141,7 +144,7 @@ export default function AllTeamsPage() {
                             </TableHeader>
                             <TableBody>
                                 {teams.map(team => (
-                                    <TableRow key={team.id} className="hover:bg-muted/50 transition-colors">
+                                    <TableRow key={team.id} className="hover:bg-gray-50 transition-colors cursor-pointer" onClick={() => router.push(`teams/${team.id}`)}>
                                         <TableCell className="font-medium">{team.name}</TableCell>
                                         <TableCell>
                                             <Badge variant={team.status === 'ACTIVE' ? 'default' : 'secondary'}>
