@@ -4,12 +4,10 @@ import { CreateTeamResponse } from "./dto/create-team/response.dto";
 import { CreateTeamRequest } from "./dto/create-team/request.dto";
 import { GetManagerTeamsResponse } from "./dto/get-teams/response.dto";
 import { GetManagerTeamsRequestQueryDto } from "./dto/get-teams/request.dto";
-import {
-  GetManagerTeamDetailsResponseDto,
-} from "./dto/get-single-team/get-team-details/response.dto";
+import { GetManagerTeamDetailsResponseDto } from "./dto/get-single-team/get-team-details/response.dto";
 import { GetManagerTeamDetailsRequestDto } from "./dto/get-single-team/get-team-details/request.dto";
 
-const teamApi = baseApi.injectEndpoints({
+const managerTeamApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     createTeam: builder.mutation<
       TresponseFormat<CreateTeamResponse>,
@@ -62,4 +60,4 @@ export const {
   useCreateTeamMutation,
   useGetManagerTeamsQuery,
   useGetManagerTeamDetailsQuery,
-} = teamApi;
+} = managerTeamApi;

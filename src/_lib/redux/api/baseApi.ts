@@ -13,6 +13,7 @@ export const baseApi = createApi({
     "participant-invitation",
     "manager-team",
     "team-membership",
+    "task",
   ],
   keepUnusedDataFor: 45,
   refetchOnReconnect: true,

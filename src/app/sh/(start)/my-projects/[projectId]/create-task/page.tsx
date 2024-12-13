@@ -16,16 +16,20 @@ import { Badge } from "@/components/ui/badge"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { useDropzone } from 'react-dropzone'
-
 import { debounce } from "lodash"
+import { useParams } from "next/navigation"
+import { cn } from "@/_lib/utils"
+import { ScrollArea } from "@radix-ui/react-scroll-area"
+
 import { Team } from "@/_lib/redux/api/api-features/roles/manager/manager-team/dto/get-teams/response.dto"
 import { GetManagerTeamsRequestQueryDto } from "@/_lib/redux/api/api-features/roles/manager/manager-team/dto/get-teams/request.dto"
 import { useGetManagerTeamsQuery } from "@/_lib/redux/api/api-features/roles/manager/manager-team/manager.team.api"
 import { useGetManagerParticipationsQuery } from "@/_lib/redux/api/api-features/roles/manager/manager-participation/manager.participation.api"
-import { cn } from "@/_lib/utils"
-import { ScrollArea } from "@radix-ui/react-scroll-area"
-import { useParams } from "next/navigation"
 import { GetParticipationRequestDto } from "@/_lib/redux/api/api-features/roles/manager/manager-participation/dto/get-participations/request.dto"
+import { useCreateTaskMutation } from "@/_lib/redux/api/api-features/roles/manager/manager-tasks/manager.task.api"
+import { successAlert } from "@/components/alerts/successAlert"
+import { TerrorResponse } from "@/_lib/redux/data-types/responseDataType"
+import { errorAlert } from "@/components/alerts/errorAlert"
 
 type ProfilePicture = {
     minUrl: string;
@@ -66,19 +70,10 @@ export type GetProjectParticipantsResponseDto = {
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
 const ACCEPTED_FILE_TYPES = ['image/jpeg', 'image/png', 'image/gif', 'application/pdf'];
 
-const taskSchema = z.object({
-    title: z.string().min(1, "Title is required"),
-    description: z.string().optional(),
-    priority: z.enum(["LOW", "MEDIUM", "HIGH"]),
-    dueDate: z.date(),
-    budget: z.number().min(0, "Budget must be a positive number").optional(),
-    assignmentType: z.enum(["GROUP", "INDIVIDUAL"]),
-    assignees: z.array(z.string()),
-    teams: z.array(z.string()),
-    attachments: z.array(z.instanceof(File)).optional(),
-})
+// const taskSchema = createTaskSchema.extend({
+//   attachments: z.array(z.instanceof(File)).optional(),
+// });
 
-type TaskFormData = z.infer<typeof taskSchema>
 
 export default function CreateTaskPage() {
     const [selectedAssignees, setSelectedAssignees] = useState<Participation[]>([])
@@ -91,14 +86,30 @@ export default function CreateTaskPage() {
     const params = useParams<{ projectId: string }>();
     const { projectId } = params
 
-    const { register, handleSubmit, control, formState: { errors } } = useForm<TaskFormData>({
+    const taskSchema = z.object({
+        title: z.string().min(1, "Title is required").max(100, "Title must be 100 characters or less"),
+        description: z.string().max(1000, "Description must be 1000 characters or less").optional(),
+        dueDate: z.string().refine((val) => !isNaN(Date.parse(val)), {
+            message: "Invalid date format",
+        }),
+        budget: z.number().min(0, "Budget must be a positive number").optional(),
+        priority: z.enum(["LOW", "MEDIUM", "HIGH"]),
+        taskAssignmentType: z.enum(["INDIVIDUAL", "GROUP"]),
+        projectId: z.string().uuid(),
+        assigneeIds: z.array(z.string().uuid()).optional(),
+        assignedTeams: z.array(z.string().uuid()).optional(),
+    });
+
+    type TaskFormData = z.infer<typeof taskSchema>;
+
+    const { register, handleSubmit, control, formState: { errors }, reset: formReset } = useForm<TaskFormData>({
         resolver: zodResolver(taskSchema),
         defaultValues: {
             priority: "MEDIUM",
-            assignmentType: "INDIVIDUAL",
-            assignees: [],
-            teams: [],
-            attachments: [],
+            taskAssignmentType: "INDIVIDUAL",
+            projectId,
+            assigneeIds: [],
+            assignedTeams: [],
         },
     })
 
@@ -118,6 +129,7 @@ export default function CreateTaskPage() {
 
     const { data: teamsData, isLoading: isLoadingTeams } = useGetManagerTeamsQuery(teamFilterOptions)
     const { data: participantsData, isLoading: isLoadingParticipants } = useGetManagerParticipationsQuery(participationFilter)
+    const [createTask, { isLoading: isCreatingTask }] = useCreateTaskMutation()
 
     const paginatedAssignees = participantsData?.data;
     const participations = participantsData?.data?.participations;
@@ -125,22 +137,71 @@ export default function CreateTaskPage() {
 
     const teams = teamsData?.data?.teams || []
 
-    const onSubmit = (data: TaskFormData) => {
-        const formData = new FormData();
-        Object.entries(data).forEach(([key, value]) => {
-            if (Array.isArray(value)) {
-                value.forEach(item => formData.append(key, item));
-            } else if (value instanceof Date) {
-                formData.append(key, value.toISOString());
-            } else {
-                formData.append(key, value as string);
-            }
-        });
-        attachments.forEach(file => formData.append('attachments', file));
 
-        console.log(Object.fromEntries(formData));
-        // Handle form submission with formData
-    }
+
+    const onSubmit = async (data: TaskFormData) => {
+        const formData = new FormData();
+        console.log("Submitting form data");
+
+        // Loop through the `data` object and append each property dynamically
+        for (const key in data) {
+            if (Object.prototype.hasOwnProperty.call(data, key)) {
+                const value = (data as any)[key];
+                if (value !== undefined && value !== null) {
+                    if (Array.isArray(value)) {
+                        value.forEach(item => formData.append(key, item));
+                    } else {
+                        formData.append(key, value.toString());
+                    }
+                }
+            }
+        }
+
+        // Append assigneeIds and assignedTeams
+        selectedAssignees.forEach(assignee => formData.append('assigneeIds', assignee.id));
+        selectedTeams.forEach(team => formData.append('assignedTeams', team.id));
+
+        console.log('attachment', attachments);
+
+        // Append files
+        attachments.forEach((file) => formData.append('files', file));
+
+        // Log FormData contents for debugging
+        console.log('FormData contents:');
+        // for (let [key, value] of formData.entries()) {
+        //     console.log(key, value);
+        // }
+
+        try {
+            const response = await createTask(formData).unwrap();
+            console.log('Task created successfully:', response);
+            // Success handling
+            successAlert({
+                title: 'Success',
+                description: 'Task created successfully!'
+            });
+
+            setAttachments([]);
+            setSelectedAssignees([]);
+            setSelectedTeams([]);
+            formReset()
+
+            // Further success actions like redirect or state update if necessary
+        } catch (err) {
+            // Error handling
+            const axiosError = err as { data: TerrorResponse, status: number };
+            const errorMessage = axiosError?.data?.message || 'Failed to create task';
+
+            const error = { title: 'Failed', description: errorMessage };
+
+            errorAlert(error);
+
+            // Optional: Log the error to the console or handle further
+            console.error('Error creating task:', err);
+        }
+    };
+
+
 
     const handleAssigneeSearch = (term: string) => {
         setAssigneeSearchTerm(term)
@@ -195,39 +256,35 @@ export default function CreateTaskPage() {
 
     const renderFileIcon = (file: File) => {
         const fileType = file.type;
-        // Check for image
         if (fileType.startsWith("image/")) {
             return (
                 <img
-                    src={URL.createObjectURL(file)} // Generate URL for preview
+                    src={URL.createObjectURL(file)}
                     alt={file.name}
                     className="h-10 w-10 object-cover rounded-md"
                 />
             );
         }
-        // Check for PDF file
         if (fileType === "application/pdf") {
             return <FileIcon className="h-6 w-6 text-gray-600" />;
         }
-        // Check for DOC/DOCX file
         if (fileType === "application/msword" || fileType === "application/vnd.openxmlformats-officedocument.wordprocessingml.document") {
             return <DockIcon className="h-6 w-6 text-gray-600" />;
         }
-        // Handle other files with a default icon
         return <FileIcon className="h-6 w-6 text-gray-600" />;
     };
 
     useEffect(() => {
         if (selectedAssignees.length > 0) {
             const assigneeIds = selectedAssignees.map(a => a.userId)
-            register("assignees", { value: assigneeIds })
+            register("assigneeIds", { value: assigneeIds })
         }
     }, [selectedAssignees, register])
 
     useEffect(() => {
         if (selectedTeams.length > 0) {
             const teamIds = selectedTeams.map(t => t.id)
-            register("teams", { value: teamIds })
+            register("assignedTeams", { value: teamIds })
         }
     }, [selectedTeams, register])
 
@@ -248,6 +305,7 @@ export default function CreateTaskPage() {
                         <div>
                             <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-1">Description</label>
                             <Textarea id="description" {...register("description")} className="w-full min-h-[100px]" />
+                            {errors.description && <p className="mt-1 text-sm text-red-600">{errors.description.message}</p>}
                         </div>
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -270,11 +328,19 @@ export default function CreateTaskPage() {
                                                     {field.value ? format(field.value, "PPP") : <span>Pick a date</span>}
                                                 </Button>
                                             </PopoverTrigger>
-                                            <PopoverContent className="w-auto p-0" align="start">
+                                            {/* <PopoverContent className="w-auto p-0" align="start">
                                                 <Calendar
                                                     mode="single"
                                                     selected={field.value}
                                                     onSelect={field.onChange}
+                                                    initialFocus
+                                                />
+                                            </PopoverContent> */}
+                                            <PopoverContent className="w-auto p-0" align="start">
+                                                <Calendar
+                                                    mode="single"
+                                                    selected={field.value ? new Date(field.value) : undefined}
+                                                    onSelect={(date) => field.onChange(date?.toISOString())}
                                                     initialFocus
                                                 />
                                             </PopoverContent>
@@ -292,9 +358,9 @@ export default function CreateTaskPage() {
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
-                                <label htmlFor="assignmentType" className="block text-sm font-medium text-gray-700 mb-1">Assignment Type</label>
+                                <label htmlFor="taskAssignmentType" className="block text-sm font-medium text-gray-700 mb-1">Assignment Type</label>
                                 <Controller
-                                    name="assignmentType"
+                                    name="taskAssignmentType"
                                     control={control}
                                     render={({ field }) => (
                                         <Select onValueChange={field.onChange} defaultValue={field.value}>
@@ -529,7 +595,6 @@ export default function CreateTaskPage() {
                                     {attachments.map((file, index) => (
                                         <li key={index} className="flex items-center justify-between p-2 bg-gray-100 rounded-md">
                                             <div className="flex items-center gap-2">
-                                                {/* Render file type preview */}
                                                 {renderFileIcon(file)}
                                                 <span className="text-sm truncate">{file.name}</span>
                                             </div>
@@ -548,7 +613,9 @@ export default function CreateTaskPage() {
                             )}
                         </div>
 
-                        <Button type="submit" className="w-full">Create Task</Button>
+                        <Button type="submit" className="w-full" disabled={isCreatingTask}>
+                            {isCreatingTask ? 'Creating Task...' : 'Create Task'}
+                        </Button>
                     </form>
                 </CardContent>
             </Card>

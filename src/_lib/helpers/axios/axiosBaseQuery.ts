@@ -25,20 +25,27 @@ export const axiosBaseQuery =
   > =>
   async ({ url, method, data, params, headers, contentType }) => {
     try {
+      // Conditionally set the Content-Type for FormData
+      const requestHeaders: AxiosRequestConfig["headers"] = {
+        ...headers, // Spread any headers passed in
+      };
+
+      // Only set Content-Type if data is NOT FormData (to allow auto boundary generation)
+      if (!(data instanceof FormData)) {
+        requestHeaders["Content-Type"] = contentType || "application/json";
+      }
+
+      // Perform the API request
       const result = await axiosInstance({
         url: baseUrl + url,
         method,
         data,
         params,
-        headers: {
-          "Content-Type": contentType || "application/json",
-        },
+        headers: requestHeaders,
       });
-      // console.log("level 1");
-      // console.log("level 1 res", result);
+
       return { data: result.data };
     } catch (axiosError) {
-      // const err = axiosError as AxiosError<TerrorResponse>;
       const err = axiosError as AxiosError;
 
       console.error("API Error:", err.response?.data);
