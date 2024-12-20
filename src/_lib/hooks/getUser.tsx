@@ -15,19 +15,20 @@ export const useGetUser = () => {
         skip: !!user, // Skip query if user data is already present
     });
 
+    // console.log('user.....')
+
     useEffect(() => {
         if (!isLoading || !isFetching) {
             if (isSuccess) { // Handle success scenario only
                 dispatch(setUser(data.data.user)); // Dispatch user data only on success
             } else if (isError) { // Handle error scenario
-                console.log("*********Error fetching user data:", error, 'token', LocalStorageService.getInstance().token)
                 // LocalStorageService.getInstance().token;
                 // console.log('caught the theif')
                 errorAlert({ title: 'Failed', description: "Please login again" })
                 // router.push('/sign-in');
             }
         }
-    }, [data, isSuccess, isError, isLoading, isFetching, error, dispatch]); // Only include necessary dependencies
+    }, [data, isSuccess, isError, isLoading, isFetching, dispatch]); // Only include necessary dependencies
 
     const combinedData = user || data?.data.user;
     const combinedLoading = isLoading || isFetching;

@@ -14,6 +14,7 @@ export const baseApi = createApi({
     "manager-team",
     "team-membership",
     "task",
+    "group-chats"
   ],
   keepUnusedDataFor: 45,
   refetchOnReconnect: true,

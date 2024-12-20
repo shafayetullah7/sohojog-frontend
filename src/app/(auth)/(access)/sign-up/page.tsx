@@ -53,7 +53,7 @@ const SignUp = () => {
 
             const { data: { user } } = res;
 
-            console.log('res', res);
+            // console.log('res', res);
 
             if (res.success) {
                 // console.log('here 0')
@@ -78,9 +78,9 @@ const SignUp = () => {
             //     })
             // }
 
-            console.log("sign up response:", res);
+            // console.log("sign up response:", res);
         } catch (err) {
-            console.log('eeror', err)
+            // console.log('eeror', err)
             const axiosError = err as { data: TerrorResponse, status: number };
 
             let errors: { title: string, description: string }[] = []

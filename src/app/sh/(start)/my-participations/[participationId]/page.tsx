@@ -61,10 +61,6 @@ const ParticipationOverviewPage = ({ params }: ParticipationOverviewPageProps) =
         invitationFilter === "all" || invitation.status === invitationFilter
     )
 
-    const handleInvitationAction = (id: number, action: 'accept' | 'decline' | 'delete') => {
-        console.log(`Invitation ${id} ${action}ed`)
-        // Here you would typically update the invitation status or remove it
-    }
 
     return (
         <div className="flex-grow p-4">

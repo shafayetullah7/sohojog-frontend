@@ -37,7 +37,7 @@ const DialogContent = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Content>,
   DialogContentProps
 >(({ className, children, ...props }, ref) => {
-  { console.log('.............', props.closeShow) }
+  // { console.log('.............', props.closeShow) }
   return (
     <DialogPortal>
       <DialogOverlay />

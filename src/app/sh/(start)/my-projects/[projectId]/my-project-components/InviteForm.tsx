@@ -82,7 +82,7 @@ export default function InviteForm({ isOpen, onClose, projectId }: Props) {
 
 
   const onSubmit = async (data: InviteFormValues) => {
-    console.log("Sending invitation to:", data)
+    // console.log("Sending invitation to:", data)
     // Here you would typically call an API to send the invitation
 
     const reqData: SendInvitePayload = {

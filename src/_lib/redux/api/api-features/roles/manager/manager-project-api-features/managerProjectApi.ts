@@ -20,6 +20,7 @@ const managerProjectApi = baseApi.injectEndpoints({
         method: "POST",
         data,
       }),
+      invalidatesTags: [{ type: "manager-project", id: "LIST" }],
     }),
 
     getManagerProject: builder.query<

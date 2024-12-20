@@ -26,7 +26,7 @@ export default function RecipientInvitationDetails({ invitation }: { invitation:
                 params: { id: invitation.id },
                 body: { status: "ACCEPTED" },
             }).unwrap();
-            console.log("Invitation accepted successfully!");
+            // console.log("Invitation accepted successfully!");
         } catch (error) {
             console.error("Error accepting the invitation:", error);
         }
@@ -38,7 +38,7 @@ export default function RecipientInvitationDetails({ invitation }: { invitation:
                 params: { id: invitation.id },
                 body: { status: "DECLINED" },
             }).unwrap();
-            console.log("Invitation declined successfully!");
+            // console.log("Invitation declined successfully!");
         } catch (error) {
             console.error("Error declining the invitation:", error);
         }

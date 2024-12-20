@@ -68,7 +68,7 @@ export default function WalletEnableDialog() {
                 projectId: params.projectId
             }).unwrap();
 
-            console.log("Wallet enabled successfully with balance:", data.balance, "estimated budget:", data.estimatedBudget, "and currency:", data.currency);
+            // console.log("Wallet enabled successfully with balance:", data.balance, "estimated budget:", data.estimatedBudget, "and currency:", data.currency);
             setIsWalletDialogOpen(false);
         } catch (error) {
             console.error("Error enabling wallet:", error);

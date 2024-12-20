@@ -3,7 +3,6 @@ import { PlusIcon } from 'lucide-react';
 import {
     Dialog,
     DialogContent,
-    DialogDescription,
     DialogHeader,
     DialogTitle,
     DialogTrigger,
@@ -26,10 +25,10 @@ const ProjectsHead = () => {
 
                 <Dialog open={openModal}>
                     <DialogTrigger>
-                        <button className="flex items-center space-x-2 p-2 border-2 border-gray-500 rounded-lg font-semibold" onClick={() => updateOpenModal(true)}>
+                        <div className="flex items-center space-x-2 p-2 border-2 border-gray-500 rounded-lg font-semibold" onClick={() => updateOpenModal(true)}>
                             <PlusIcon className="size-4" strokeWidth={3} />
                             <span>Create New Project</span>
-                        </button>
+                        </div>
                     </DialogTrigger>
                     <DialogContent className="w-auto max-w-[min(calc(100vw-2rem),600px)]">
                         <DialogHeader>

@@ -22,7 +22,7 @@ axiosInstance.interceptors.request.use(
     const token = localStorageService.token;
     const otpToken = localStorageService.otpToken;
 
-    console.log("axios interceptor token", window.location.href, token);
+    // console.log("axios interceptor token", window.location.href, token);
 
     if (token && config.headers) {
       config.headers["Authorization"] = `Bearer ${token}`;
@@ -105,7 +105,7 @@ axiosInstance.interceptors.response.use(
     ) {
       if (!isRedirecting) {
         isRedirecting = true;
-        Router.push("/sign-in").finally(() => {
+        Router.push("/auth/sign-in").finally(() => {
           isRedirecting = false;
         });
       }

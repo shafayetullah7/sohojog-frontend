@@ -1,5 +1,5 @@
 'use client'
-import { useGetUser } from "@/hooks/getUser";
+import { useGetUser } from "@/_lib/hooks/getUser";
 import { useEffect } from "react";
 
 const UserNav = () => {

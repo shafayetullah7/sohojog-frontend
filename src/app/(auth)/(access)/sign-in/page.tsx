@@ -60,12 +60,12 @@ const SignIn = () => {
 
     const loginFormHandler = async (data: Tform) => {
         try {
-            console.log(data);
+            // console.log(data);
             const res = await login(data).unwrap();
             const { data: { user } } = res;
-            console.log('res 123', res.data, user.id);
+            // console.log('res 123', res.data, user.id);
             if (res.success) {
-                console.log('here 0')
+                // console.log('here 0')
                 // toast({
                 //     title: "Success",
                 //     description: res.message || "You have signed up successfully.",
@@ -83,11 +83,11 @@ const SignIn = () => {
 
             }
         } catch (err) {
-            console.log('Error occured', err);
+            // console.log('Error occured', err);
             // console.log((err as { message: string }).message);
             // console.log(JSON.stringify(err));
 
-            console.log('eeror', err);
+            // console.log('eeror', err);
             const axiosError = err as { data: TerrorResponse, status: number };
 
             // let errors: { title: string, description: string }[] = []

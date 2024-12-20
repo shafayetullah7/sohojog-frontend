@@ -14,7 +14,7 @@ import { useDispatch } from "react-redux";
 import { setUser } from "@/_lib/redux/features/user/userSlice";
 import { useRouter } from "next/navigation";
 import { successAlert } from "@/components/alerts/successAlert";
-import { useGetUser } from "@/hooks/getUser";
+import { useGetUser } from "@/_lib/hooks/getUser";
 
 // Define the form validation schema using Zod
 const formSchema = z.object({
@@ -46,8 +46,8 @@ export default function VerifyUserPage() {
         if (userState.data) {
             try {
                 const res = await sendOtp({ email: userState.data.email }).unwrap()
-                console.log('sendotp response', sendOtpResponse);
-                console.log('res..', res)
+                // console.log('sendotp response', sendOtpResponse);
+                // console.log('res..', res)
                 if (res.success) {
                     // router.replace('/verify-user');
                     successAlert({ title: "Success", description: "New OTP has been sent to the email." })
@@ -67,16 +67,16 @@ export default function VerifyUserPage() {
     // Handle form submission
     const verifyHandler = async (data: TverifyUserData) => {
         try {
-            console.log(data);
+            // console.log(data);
             const response = await verifyUser(data).unwrap()
-            console.log(response);
+            // console.log(response);
             if (response.success) {
                 dispatch(setUser(response.data.user))
                 successAlert({ title: "User Verified", description: "User verification successful" })
                 router.replace('/sh')
             }
         } catch (err) {
-            console.log('eeror', err)
+            // console.log('eeror', err)
             const axiosError = err as { data: TerrorResponse, status: number };
 
             let errors: { title: string, description: string }[] = []

@@ -64,6 +64,8 @@ const members: Member[] = [
 export default function GroupChat() {
     const [newMessage, setNewMessage] = useState('')
 
+    // console.log("on chat page")
+
     const handleSendMessage = (e: React.FormEvent) => {
         e.preventDefault()
         if (newMessage.trim() !== '') {
