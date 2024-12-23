@@ -1,8 +1,8 @@
 "use client"
 
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import { format } from 'date-fns'
-import { Phone, Video, MoreVertical, Send, Paperclip, Smile, Users } from 'lucide-react'
+import { Phone, Video, MoreVertical, Send, Paperclip, Smile, Users, X } from 'lucide-react'
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -29,6 +29,9 @@ import {
     TooltipProvider,
     TooltipTrigger,
 } from "@/components/ui/tooltip"
+import { toast } from "@/components/ui/use-toast"
+import EmojiPicker, { EmojiClickData } from 'emoji-picker-react'
+import Image from 'next/image'
 
 type Message = {
     id: string
@@ -46,6 +49,11 @@ type Member = {
     isOnline: boolean
 }
 
+type SelectedFile = {
+    file: File
+    preview?: string
+}
+
 const messages: Message[] = [
     { id: '1', content: "Hey team, how's the project coming along?", sender: "Alice", avatar: "/avatars/alice.jpg", timestamp: new Date(2023, 5, 15, 10, 30), isCurrentUser: false },
     { id: '2', content: "We're making good progress. The design phase is almost complete.", sender: "Bob", avatar: "/avatars/bob.jpg", timestamp: new Date(2023, 5, 15, 10, 32), isCurrentUser: true },
@@ -61,23 +69,75 @@ const members: Member[] = [
     { id: '4', name: "David Lee", avatar: "/avatars/david.jpg", isOnline: true },
 ]
 
+const ALLOWED_FILE_TYPES = ['jpg', 'jpeg', 'png', 'gif', 'pdf', 'doc', 'docx'];
+
 export default function GroupChat() {
     const [newMessage, setNewMessage] = useState('')
+    const [selectedFiles, setSelectedFiles] = useState<SelectedFile[]>([]);
+    const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+    const fileInputRef = useRef<HTMLInputElement>(null);
 
-    // console.log("on chat page")
+    const isFileAllowed = (file: File) => {
+        const extension = file.name.split('.').pop()?.toLowerCase();
+        return extension && ALLOWED_FILE_TYPES.includes(extension);
+    };
+
+    const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const files = Array.from(e.target.files || []);
+        const newSelectedFiles = files.filter(file => {
+            if (!isFileAllowed(file)) {
+                toast({
+                    title: "Invalid file format",
+                    description: `File "${file.name}" is not allowed. Please use one of the following formats: ${ALLOWED_FILE_TYPES.join(', ')}`,
+                    variant: "destructive",
+                });
+                return false;
+            }
+            if (selectedFiles.some(selectedFile => selectedFile.file.name === file.name)) {
+                toast({
+                    title: "Duplicate file",
+                    description: `File "${file.name}" has already been selected.`,
+                    variant: "destructive",
+                });
+                return false;
+            }
+            return true;
+        }).map(file => ({
+            file,
+            preview: file.type.startsWith('image/') ? URL.createObjectURL(file) : undefined
+        }));
+        setSelectedFiles(prevFiles => [...prevFiles, ...newSelectedFiles]);
+    };
+
+    const handleRemoveFile = (index: number) => {
+        setSelectedFiles(prevFiles => {
+            const newFiles = [...prevFiles];
+            if (newFiles[index].preview) {
+                URL.revokeObjectURL(newFiles[index].preview);
+            }
+            newFiles.splice(index, 1);
+            return newFiles;
+        });
+    };
 
     const handleSendMessage = (e: React.FormEvent) => {
         e.preventDefault()
-        if (newMessage.trim() !== '') {
-            // Here you would typically send the message to your backend
+        if (newMessage.trim() !== '' || selectedFiles.length > 0) {
             console.log('Sending message:', newMessage)
+            console.log('Sending files:', selectedFiles.map(f => f.file))
             setNewMessage('')
+            setSelectedFiles([])
         }
     }
 
+    const handleEmojiClick = (emojiData: EmojiClickData) => {
+        setNewMessage(prevMessage => prevMessage + emojiData.emoji);
+        setShowEmojiPicker(false);
+    };
+
     return (
         <TooltipProvider>
-            <div className="flex flex-col h-full w-full  rounded-2xl overflow-hidden">
+            <div className="flex flex-col h-full w-full rounded-2xl overflow-hidden">
                 {/* Chat Header */}
                 <div className="flex items-center justify-between p-4 border-b">
                     <div className="flex items-center space-x-2">
@@ -158,7 +218,6 @@ export default function GroupChat() {
                                 className={`flex ${message.isCurrentUser ? 'justify-end' : 'justify-start'} items-start space-x-2`}
                             >
                                 {!message.isCurrentUser && (
-
                                     <Tooltip>
                                         <TooltipTrigger asChild>
                                             <Avatar className="w-8 h-8 cursor-default">
@@ -189,26 +248,71 @@ export default function GroupChat() {
                 </ScrollArea>
 
                 {/* Message Input */}
-                <form onSubmit={handleSendMessage} className="border-t p-4 flex items-center space-x-2">
-                    <Button type="button" variant="ghost" size="icon">
-                        <Paperclip className="h-5 w-5" />
-                        <span className="sr-only">Attach file</span>
-                    </Button>
-                    <Input
-                        type="text"
-                        placeholder="Type a message..."
-                        value={newMessage}
-                        onChange={(e) => setNewMessage(e.target.value)}
-                        className="flex-grow"
-                    />
-                    <Button type="button" variant="ghost" size="icon">
-                        <Smile className="h-5 w-5" />
-                        <span className="sr-only">Insert emoji</span>
-                    </Button>
-                    <Button type="submit" size="icon">
-                        <Send className="h-5 w-5" />
-                        <span className="sr-only">Send message</span>
-                    </Button>
+                <form onSubmit={handleSendMessage} className="border-t p-4">
+                    {selectedFiles.length > 0 && (
+                        <div className="flex flex-wrap gap-2 mb-2">
+                            {selectedFiles.map((file, index) => (
+                                <div key={index} className="flex items-center bg-gray-100 rounded-lg p-1">
+                                    {file.preview ? (
+                                        // <img src={file.preview} alt="Preview" className="w-8 h-8 object-cover rounded" />
+                                        <Image
+                                            src={file.preview || '/placeholder-image.png'} // Fallback to a placeholder
+                                            alt="Preview"
+                                            width={32}
+                                            height={32}
+                                            className="object-cover rounded"
+                                        />
+                                    ) : (
+                                        <div className="w-8 h-8 bg-gray-300 rounded flex items-center justify-center text-xs">File</div>
+                                    )}
+                                    <span className="text-sm truncate max-w-[100px] ml-2">{file.file.name}</span>
+                                    <button
+                                        type="button"
+                                        onClick={() => handleRemoveFile(index)}
+                                        className="ml-1 text-gray-500 hover:text-gray-700"
+                                    >
+                                        <X className="h-4 w-4" />
+                                    </button>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                    <div className="flex items-center space-x-2">
+                        <input
+                            type="file"
+                            ref={fileInputRef}
+                            onChange={handleFileUpload}
+                            multiple
+                            accept={ALLOWED_FILE_TYPES.map(type => `.${type}`).join(',')}
+                            className="hidden"
+                        />
+                        <Button type="button" variant="ghost" size="icon" onClick={() => fileInputRef.current?.click()}>
+                            <span role="img" aria-label="Attachment" className="mr-1">📎</span>
+                            <span className="sr-only">Attach file</span>
+                        </Button>
+                        <Input
+                            type="text"
+                            placeholder="Type a message..."
+                            value={newMessage}
+                            onChange={(e) => setNewMessage(e.target.value)}
+                            className="flex-grow"
+                        />
+                        <div className="relative">
+                            <Button type="button" variant="ghost" size="icon" onClick={() => setShowEmojiPicker(!showEmojiPicker)}>
+                                <Smile className="h-5 w-5" />
+                                <span className="sr-only">Insert emoji</span>
+                            </Button>
+                            {showEmojiPicker && (
+                                <div className="absolute bottom-full right-0 mb-2">
+                                    <EmojiPicker onEmojiClick={handleEmojiClick} />
+                                </div>
+                            )}
+                        </div>
+                        <Button type="submit" size="icon">
+                            <Send className="h-5 w-5" />
+                            <span className="sr-only">Send message</span>
+                        </Button>
+                    </div>
                 </form>
             </div>
         </TooltipProvider>
