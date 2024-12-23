@@ -30,6 +30,7 @@ import { useCreateTaskMutation } from "@/_lib/redux/api/api-features/roles/manag
 import { successAlert } from "@/components/alerts/successAlert"
 import { TerrorResponse } from "@/_lib/redux/data-types/responseDataType"
 import { errorAlert } from "@/components/alerts/errorAlert"
+import Image from "next/image"
 
 type ProfilePicture = {
     minUrl: string;
@@ -258,10 +259,18 @@ export default function CreateTaskPage() {
         const fileType = file.type;
         if (fileType.startsWith("image/")) {
             return (
-                <img
+                // <img
+                //     src={URL.createObjectURL(file)}
+                //     alt={file.name}
+                //     className="h-10 w-10 object-cover rounded-md"
+                // />
+                <Image
                     src={URL.createObjectURL(file)}
                     alt={file.name}
-                    className="h-10 w-10 object-cover rounded-md"
+                    width={40} // Set desired width
+                    height={40} // Set desired height
+                    className="object-cover rounded-md"
+                    unoptimized={true}
                 />
             );
         }

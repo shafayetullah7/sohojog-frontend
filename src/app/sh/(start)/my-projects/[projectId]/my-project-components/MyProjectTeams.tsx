@@ -14,7 +14,12 @@ import { useGetManagerTeamsQuery } from "@/_lib/redux/api/api-features/roles/man
 export default function MyProjectTeams() {
   const params = useParams();
   const projectId = params.projectId as string;
-  const { data: teamsData, isLoading, isError } = useGetManagerTeamsQuery();
+  const { data: teamsData, isLoading, isError } = useGetManagerTeamsQuery({
+    page: 1,
+    limit: 0,
+    sortBy: 'createdAt',
+    sortOrder: 'desc'
+  });
 
   const teams = teamsData?.data?.teams || [];
 

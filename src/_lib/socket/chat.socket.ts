@@ -1,24 +1,27 @@
 import { io, Socket } from "socket.io-client";
+import { LocalStorageService } from "../helpers/access/Access";
 
 const CHAT_SOCKET_URL = "http://localhost:4000/chat";
 
 let chatSocket: Socket | null = null;
 
-/**
- * Initializes or returns an existing chat socket connection.
- * @returns {Socket} - The chat socket instance
- */
 export const getChatSocket = (): Socket => {
   // Reset the chat socket if it exists
   if (chatSocket) {
-    chatSocket.disconnect(); // Gracefully disconnect if needed
-    chatSocket = null;
+    // chatSocket.disconnect(); // Gracefully disconnect if needed
+    // chatSocket = null;
+    // console.log("chat is here");
+    return chatSocket;
   }
 
-  // Initialize the chat socket if not already done
+  const token = LocalStorageService.getInstance().token;
+
   if (!chatSocket) {
     chatSocket = io(CHAT_SOCKET_URL, {
       withCredentials: true, // Include credentials in requests
+      auth: {
+        token: token,
+      },
     });
 
     // Handle successful connection

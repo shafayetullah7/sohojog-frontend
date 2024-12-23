@@ -51,6 +51,7 @@ import {
   Award,
 } from "lucide-react"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import Image from "next/image"
 
 interface UserData {
   name: string
@@ -363,7 +364,17 @@ export default function UserProfile() {
             <DialogTitle>Profile Picture</DialogTitle>
           </DialogHeader>
           <div className="flex items-center justify-center">
-            <img src={userInfo.profilePicture} alt={userInfo.name} className="max-w-full max-h-[70vh] object-contain rounded-xl" />
+            {/* <img src={userInfo.profilePicture} alt={userInfo.name} className="max-w-full max-h-[70vh] object-contain rounded-xl" /> */}
+            <Image
+              src={userInfo.profilePicture}
+              alt={userInfo.name}
+              className="object-contain rounded-xl"
+              width={0}
+              height={0}
+              sizes="100vw"
+              style={{ width: '100%', height: 'auto', maxHeight: '70vh' }}
+              unoptimized={true} // Use only if profilePicture URL isn't optimizable by Next.js
+            />
           </div>
         </DialogContent>
       </Dialog>

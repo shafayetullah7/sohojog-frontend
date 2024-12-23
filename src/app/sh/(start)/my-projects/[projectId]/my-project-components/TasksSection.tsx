@@ -7,7 +7,24 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 import { ChevronRight, Calendar, Clock } from 'lucide-react'
 import { format, differenceInDays } from 'date-fns'
 
-const tasks = [
+type Tasks = {
+    id: number;
+    title: string;
+    assignees: {
+        name: string;
+        avatar: string;
+    }[];
+    assignDate: string;
+    dueDate: string;
+    status: string;
+}[]
+
+type Assignee = {
+    name: string,
+    avatar: string
+}[]
+
+const tasks: Tasks = [
     {
         id: 1,
         title: "Complete user flow",
@@ -60,7 +77,7 @@ export function TasksSection() {
     )
 }
 
-function TaskList({ tasks }) {
+function TaskList({ tasks }: { tasks: Tasks }) {
     return (
         <ul className="divide-y divide-gray-200">
             {tasks.map(task => (
@@ -91,8 +108,8 @@ function TaskList({ tasks }) {
     )
 }
 
-function AvatarGroup({ assignees }) {
-    const [hoveredIndex, setHoveredIndex] = useState(null)
+function AvatarGroup({ assignees }: { assignees: Assignee }) {
+    const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
     const displayedAssignees = assignees.slice(0, 3)
     const remainingCount = assignees.length - 3
 
