@@ -6,6 +6,7 @@ type Props = {
     children: ReactNode
 }
 const InboxLayout = ({ children }: Props) => {
+
     return (
         <div className="flex gap-6 justify-between h-full">
             <div className="flex-grow">

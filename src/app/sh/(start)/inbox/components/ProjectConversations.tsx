@@ -11,10 +11,10 @@ const ProjectConversations = () => {
     const [query, setQuery] = useState<ProjectChatListQueryRequest>({ page: 1 });
 
     const { data: projectChatData } = useGetGroupChatListQuery(query);
-    console.log('on project conversation page');
+    // console.log('on project conversation page');
 
     const projects = projectChatData?.data?.projects || [];
-    console.log({ projects });
+    // console.log({ projects });
 
 
 

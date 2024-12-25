@@ -1,3 +1,5 @@
+'use client'
+
 import UserNav from "@/components/nav/UserNav";
 import Sidebar from "@/components/sidebar/Sidebar";
 import { ReactNode } from "react";
@@ -7,6 +9,7 @@ type Props = {
 }
 
 const StartLayout = ({ children }: Props) => {
+
     return (
         <div className=" text-gray-900 flex flex-col h-screen">
             <div className=""><UserNav></UserNav></div>

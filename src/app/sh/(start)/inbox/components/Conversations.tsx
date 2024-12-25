@@ -11,9 +11,9 @@ import ProjectConversations from './ProjectConversations'
 
 
 const personalConversations: Conversation[] = [
-    { id: '1', name: 'Alice Johnson', avatar: '/avatars/alice.jpg', lastMessage: 'See you tomorrow!', lastMessageTime: new Date(Date.now() - 1000 * 60 * 23), unread: 2, isActive: true },
-    { id: '2', name: 'Bob Smith', avatar: '/avatars/bob.jpg', lastMessage: 'The meeting went well', lastMessageTime: new Date(Date.now() - 1000 * 60 * 60 * 2), unread: 0, isActive: false },
-    { id: '3', name: 'Charlie Brown', avatar: '/avatars/charlie.jpg', lastMessage: 'Thanks for your help!', lastMessageTime: new Date(Date.now() - 1000 * 60 * 60 * 24), unread: 1, isActive: true },
+    { id: '1', name: 'Alice Johnson', avatar: 'https://www.example.com/avatars/alice.jpg', lastMessage: 'See you tomorrow!', lastMessageTime: new Date(Date.now() - 1000 * 60 * 23), unread: 2, isActive: true },
+    { id: '2', name: 'Bob Smith', avatar: 'https://www.example.com/avatars/bob.jpg', lastMessage: 'The meeting went well', lastMessageTime: new Date(Date.now() - 1000 * 60 * 60 * 2), unread: 0, isActive: false },
+    { id: '3', name: 'Charlie Brown', avatar: 'https://www.example.com/avatars/charlie.jpg', lastMessage: 'Thanks for your help!', lastMessageTime: new Date(Date.now() - 1000 * 60 * 60 * 24), unread: 1, isActive: true },
 ]
 
 const allProjects: Project[] = [
@@ -59,6 +59,7 @@ export default function Conversations() {
     const [activeTab, setActiveTab] = useState<'personal' | 'projects'>('personal')
     const [searchQuery, setSearchQuery] = useState('')
     const [projectFilter, setProjectFilter] = useState<ProjectFilter>('all')
+
 
     // console.log('on conversations page')
 

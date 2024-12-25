@@ -30,9 +30,11 @@ const HomeLayout = ({ children }: Props) => {
     // console.log('mounting.....', isUserLoading)
 
 
-    if (!LocalStorage.token) {
-        router.replace("/sign-in");
-    }
+    // useEffect(() => {
+    //     if (!LocalStorage.token) {
+    //         router.replace("/sign-in");
+    //     }
+    // }, [LocalStorage.token,router])
 
     if (user) {
         if (!user.verified) {
@@ -104,6 +106,10 @@ const HomeLayout = ({ children }: Props) => {
     }
 
     */
+
+    if (isUserLoading || !user) {
+        return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
+    }
 
     // Render children when user is verified
     return <div className="min-h-screen">{children}</div>;

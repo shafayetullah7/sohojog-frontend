@@ -1,15 +1,17 @@
 'use client'
 import React, { useEffect } from 'react';
-import GroupChat from './components/GroupChat';
-import useChatSocket from '@/_lib/hooks/useChatSocket';
+
 
 const InboxPage = () => {
     // console.log("hello chat")
-    const socket = useChatSocket()
+    // const socket = useChatSocket();
+    // useEffect(() => {
+    //     console.log(socket)
+    // }, [socket])
 
     return (
         <div className='w-full h-full bg-white'>
-            <GroupChat></GroupChat>
+            hello message
         </div>
     );
 };

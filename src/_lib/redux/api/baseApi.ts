@@ -16,6 +16,7 @@ export const baseApi = createApi({
     "task",
     "user-file",
     "group-chats",
+    "messages",
   ],
   keepUnusedDataFor: 45,
   refetchOnReconnect: true,

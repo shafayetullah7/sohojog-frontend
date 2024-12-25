@@ -9,7 +9,7 @@ const userFileApi = baseApi.injectEndpoints({
       FormData
     >({
       query: (body) => ({
-        url: "/user-files", // API endpoint for uploading user files
+        url: "user-files", // API endpoint for uploading user files
         method: "POST",
         data: body,
         headers: {

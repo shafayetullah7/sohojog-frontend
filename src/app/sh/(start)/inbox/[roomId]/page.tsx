@@ -1,12 +1,12 @@
 'use client'
 
-import { useParams } from "next/navigation";
+import ChatBox from "../components/ChatBox";
 
 const RoomPage = () => {
-    const params = useParams<{ roomId: string }>()
     return (
-        <div>
-            {params.roomId}
+        <div className="h-full bg-white rounded-2xl">
+            {/* {params.roomId} */}
+            <ChatBox></ChatBox>
         </div>
     );
 };
