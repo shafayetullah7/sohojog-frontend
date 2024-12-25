@@ -80,10 +80,6 @@ export default function ChatBox() {
     const messagesEndRef = useRef<HTMLDivElement>(null)
     const params = useParams<{ roomId: string }>()
     const socket = useChatSocket()
-    const renderCount = useRef(0); // Initialize render count
-    const [roomJoined, setRoomJoined] = useState<boolean>(false);
-
-    renderCount.current += 1;
 
     const { data: messageData, isLoading: messageFetchLoading, error: messageFetchError, isFetching } = useGetMessagesQuery({ roomId: params.roomId, page: currentPage, limit: 20 })
 
@@ -124,16 +120,15 @@ export default function ChatBox() {
 
 
     useEffect(() => {
-        if (socket && params.roomId) {
+        if (socket && params.roomId && !socket.hasListeners('message')) {
+            console.log("Setting up socket listeners");
 
-            socket.on("connect", () => {
+            const onConnect = () => {
                 console.log("Successfully connected to the server");
                 socket.emit('joinRoom', { room: params.roomId }, (response: { success: boolean }) => {
-                    // Handle the server's response for room join
                     if (response.success) {
                         console.log(`Successfully joined room: ${params.roomId}`);
                     } else {
-                        // Handle failure to join room
                         toast({
                             title: "Error",
                             description: "Failed to join the room.",
@@ -141,13 +136,10 @@ export default function ChatBox() {
                         });
                     }
                 });
-            });
+            };
 
-
-            // Listen for incoming messages
+            socket.on("connect", onConnect);
             socket.on('message', handleNewMessage);
-
-            // Handle errors related to joining the room
             socket.on('joinRoomError', (data) => {
                 toast({
                     title: "Error",
@@ -155,15 +147,13 @@ export default function ChatBox() {
                     variant: "destructive",
                 });
             });
-
-            // Handle when a user joins the room
             socket.on('userJoined', (data) => {
                 console.log(`User with ID ${data.userId} joined the room`);
-                // Update UI or perform actions on user joining
             });
 
-            // Cleanup socket event listeners when the component is unmounted or changes
             return () => {
+                console.log("Cleaning up socket listeners");
+                socket.off("connect", onConnect);
                 socket.off('message', handleNewMessage);
                 socket.off('joinRoomError');
                 socket.off('userJoined');
@@ -171,40 +161,6 @@ export default function ChatBox() {
         }
     }, [socket, handleNewMessage, params.roomId]);
 
-
-
-    /*
-
-    useEffect(() => {
-        if (socket && socket.connected && params.roomId) {
-            if (!roomJoined) {
-                socket.emit('joinRoom', { room: params.roomId });
-            }
-            socket.on('message', handleNewMessage);
-
-            socket.on('joinRoomError', (data) => {
-                toast({
-                    title: "Error",
-                    description: data.message,
-                    variant: "destructive",
-                });
-            });
-
-            socket.on('userJoined', (data) => {
-                console.log(`User with ID ${data.userId} joined the room`);
-                setRoomJoined(true);
-                // Handle user joining the room, update UI, etc.
-            });
-
-            return () => {
-                socket.off('message', handleNewMessage);
-                socket.off('joinRoomError');
-                socket.off('userJoined');
-            };
-        }
-    }, [socket, handleNewMessage, params.roomId, roomJoined]);
-
-*/
 
 
     const scrollToBottom = () => {
@@ -296,8 +252,6 @@ export default function ChatBox() {
                 fileIds,
             };
 
-            console.log('im here')
-
             socket?.emit('sendMessage', payload, (response: { success: boolean; error?: string }) => {
                 if (!response.success) {
                     console.error("Failed to send message:", response.error);
@@ -335,7 +289,6 @@ export default function ChatBox() {
 
     return (
         <TooltipProvider>
-            <p>This component has rendered {renderCount.current} times.</p>
             <div className="flex flex-col h-full w-full rounded-2xl overflow-hidden">
                 {/* Chat Header */}
                 <div className="flex items-center justify-between p-4 border-b">

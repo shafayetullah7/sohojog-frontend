@@ -10,7 +10,10 @@ const useChatSocket = (): Socket | null => {
         setSocket(socketInstance);
 
         return () => {
-            socketInstance.disconnect();
+            if (socketInstance.connected) {
+                socketInstance.removeAllListeners();
+                socketInstance.disconnect();
+            }
         };
     }, []);
 
