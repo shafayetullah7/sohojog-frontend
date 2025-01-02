@@ -159,10 +159,18 @@ export default function CreateTaskPage() {
         }
 
         // Append assigneeIds and assignedTeams
-        selectedAssignees.forEach(assignee => formData.append('assigneeIds', assignee.id));
-        selectedTeams.forEach(team => formData.append('assignedTeams', team.id));
+        if (selectedAssignees.length) {
+            const modifiedAssigneeIds = selectedAssignees.map(data => data.id).join(',');
+            formData.append('assigneeIds', modifiedAssigneeIds);
+        }
 
-        console.log('attachment', attachments);
+
+        if (selectedTeams.length) {
+            const modifiedTeamIds = selectedTeams.map(data => data.id).join(',');
+            formData.append('assignedTeams', modifiedTeamIds)
+        }
+
+
 
         // Append files
         attachments.forEach((file) => formData.append('files', file));

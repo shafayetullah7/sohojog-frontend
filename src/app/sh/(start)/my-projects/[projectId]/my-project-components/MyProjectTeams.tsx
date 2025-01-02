@@ -16,7 +16,7 @@ export default function MyProjectTeams() {
   const projectId = params.projectId as string;
   const { data: teamsData, isLoading, isError } = useGetManagerTeamsQuery({
     page: 1,
-    limit: 0,
+    limit: 20,
     sortBy: 'createdAt',
     sortOrder: 'desc'
   });

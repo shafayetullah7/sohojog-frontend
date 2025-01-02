@@ -42,6 +42,8 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import useChatSocket from '@/_lib/hooks/useChatSocket'
 import { useGetUser } from '@/_lib/hooks/getUser'
+import VideoCall from './VideoCall'
+import VideoCall2 from './VideoCall2'
 
 type Member = {
     id: string
@@ -76,6 +78,9 @@ export default function ChatBox() {
     const [showEmojiPicker, setShowEmojiPicker] = useState(false)
     const [isSending, setIsSending] = useState(false)
     const [currentPage, setCurrentPage] = useState(1)
+    const [isInCall, setIsInCall] = useState(false)
+    const [isAudioOnly, setIsAudioOnly] = useState(false) // Added state for audio-only calls
+    const [remoteUser, setRemoteUser] = useState({ name: '', avatar: '' }) // Added state for remote user
     const fileInputRef = useRef<HTMLInputElement>(null)
     const messagesEndRef = useRef<HTMLDivElement>(null)
     const params = useParams<{ roomId: string }>()
@@ -89,6 +94,10 @@ export default function ChatBox() {
             message: '',
         },
     })
+
+    useEffect(() => {
+        console.log({ isInCall })
+    }, [isInCall])
 
     useEffect(() => {
         if (messageData?.data?.messages && user?.id) {
@@ -287,6 +296,16 @@ export default function ChatBox() {
         setShowEmojiPicker(false)
     }
 
+    const startCall = (audioOnly: boolean) => {
+        setIsAudioOnly(audioOnly)
+        setIsInCall(true)
+        // Provide a default value for remoteUser
+        setRemoteUser({
+            name: "Unknown User",
+            avatar: "https://github.com/shadcn.png" // default avatar
+        })
+    }
+
     return (
         <TooltipProvider>
             <div className="flex flex-col h-full w-full rounded-2xl overflow-hidden">
@@ -303,11 +322,11 @@ export default function ChatBox() {
                         </div>
                     </div>
                     <div className="flex items-center space-x-2">
-                        <Button variant="ghost" size="icon">
+                        <Button variant="ghost" size="icon" onClick={() => startCall(true)}>
                             <Phone className="h-5 w-5" />
                             <span className="sr-only">Start audio call</span>
                         </Button>
-                        <Button variant="ghost" size="icon">
+                        <Button variant="ghost" size="icon" onClick={() => startCall(false)}>
                             <Video className="h-5 w-5" />
                             <span className="sr-only">Start video call</span>
                         </Button>
@@ -473,6 +492,27 @@ export default function ChatBox() {
                         </Button>
                     </div>
                 </form>
+                {/* {isInCall && (
+                    <VideoCall
+                        socket={socket}
+                        roomId={params.roomId}
+                        onClose={() => setIsInCall(false)}
+                        isAudioOnly={isAudioOnly}
+                        remoteUser={remoteUser || { name: "Unknown User", avatar: "https://github.com/shadcn.png" }}
+                    />
+                )} */}
+                {isInCall && (
+                    <VideoCall2
+                        socket={socket}
+                        roomId={params.roomId}
+                        onClose={() => setIsInCall(false)}
+                        // isAudioOnly={isAudioOnly}
+                        // remoteUser={remoteUser || { name: "Unknown User", avatar: "https://github.com/shadcn.png" }}
+                    />
+                )}
+                {/* {isInCall && (
+                    <p>calling...</p>
+                )} */}
             </div>
         </TooltipProvider>
     )

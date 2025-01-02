@@ -1,10 +1,11 @@
 {
   "compilerOptions": {
+    "target": "ES2017", // Specify ES7 as the output target
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
-    "noEmit": true,
+    "noEmit": false, // Allow emitting compiled code
     "esModuleInterop": true,
     "module": "esnext",
     "moduleResolution": "bundler",
