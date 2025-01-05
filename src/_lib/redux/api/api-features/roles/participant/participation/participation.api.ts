@@ -1,39 +1,42 @@
 import { baseApi } from "@/_lib/redux/api/baseApi";
 import { TresponseFormat } from "@/_lib/redux/data-types/responseDataType";
-import { GetProjectsResponseDto } from "./dto/get-participations/response.dto";
-import { GetProjectDetailsResponseDto } from "./dto/get-project-detail/response.dto";
+import { GetParticipationsResponseDto } from "./dto/get-participations/response.dto";
+import { GetParticipationProjectDetailResponseDto } from "./dto/get-project-detail/response.dto";
 
 const participantProjectApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getParticipantProjects: builder.query<
-      TresponseFormat<GetProjectsResponseDto>,
+      TresponseFormat<GetParticipationsResponseDto>,
       void
     >({
       query: () => ({
-        url: "participant/projects", // Backend endpoint
+        url: "participant/participations", // Backend endpoint
         method: "GET",
       }),
       providesTags: (result) =>
         result
-          ? result.data.projects.map((project) => ({
-              type: "participant-project",
-              id: project.id,
+          ? result.data.participations.map((participation) => ({
+              type: "participation",
+              id: participation.id,
             })) // Cache based on project IDs
-          : [{ type: "participant-project", id: "LIST" }],
+          : [{ type: "participation", id: "LIST" }],
     }),
     getParticipantProjectDetails: builder.query<
-      TresponseFormat<GetProjectDetailsResponseDto>,
+      TresponseFormat<GetParticipationProjectDetailResponseDto>,
       string
     >({
-      query: (projectId) => ({
-        url: `participant/projects/${projectId}`,
+      query: (participationId) => ({
+        url: `participant/participations/${participationId}`,
         method: "GET",
       }),
-      providesTags: (result, error, projectId) => [
-        { type: "participant-project", id: projectId },
+      providesTags: (result, error, participationId) => [
+        { type: "participation", id: participationId },
       ], // Cache tagging for efficient updates
     }),
   }),
 });
 
-export const { useGetParticipantProjectsQuery, useGetParticipantProjectDetailsQuery } = participantProjectApi;
+export const {
+  useGetParticipantProjectsQuery,
+  useGetParticipantProjectDetailsQuery,
+} = participantProjectApi;

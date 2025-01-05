@@ -17,7 +17,8 @@ export const baseApi = createApi({
     "user-file",
     "group-chats",
     "messages",
-    "participant-project",
+    "participation",
+    "participation-task"
   ],
   keepUnusedDataFor: 45,
   refetchOnReconnect: true,

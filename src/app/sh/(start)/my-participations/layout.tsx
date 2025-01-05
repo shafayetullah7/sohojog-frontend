@@ -21,7 +21,7 @@ export default function MyParticipationsLayout({ children }: MyParticipationsLay
 
 
   return (
-    <div className="flex h-full">
+    <div className="flex h-full gap-5">
       {/* <ParticipationMainSection></ParticipationMainSection> */}
       <div className="flex-1">
         {children}

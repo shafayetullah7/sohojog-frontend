@@ -1,15 +1,13 @@
+import { ProjectStatusType } from "../get-project-detail/response.dto";
+
 export interface ProfilePicture {
-  minUrl?: string; // Optional because "creator" has "midUrl" instead
+  minUrl: string;
 }
 
 export interface User {
+  id: string;
   name: string;
   profilePicture: ProfilePicture;
-}
-
-export interface Participation {
-  joinedAt: string | null; // Nullable because `joinedAt` can be `null`
-  user: User;
 }
 
 export interface Count {
@@ -18,19 +16,31 @@ export interface Count {
   tasks: number;
 }
 
-export interface ParticipationProject {
+export interface ProjectParticipation {
+  id: string;
+  joinedAt: string | null;
+  user: User;
+}
+
+export interface Project {
   id: string;
   title: string;
   createdAt: string;
   startDate: string;
   endDate: string;
-  status: "IN_PROGRESS" | "COMPLETED" | "UPCOMING"; // Adjust if there are more statuses
+  status: ProjectStatusType;
   creator: User;
   _count: Count;
-  participations: Participation[];
+  participations: ProjectParticipation[];
 }
 
+export interface Participation {
+  id: string;
+  userId: string;
+  joinedAt: string | null;
+  project: Project;
+}
 
-export interface GetProjectsResponseDto {
-  projects: ParticipationProject[];
+export interface GetParticipationsResponseDto {
+  participations: Participation[];
 }
