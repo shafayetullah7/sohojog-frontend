@@ -46,6 +46,7 @@ import { useGetParticipantTasksQuery } from '@/_lib/redux/api/api-features/roles
 import { TaskPriority, TaskStatus } from '@/_constants/enums/task.enums'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { useRouter } from 'next/navigation'
 
 const statusColors = {
   TODO: 'bg-yellow-100 text-yellow-800',
@@ -67,6 +68,7 @@ type Props = {
 }
 
 export function TaskManagement({ participationId }: Props) {
+  const router = useRouter()
   const [queryParams, setQueryParams] = useState<QueryTaskDto>({
     participationId,
     page: 1,
@@ -94,6 +96,10 @@ export function TaskManagement({ participationId }: Props) {
       sortOrder: prev.sortOrder === 'asc' ? 'desc' : 'asc',
       page: 1,
     }))
+  }
+
+  const handleViewDetails = (taskId: string) => {
+    router.push(`/sh/my-participations/${participationId}/${taskId}`)
   }
 
   if (isLoading) {
@@ -253,7 +259,7 @@ export function TaskManagement({ participationId }: Props) {
             </TableHeader>
             <TableBody>
               {data?.data.tasks.map((task) => (
-                <TableRow key={task.id}>
+                <TableRow key={task.id} onClick={() => handleViewDetails(task.id)} className='cursor-pointer '>
                   <TableCell>
                     <TooltipProvider>
                       <Tooltip>
