@@ -1,22 +1,28 @@
-export enum TaskStatus {
-  TODO = "TODO",
-  IN_PROGRESS = "IN_PROGRESS",
-  DONE = "DONE",
-  HALTED = "HALTED",
-  ARCHIVED = "ARCHIVED",
-}
+export const TaskStatus = {
+  TODO: "TODO",
+  IN_PROGRESS: "IN_PROGRESS",
+  DONE: "DONE",
+  HALTED: "HALTED",
+  ARCHIVED: "ARCHIVED",
+} as const;
 
-export enum TaskPriority {
-  LOW = "LOW",
-  MEDIUM = "MEDIUM",
-  HIGH = "HIGH",
-  CRITICAL = "CRITICAL",
-}
+export const TaskPriority = {
+  LOW: "LOW",
+  MEDIUM: "MEDIUM",
+  HIGH: "HIGH",
+  CRITICAL: "CRITICAL",
+} as const;
 
-export enum TaskAssignmentType {
-  GROUP = "GROUP",
-  INDIVIDUAL = "INDIVIDUAL",
-}
+export type TaskStatus = (typeof TaskStatus)[keyof typeof TaskStatus];
+export type TaskPriority = (typeof TaskPriority)[keyof typeof TaskPriority];
+
+export const TaskAssignmentType = {
+  GROUP: "GROUP",
+  INDIVIDUAL: "INDIVIDUAL",
+} as const;
+
+export type TaskAssignmentType =
+  (typeof TaskAssignmentType)[keyof typeof TaskAssignmentType];
 
 export const FileType = {
   PDF: "PDF",
@@ -36,4 +42,12 @@ export const FileType = {
   OTHER: "OTHER", // For any other file type not covered
 } as const;
 
-export type FileType = typeof FileType[keyof typeof FileType];
+export type FileType = (typeof FileType)[keyof typeof FileType];
+
+export const SubmissionStatus = {
+  PENDING: "PENDING",
+  APPROVED: "APPROVED",
+  REJECTED: "REJECTED",
+} as const;
+export type SubmissionStatus =
+  (typeof SubmissionStatus)[keyof typeof SubmissionStatus];

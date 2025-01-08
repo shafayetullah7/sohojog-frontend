@@ -1,4 +1,4 @@
-import { TaskPriority, TaskStatus } from "./request.dto";
+import { TaskPriority, TaskStatus } from "@/_constants/enums/task.enums";
 
 type ProfilePicture = {
   minUrl: string;

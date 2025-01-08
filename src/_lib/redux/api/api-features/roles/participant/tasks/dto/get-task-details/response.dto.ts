@@ -1,5 +1,6 @@
 import {
   FileType,
+  SubmissionStatus,
   TaskAssignmentType,
   TaskPriority,
   TaskStatus,
@@ -70,15 +71,43 @@ type SubmissionFile = {
   file: FileDetails;
 };
 
-type AssignmentSubmission = {
+interface AssignmentSubmission {
   id: string;
+  assignmentId: string;
+  description: string;
+  status: SubmissionStatus;
+  createdAt: string;
+  updatedAt: string;
+  participationId: string | null;
   submissionFile: SubmissionFile[];
-};
+}
 
-type TaskAssignment = {
+interface TaskAssignment {
   id: string;
-  assignmentSubmission: AssignmentSubmission[];
-};
+  taskId: string;
+  participationId: string | null;
+  assignedAt: string;
+  assignmentSubmission: AssignmentSubmission;
+}
+
+// Root type definition
+interface TaskAssignmentResponse {
+  id: string;
+  taskId: string;
+  participationId: string | null;
+  assignedAt: string;
+  assignmentSubmission: AssignmentSubmission | null; // Nullable, if there's no submission
+}
+
+// type AssignmentSubmission = {
+//   id: string;
+//   submissionFile: SubmissionFile[];
+// };
+
+// type TaskAssignment = {
+//   id: string;
+//   assignmentSubmission: AssignmentSubmission[];
+// };
 
 type Task = {
   id: string;

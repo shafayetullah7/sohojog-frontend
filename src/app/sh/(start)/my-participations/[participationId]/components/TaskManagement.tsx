@@ -43,10 +43,10 @@ import {
 import { CalendarIcon, Loader2, X } from 'lucide-react'
 import { QueryTaskDto } from '@/_lib/redux/api/api-features/roles/participant/tasks/dto/get-tasks/request.dto'
 import { useGetParticipantTasksQuery } from '@/_lib/redux/api/api-features/roles/participant/tasks/tasks.api'
-import { TaskPriority, TaskStatus } from '@/_constants/enums/task.enums'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { useRouter } from 'next/navigation'
+import { TaskPriority, TaskStatus } from '@/_constants/enums/task.enums'
 
 const statusColors = {
   TODO: 'bg-yellow-100 text-yellow-800',

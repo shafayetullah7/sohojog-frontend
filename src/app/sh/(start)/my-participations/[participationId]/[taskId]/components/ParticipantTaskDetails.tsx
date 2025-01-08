@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button"
 import { Loader2, Paperclip, Users, User } from 'lucide-react'
 import { TaskStatus, TaskPriority, TaskAssignmentType } from "@/_constants/enums/task.enums"
 import { AttachmentViewer } from './AttachmentViewer'
+import { TaskSubmission } from './TaskSubmission'
 
 const statusColors = {
     [TaskStatus.TODO]: 'bg-yellow-100 text-yellow-800',
@@ -170,7 +171,8 @@ export function ParticipantTaskDetails({ taskId }: Props) {
                             <div key={assignment.id}>
                                 <h4 className="font-medium">Assignment ID: {assignment.id}</h4>
                                 <div className="mt-2 space-y-2">
-                                    {assignment.assignmentSubmission.map((submission) => (
+
+                                    {/* {assignment.assignmentSubmission.map((submission) => (
                                         <div key={submission.id} className="flex items-center space-x-2">
                                             <User className="h-4 w-4" />
                                             <span>Submission ID: {submission.id}</span>
@@ -181,7 +183,8 @@ export function ParticipantTaskDetails({ taskId }: Props) {
                                                 </Button>
                                             ))}
                                         </div>
-                                    ))}
+                                    ))} */}
+
                                 </div>
                                 <Separator className="my-2" />
                             </div>
@@ -192,6 +195,7 @@ export function ParticipantTaskDetails({ taskId }: Props) {
                     </div>
                 </CardContent>
             </Card>
+            <TaskSubmission taskId={taskId} />
         </div>
     )
 }
