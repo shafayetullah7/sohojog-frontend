@@ -8,6 +8,9 @@ import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 import { Badge } from "@/components/ui/badge"
 import Image from 'next/image'
+import { useSubmitParticipantTaskMutation } from '@/_lib/redux/api/api-features/roles/participant/tasks/tasks.api'
+import { TerrorResponse } from '@/_lib/redux/data-types/responseDataType'
+import { errorAlert } from '@/components/alerts/errorAlert'
 
 interface FileWithPreview extends File {
     preview: string;
@@ -19,7 +22,8 @@ type Props = {
 
 export function TaskSubmission({ taskId }: Props) {
     const [description, setDescription] = useState('')
-    const [files, setFiles] = useState<FileWithPreview[]>([])
+    const [files, setFiles] = useState<FileWithPreview[]>([]);
+    const [submitTask, { isLoading }] = useSubmitParticipantTaskMutation();
 
     const onDrop = useCallback((acceptedFiles: File[]) => {
         if (files.length + acceptedFiles.length > 6) {
@@ -50,12 +54,52 @@ export function TaskSubmission({ taskId }: Props) {
         URL.revokeObjectURL(file.preview)
     }
 
+    /*
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault()
         // Handle submission logic here
         console.log('Description:', description)
         console.log('Files:', files)
     }
+    */
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+
+        if (!description) {
+            alert('Please provide a description.');
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append('description', description);
+        formData.append('taskId', taskId);
+
+        files.forEach((file) => {
+            formData.append('files', file);
+        });
+
+        try {
+            const response = await submitTask(formData).unwrap();
+            console.log('Task submitted successfully:', response);
+            alert('Task submitted successfully!');
+            // Clear the form after successful submission
+            setDescription('');
+            setFiles([]);
+        } catch (err) {
+            // console.error('Error submitting task:', error);
+            // alert('Failed to submit the task. Please try again.');
+            const axiosError = err as { data: TerrorResponse, status: number };
+            const errorMessage = axiosError?.data?.message || 'Failed to create task';
+
+            const error = { title: 'Failed', description: errorMessage };
+
+            errorAlert(error);
+
+            // Optional: Log the error to the console or handle further
+            console.error('Error creating task:', err);
+        }
+    };
 
     return (
         <Card>
@@ -141,7 +185,7 @@ export function TaskSubmission({ taskId }: Props) {
                         </div>
                     )}
 
-                    <Button type="submit" className="w-full" disabled={files.length === 0 || description.trim() === ''}>
+                    <Button type="submit" className="w-full" disabled={isLoading || description.trim() === ''}>
                         Submit Task
                     </Button>
                 </form>

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { format } from 'date-fns'
 import { useGetParticipantSingleTaskQuery } from '@/_lib/redux/api/api-features/roles/participant/tasks/tasks.api'
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -35,6 +35,11 @@ type Props = {
 export function ParticipantTaskDetails({ taskId }: Props) {
     const { data, error, isLoading } = useGetParticipantSingleTaskQuery(taskId)
 
+    useEffect(() => {
+        console.log(data?.data);
+        console.log('***********')
+    }, [data])
+
     if (isLoading) {
         return (
             <div className="flex justify-center items-center h-64">
@@ -47,7 +52,10 @@ export function ParticipantTaskDetails({ taskId }: Props) {
         return <div className="text-red-500">Error loading task details. Please try again.</div>
     }
 
-    const task = data?.data.task
+    const task = data?.data.task;
+
+
+
 
     if (!task) {
         return <div className="text-red-500">No task data available.</div>
@@ -195,7 +203,9 @@ export function ParticipantTaskDetails({ taskId }: Props) {
                     </div>
                 </CardContent>
             </Card>
-            <TaskSubmission taskId={taskId} />
+            {!isLoading && <>
+                {((task.taskAssignment?.length && task.taskAssignment[0]?.assignmentSubmission) || task.taskSubmission) ? <TaskSubmission taskId={taskId}></TaskSubmission> : <></>}
+            </>}
         </div>
     )
 }

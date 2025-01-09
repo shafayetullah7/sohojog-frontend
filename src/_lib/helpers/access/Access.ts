@@ -42,6 +42,13 @@ export class LocalStorageService {
     return null; // Return null if not in the browser
   }
 
+  public deleteTokens(): void {
+    if (this.isBrowser()) {
+      localStorage.removeItem("sohojogtoken");
+      localStorage.removeItem("sohojogotpToken");
+    }
+  }
+
   set otpToken(value: string | null) {
     if (this.isBrowser()) {
       if (value) {

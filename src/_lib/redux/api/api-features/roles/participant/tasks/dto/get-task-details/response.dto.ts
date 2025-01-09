@@ -6,6 +6,23 @@ import {
   TaskStatus,
 } from "@/_constants/enums/task.enums";
 
+
+
+// Type for the submission file
+export type SubmissionFileType = {
+  id: string;
+  file: FileType;
+};
+
+
+
+
+
+// Type for the participation object
+
+
+// ........................
+
 type FileDetails = {
   id: string;
   file: string;
@@ -90,13 +107,27 @@ interface TaskAssignment {
   assignmentSubmission: AssignmentSubmission;
 }
 
-// Root type definition
+export type ParticipationType = {
+  id: string;
+  user: User;
+};
+
+export type TaskSubmission = {
+  id: string;
+  description: string;
+  submittedBy: string;
+  status: SubmissionStatus;
+  submissionFile: SubmissionFileType[];
+  participation: ParticipationType;
+};
+
+
 interface TaskAssignmentResponse {
   id: string;
   taskId: string;
   participationId: string | null;
   assignedAt: string;
-  assignmentSubmission: AssignmentSubmission | null; // Nullable, if there's no submission
+  assignmentSubmission: AssignmentSubmission | null; 
 }
 
 // type AssignmentSubmission = {
@@ -127,6 +158,7 @@ type Task = {
   project: Project;
   teamTaskAssignment: TeamTaskAssignment[];
   taskAssignment: TaskAssignment[];
+  taskSubmission:TaskSubmission
 };
 
 export type GetParticipantSingleTaskResponse = {

@@ -33,9 +33,20 @@ const participantTaskApi = baseApi.injectEndpoints({
       }),
       providesTags: (result, error, id) => [{ type: "participation-task", id }],
     }),
+    submitParticipantTask: builder.mutation<TresponseFormat<null>, FormData>({
+      query: (formData) => ({
+        url: "/participant/tasks/submit",
+        method: "POST",
+        body: formData,
+      }),
+      invalidatesTags: [{ type: "participation-task", id: "LIST" }],
+    }),
   }),
 });
 
 // Export the hooks
-export const { useGetParticipantTasksQuery, useGetParticipantSingleTaskQuery } =
-  participantTaskApi;
+export const {
+  useGetParticipantTasksQuery,
+  useGetParticipantSingleTaskQuery,
+  useSubmitParticipantTaskMutation,
+} = participantTaskApi;
